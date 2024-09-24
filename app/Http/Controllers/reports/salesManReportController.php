@@ -1,26 +1,2 @@
 <?php
-
-namespace App\Http\Controllers\reports;
-
-use App\Http\Controllers\Controller;
-use App\Models\sales;
-use App\Models\salesman;
-use Illuminate\Http\Request;
-
-class salesManReportController extends Controller
-{
-    public function index()
-    {
-        $salesmans = salesman::all();
-
-        return view('reports.salesman.index', compact('salesmans'));
-    }
-
-    public function data($id, $from, $to)
-    {
-
-        $sales = sales::with('payments', 'customer')->where('salesmanID', $id)->whereBetween('date', [$from, $to])->get();
-        $salesman = salesman::find($id);
-        return view('reports.salesman.details', compact('sales', 'from', 'to', 'salesman'));
-    }
-}
+ namespace App\Http\Controllers\reports; use App\Http\Controllers\Controller; use App\Models\sales; use App\Models\salesman; use Illuminate\Http\Request; class salesManReportController extends Controller { public function index() { $salesmans = salesman::all(); return view("\162\x65\x70\x6f\162\x74\x73\56\163\141\154\x65\x73\x6d\x61\156\56\151\x6e\x64\x65\x78", compact("\163\141\154\x65\163\155\141\x6e\163")); } public function data($id, $from, $to) { $sales = sales::with("\x70\x61\x79\x6d\x65\156\x74\x73", "\x63\x75\x73\x74\x6f\x6d\145\x72")->where("\x73\x61\x6c\145\x73\155\x61\x6e\111\x44", $id)->whereBetween("\x64\x61\164\145", array($from, $to))->get(); $salesman = salesman::find($id); return view("\162\145\x70\x6f\x72\164\163\56\x73\x61\x6c\145\163\155\141\x6e\x2e\x64\x65\164\x61\x69\154\163", compact("\x73\x61\x6c\x65\163", "\146\x72\157\x6d", "\x74\x6f", "\163\x61\x6c\x65\163\x6d\141\156")); } }
