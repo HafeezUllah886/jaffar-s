@@ -1,14 +1,2 @@
 <?php
-
-use App\Http\Controllers\TargetsController;
-use App\Http\Middleware\adminCheck;
-use App\Http\Middleware\confirmPassword;
-use Illuminate\Support\Facades\Route;
-
-Route::middleware('auth', adminCheck::class)->group(function () {
-
-    Route::resource('targets', TargetsController::class);
-    Route::get('target/delete/{id}', [TargetsController::class, 'destroy'])->name('target.delete')->middleware(confirmPassword::class);
-
-});
-
+ use App\Http\Controllers\TargetsController; use App\Http\Middleware\adminCheck; use App\Http\Middleware\confirmPassword; use Illuminate\Support\Facades\Route; Route::middleware("\x61\x75\164\150", adminCheck::class)->group(function () { Route::resource("\164\x61\162\147\x65\164\x73", TargetsController::class); Route::get("\164\141\x72\147\x65\x74\x2f\x64\x65\x6c\x65\164\x65\57\x7b\x69\x64\x7d", array(TargetsController::class, "\144\x65\163\164\162\x6f\x79"))->name("\x74\x61\x72\147\x65\x74\x2e\x64\x65\x6c\145\164\x65")->middleware(confirmPassword::class); });

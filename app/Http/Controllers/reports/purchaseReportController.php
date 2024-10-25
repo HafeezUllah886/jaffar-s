@@ -1,22 +1,2 @@
 <?php
-
-namespace App\Http\Controllers\reports;
-
-use App\Http\Controllers\Controller;
-use App\Models\purchase;
-use Illuminate\Http\Request;
-
-class purchaseReportController extends Controller
-{
-    public function index()
-    {
-        return view('reports.purchases.index');
-    }
-
-    public function data($from, $to)
-    {
-        $purchases = purchase::with('vendor', 'details')->whereBetween('date', [$from, $to])->get();
-
-        return view('reports.purchases.details', compact('from', 'to', 'purchases'));
-    }
-}
+ namespace App\Http\Controllers\reports; use App\Http\Controllers\Controller; use App\Models\purchase; use Illuminate\Http\Request; class purchaseReportController extends Controller { public function index() { return view("\x72\145\160\157\162\x74\x73\56\x70\x75\x72\143\x68\x61\163\145\x73\56\x69\x6e\x64\145\170"); } public function data($from, $to) { $purchases = purchase::with("\166\145\156\x64\157\162", "\144\x65\x74\141\x69\154\163")->whereBetween("\x64\141\x74\145", array($from, $to))->get(); return view("\162\x65\x70\157\x72\164\163\x2e\x70\x75\x72\143\150\x61\x73\x65\163\56\144\x65\164\x61\x69\x6c\163", compact("\x66\x72\x6f\155", "\x74\157", "\x70\x75\162\143\150\141\163\x65\163")); } }

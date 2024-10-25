@@ -1,16 +1,2 @@
 <?php
-
-use App\Http\Controllers\OrdersController;
-use App\Http\Middleware\adminCheck;
-use App\Http\Middleware\CheckOrderOwner;
-use App\Http\Middleware\confirmPassword;
-use Illuminate\Support\Facades\Route;
-
-Route::middleware('auth')->group(function () {
-
-    Route::resource('orders', OrdersController::class);
-
-    Route::get("order/delete/{id}", [OrdersController::class, 'destroy'])->name('order.delete')->middleware([confirmPassword::class, CheckOrderOwner::class]);
-    Route::get("order/sale/{id}", [OrdersController::class, 'sale'])->name('order.sale')->middleware(adminCheck::class);
-
-});
+ use App\Http\Controllers\OrdersController; use App\Http\Middleware\adminCheck; use App\Http\Middleware\CheckOrderOwner; use App\Http\Middleware\confirmPassword; use Illuminate\Support\Facades\Route; Route::middleware("\x61\165\164\x68")->group(function () { Route::resource("\x6f\x72\144\145\x72\x73", OrdersController::class); Route::get("\157\162\x64\x65\162\x2f\x64\x65\154\x65\164\x65\x2f\x7b\x69\x64\x7d", array(OrdersController::class, "\144\145\163\164\x72\157\171"))->name("\x6f\162\x64\x65\162\56\x64\x65\154\x65\x74\145")->middleware(array(confirmPassword::class, CheckOrderOwner::class)); Route::get("\x6f\162\x64\x65\162\x2f\x73\x61\154\x65\x2f\173\151\144\x7d", array(OrdersController::class, "\x73\141\154\x65"))->name("\157\x72\x64\145\162\x2e\163\x61\x6c\x65")->middleware(adminCheck::class); });

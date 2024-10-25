@@ -1,22 +1,2 @@
 <?php
-
-namespace App\Http\Controllers\reports;
-
-use App\Http\Controllers\Controller;
-use App\Models\sales;
-use Illuminate\Http\Request;
-
-class salesReportController extends Controller
-{
-    public function index()
-    {
-        return view('reports.sales.index');
-    }
-
-    public function data($from, $to)
-    {
-        $sales = sales::with('customer', 'details')->whereBetween('date', [$from, $to])->get();
-
-        return view('reports.sales.details', compact('from', 'to', 'sales'));
-    }
-}
+ namespace App\Http\Controllers\reports; use App\Http\Controllers\Controller; use App\Models\sales; use Illuminate\Http\Request; class salesReportController extends Controller { public function index() { return view("\x72\145\x70\x6f\x72\164\x73\x2e\x73\141\x6c\x65\x73\x2e\151\156\144\x65\170"); } public function data($from, $to) { $sales = sales::with("\143\165\163\164\157\155\x65\x72", "\x64\145\x74\x61\x69\x6c\163")->whereBetween("\144\x61\164\x65", array($from, $to))->get(); return view("\162\145\x70\157\162\x74\163\x2e\163\141\154\145\x73\56\x64\x65\164\x61\x69\x6c\163", compact("\x66\x72\x6f\x6d", "\x74\157", "\x73\141\x6c\x65\x73")); } }
