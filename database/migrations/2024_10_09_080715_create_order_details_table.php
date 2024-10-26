@@ -22,6 +22,7 @@ return new class extends Migration
             $table->date('date');
             $table->foreignId('unitID')->constrained('units', 'id');
             $table->float('unitValue');
+            $table->float('bonus')->default(0);
             $table->timestamps();
         });
     }

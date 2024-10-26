@@ -29,6 +29,7 @@
                 <div class="card-body">
                     <form action="{{ route('orders.update', $order->id) }}" method="post">
                         @csrf
+                        @method("PUT")
                         <div class="row">
                             <div class="col-12">
                                 <div class="form-group">
@@ -61,7 +62,7 @@
                                                        <input type="hidden" step="any" id="price_{{$id}}" value="{{$product->price}}" id="price[]">
                                                        <input type="hidden" step="any" id="discount_{{$id}}" value="{{$product->discount}}" id="discount[]">
                                                        <input type="hidden" step="any" id="amount_{{$id}}" value="{{$netPrice}}" id="amount[]">
-                                                       <h5 class="text-primary fs-18 mb-0"><span>{{$netPrice}}</span><small class="text-decoration-line-through text-muted fs-13">{{$product->price}}</small></h5>
+                                                       <h5 class="text-primary fs-18 mb-0"><span>{{$price}}</span></h5>
                                                    </div>
                                                    <div class="flex-grow-1 text-end"><h5 class="text-primary fs-18 mb-0"><span id="amountText_{{$id}}">{{$product->amount}}</span></h5></div>
                                                </div>
@@ -80,13 +81,29 @@
                                                     </select>
                                                    </div>
                                                    <div class="col-6 text-end">
-                                                       <div class="input-step flex-shrink-0">
+                                                       <div class="input-step flex-shrink-0 w-100">
                                                            <button type="button" onclick="minus({{$id}})">–</button>
-                                                           <input type="number" id="qty_{{$id}}" oninput=" updateChanges({{$id}})" name="qty[]" value="{{$product->qty}}" min="1">
+                                                           <input type="number" id="qty_{{$id}}" oninput="updateChanges({{$id}})" class="w-100" name="qty[]" value="{{$product->qty / $product->unitValue}}" min="1">
                                                            <button type="button" onclick="plus({{$id}})">+</button>
                                                        </div>
                                                    </div>
                                                </div>
+                                               <div class="row mt-2">
+                                                <div class="col-6">
+                                                    <div>
+                                                        <td class="no-padding">
+                                                            <input type="number" oninput="updateChanges({{$id}})" placeholder="Discount" class="form-control text-center" id="discount_{{$id}}" value="{{$product->discount}}" name="discount[]">
+                                                        </td>
+                                                    </div>
+                                                </div>
+                                                <div class="col-6">
+                                                    <div>
+                                                        <td class="no-padding">
+                                                            <input type="number" placeholder="Bonus" class="form-control text-center" value="{{$product->bonus}}" id="bonus_{{$id}}" name="bonus[]">
+                                                        </td>
+                                                    </div>
+                                                </div>
+                                            </div>
                                            </div>
                                        </div>
                                     @endforeach
@@ -182,10 +199,9 @@
                                 html += '</div>';
                                 html += '<div class="d-flex mb-4 align-items-center">';
                                     html += '<div class="flex-grow-1">';
-                                        html += '<input type="hidden" step="any" id="price_' + id + '" value="'+price+'" id="price[]">';
-                                        html += '<input type="hidden" step="any" id="discount_' + id + '" value="'+discount+'" id="discount[]">';
-                                        html += '<input type="hidden" step="any" id="amount_' + id + '" value="'+netPrice+'" id="amount[]">';
-                                        html += '<h5 class="text-primary fs-18 mb-0"><span>'+ netPrice +'</span><small class="text-decoration-line-through text-muted fs-13">'+price+'</small></h5>';
+                                        html += '<input type="hidden" step="any" id="price_' + id + '" value="'+price+'" name="price[]">';
+                                        html += '<input type="hidden" step="any" id="amount_' + id + '" value="'+netPrice+'" name="amount[]">';
+                                        html += '<h5 class="text-primary fs-18 mb-0"><span>'+ price +'</span></h5>';
                                     html += '</div>';
                                     html += '<div class="flex-grow-1 text-end"><h5 class="text-primary fs-18 mb-0"><span id="amountText_' + id + '">'+netPrice+'</span></h5></div>';
                                 html += '</div>';
@@ -201,10 +217,26 @@
                                         html += '</div>';
                                     html += '</div>';
                                     html += '<div class="col-6 text-end">';
-                                        html += '<div class="input-step flex-shrink-0">';
+                                        html += '<div class="input-step flex-shrink-0 w-100">';
                                             html += '<button type="button" onclick="minus('+id+')">–</button>';
-                                            html += '<input type="number" id="qty_' + id + '" oninput=" updateChanges('+id+')" name="qty[]" value="1" min="1">';
+                                            html += '<input type="number" id="qty_' + id + '" class="w-100" oninput="updateChanges('+id+')" name="qty[]" value="1" min="1">';
                                             html += '<button type="button" onclick="plus('+id+')">+</button>';
+                                        html += '</div>';
+                                    html += '</div>';
+                                html += '</div>';
+                                html += '<div class="row mt-2">';
+                                    html += '<div class="col-6">';
+                                        html += '<div>';
+                                            html += '<td class="no-padding">';
+                                                html += '<input type="number" oninput="updateChanges('+id+')" placeholder="Discount" class="form-control text-center" id="discount_' + id + '" value="'+discount+'" name="discount[]">';
+                                            html += '</td>';
+                                        html += '</div>';
+                                    html += '</div>';
+                                    html += '<div class="col-6">';
+                                        html += '<div>';
+                                            html += '<td class="no-padding">';
+                                                html += '<input type="number" placeholder="Bonus" class="form-control text-center" id="bonus_' + id + '" name="bonus[]">';
+                                            html += '</td>';
                                         html += '</div>';
                                     html += '</div>';
                                 html += '</div>';

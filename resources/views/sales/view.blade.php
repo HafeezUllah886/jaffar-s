@@ -34,7 +34,7 @@
                                         <h5 class="fs-14 mb-0"> <span class="text-muted">Type :</span> {{$sale->customer->c_type}} | NTN #</span> {{$sale->customer->ntn ?? "NA"}} | <span class="text-muted">STRN #</span> {{$sale->customer->strn ?? "NA"}}</h5>
                                         <h5 class="fs-14 mb-0"> <span class="text-muted">Address :</span> {{$sale->customer->address ?? "NA"}}</h5>
                                         @endif
-                                       
+
                                     </div>
                                     <div class="col-3">
                                         <p class="text-muted mb-2 text-uppercase fw-semibold">Order Booker</p>

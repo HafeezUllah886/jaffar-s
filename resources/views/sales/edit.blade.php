@@ -92,7 +92,7 @@
                                             <td class="no-padding"><input type="number" name="tp[]" oninput="updateChanges({{ $id }})" required step="any" value="{{$product->tp}}" min="0" class="form-control text-center" id="tp_{{ $id }}"></td>
                                             <td class="no-padding"><input type="number" name="gst[]" oninput="updateChanges({{ $id }})" required step="any" value="{{$product->gst}}" min="0" class="form-control text-center" id="gst_{{ $id }}"></td>
                                             <td class="no-padding"><input type="number" name="gstValue[]" required step="any" value="{{$product->gstValue}}" min="0" class="form-control text-center" id="gstValue_{{ $id }}"></td>
-                                            <td class="no-padding"><input type="number" name="bonus[]" min="0" required step="any" value="0" oninput="updateChanges({{ $id }})" class="form-control text-center no-padding" id="bonus_{{ $id }}"></td>
+                                            <td class="no-padding"><input type="number" name="bonus[]" min="0" required step="any" value="{{$product->bonus}}" oninput="updateChanges({{ $id }})" class="form-control text-center no-padding" id="bonus_{{ $id }}"></td>
                                             <td> <span class="btn btn-sm btn-danger" onclick="deleteRow({{$id}})">X</span> </td>
                                             <input type="hidden" name="id[]" value="{{ $id }}">
                                             <input type="hidden" id="stock_{{$id}}" value="{{ getStock($id) + $product->qty}}">

@@ -9,35 +9,44 @@
                                 <a href="javascript:window.print()" class="btn btn-success ml-4"><i class="ri-printer-line mr-4"></i> Print</a>
                             </div>
                             <div class="card-header border-bottom-dashed p-4">
-                                <div class="d-flex">
-                                    <div class="flex-grow-1">
-                                        <img src="{{asset('assets/images/logo.png')}}" style="width:250px;">
-                                        <div class="mt-sm-5 mt-4">
-                                            <div class="row">
-                                                <div class="col-6">
-                                                    <h6 class="text-muted text-uppercase fw-semibold">Industrial Area, Sirki Road, Quetta</h6>
-                                                    <p class="text-muted mb-1" id="address-details">NTN: 2645388-6</p>
-                                                    <p class="text-muted mb-0" id="zip-code"><span>0331-8358638 | </span> jaffarqta92@gmail.com</p>
-                                                </div>
-                                                <div class="col-6">
-                                                    <p class="text-muted mb-2 text-uppercase fw-semibold">Customer</p>
-                                                    <h5 class="fs-14 mb-0"> <span class="text-muted">M/S :</span> {{$order->customer->title}}</h5>
-                                                    <h5 class="fs-14 mb-0"> <span class="text-muted">CNIC :</span> {{$order->customer->cnic ?? "NA"}} | <span class="text-muted">Contact :</span> {{$order->customer->contact ?? "NA"}}</h5>
-                                                    <h5 class="fs-14 mb-0"> <span class="text-muted">NTN #</span> {{$order->customer->ntn ?? "NA"}} | <span class="text-muted">STRN #</span> {{$order->customer->strn ?? "NA"}}</h5>
-                                                    <h5 class="fs-14 mb-0"> <span class="text-muted">Address :</span> {{$order->customer->address ?? "NA"}}</h5>
-                                                </div>
-                                            </div>
+                                @include('layout.header')
+                            </div>
+                            <div class="col-lg-12 ">
+                                <div class="row">
+                                    <div class="col-4"></div>
+                                    <div class="col-4 text-center"><h2>ORDER RECEIPT</h2></div>
+                                </div>
+                                <div class="card-body p-4">
+                                    <div class="row g-3">
+                                        <div class="col-2">
+                                            <p class="text-muted mb-2 text-uppercase fw-semibold">Order #</p>
+                                            <h5 class="fs-14 mb-0">{{$order->id}}</h5>
+                                        </div>
+                                        <div class="col-5">
+                                            <p class="text-muted mb-2 text-uppercase fw-semibold">Customer</p>
+                                            <h5 class="fs-14 mb-0"> <span class="text-muted">M/S :</span> {{$order->customer->title}}</h5>
+                                            @if ($order->customerID != 2)
+                                            <h5 class="fs-14 mb-0"> <span class="text-muted">CNIC :</span> {{$order->customer->cnic ?? "NA"}} | <span class="text-muted">Contact :</span> {{$order->customer->contact ?? "NA"}}</h5>
+                                            <h5 class="fs-14 mb-0"> <span class="text-muted">Type :</span> {{$order->customer->c_type}} | NTN #</span> {{$order->customer->ntn ?? "NA"}} | <span class="text-muted">STRN #</span> {{$order->customer->strn ?? "NA"}}</h5>
+                                            <h5 class="fs-14 mb-0"> <span class="text-muted">Address :</span> {{$order->customer->address ?? "NA"}}</h5>
+                                            @endif
 
                                         </div>
+                                        <div class="col-3">
+                                            <p class="text-muted mb-2 text-uppercase fw-semibold">Order Booker</p>
+                                            <h5 class="fs-14 mb-0">{{$order->orderbooker->name}}</h5>
+                                        </div>
+                                        <div class="col-2">
+                                            <p class="text-muted mb-2 text-uppercase fw-semibold">Date</p>
+                                            <h5 class="fs-14 mb-0">{{date("d M Y" ,strtotime($order->date))}}</h5>
+                                        </div>
+                                        <!--end col-->
+                                        <!--end col-->
                                     </div>
-                                    <div class="flex-shrink-0 mt-sm-0 mt-3">
-                                        <h3>Order Receipt</h3>
-                                        <p> <span class="text-muted text-uppercase fw-semibold mt-0 m-0 p-0">Order # </span><span class="fs-14 m-0 p-0">{{$order->id}}</span></p>
-                                        <p> <span class="text-muted text-uppercase fw-semibold mt-0 m-0 p-0">Date : </span><span class="fs-14 m-0 p-0">{{date("d M Y" ,strtotime($order->date))}}</span></p>
-                                        <p> <span class="text-muted text-uppercase fw-semibold mt-0 m-0 p-0">Order Booker : </span><span class="fs-14 m-0 p-0">{{$order->orderbooker->name}}</span></p>
-                                    </div>
+                                    <!--end row-->
                                 </div>
-                            </div>
+                                <!--end card-body-->
+                            </div><!--end col-->
                             <!--end card-header-->
                         </div><!--end col-->
                         <div class="col-lg-12">
@@ -50,6 +59,7 @@
                                                 <th scope="col" class="text-start">Product</th>
                                                 <th scope="col" class="text-start">Unit</th>
                                                 <th scope="col" class="text-end">Qty</th>
+                                                <th scope="col" class="text-end">Bonus</th>
                                                 <th scope="col" class="text-end">Price</th>
                                                 <th scope="col" class="text-end">Discount</th>
                                                 <th scope="col" class="text-end">Amount</th>
@@ -62,6 +72,7 @@
                                                 <td class="text-start m-1 p-1 border-1 border-dark">{{$product->product->name}}</td>
                                                 <td class="text-start m-1 p-1 border-1 border-dark">{{$product->unit->name}}</td>
                                                 <td class="text-end m-1 p-1 border-1 border-dark">{{number_format($product->qty / $product->unitValue)}}</td>
+                                                <td class="text-end m-1 p-1 border-1 border-dark">{{number_format($product->bonus)}}</td>
                                                 <td class="text-end m-1 p-1 border-1 border-dark">{{number_format($product->price, 2)}}</td>
                                                 <td class="text-end m-1 p-1 border-1 border-dark">{{number_format($product->discount, 2)}}</td>
                                                 <td class="text-end m-1 p-1 border-1 border-dark">{{number_format($product->amount, 2)}}</td>
@@ -70,7 +81,7 @@
                                         </tbody>
                                         <tfoot>
                                             <tr class="m-0 p-0">
-                                                <th colspan="6" class="text-end p-0 m-0">Total Order</th>
+                                                <th colspan="7" class="text-end p-0 m-0">Total Order</th>
                                                 <th class="text-end p-0 m-0">{{number_format($order->details->sum('amount'),2)}}</th>
                                             </tr>
                                         </tfoot>

@@ -49,8 +49,7 @@
                                     <tbody id="products_list"></tbody>
                                     <tfoot>
                                         <tr>
-                                            <th colspan="6" class="text-end">Total</th>
-
+                                            <th colspan="7" class="text-end">Total</th>
                                             <th class="text-end" id="totalGst">0.00</th>
                                             <th class="text-end" id="totalAmount">0.00</th>
                                             <th></th>
