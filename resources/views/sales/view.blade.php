@@ -16,7 +16,7 @@
                         <div class="col-lg-12 ">
                             <div class="row">
                                 <div class="col-4"></div>
-                                <div class="col-4 text-center"><h2>SALES INVOICE</h2></div>
+                                <div class="col-4 text-center"><h2>SALES TAX INVOICE</h2></div>
                             </div>
                             <div class="card-body p-4">
                                 <div class="row g-3">
