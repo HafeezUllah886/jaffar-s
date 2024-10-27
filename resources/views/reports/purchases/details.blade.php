@@ -54,6 +54,7 @@
                                                 <th scope="col">Inv #</th>
                                                 <th scope="col" class="text-start">Vendor Name</th>
                                                 <th scope="col">Date</th>
+                                                <th scope="col">Discount</th>
                                                 <th scope="col">Fright (-)</th>
                                                 <th scope="col">Fright (+)</th>
                                                 <th scope="col">Amount</th>
@@ -66,6 +67,7 @@
                                                 <td class="text-start">{{ $item->inv}}</td>
                                                 <td class="text-start">{{ $item->vendor->title }}</td>
                                                 <td>{{ date("d M Y", strtotime($item->date))}}</td>
+                                                <td class="text-end">{{ number_format($item->discount, 2) }}</td>
                                                 <td class="text-end">{{ number_format($item->fright, 2) }}</td>
                                                 <td class="text-end">{{ number_format($item->fright1, 2) }}</td>
                                                 <td class="text-end">{{ number_format($item->net, 2) }}</td>
@@ -75,6 +77,7 @@
                                         <tfoot>
                                             <tr>
                                                 <th colspan="4" class="text-end">Total</th>
+                                                <th class="text-end">{{number_format($purchases->sum('discount'), 2)}}</th>
                                                 <th class="text-end">{{number_format($purchases->sum('fright'), 2)}}</th>
                                                 <th class="text-end">{{number_format($purchases->sum('fright1'), 2)}}</th>
                                                 <th class="text-end">{{number_format($purchases->sum('net'), 2)}}</th>
