@@ -54,6 +54,7 @@
                                         <option value="Retailer">Retailer</option>
                                         <option value="Wholeseller">Wholeseller</option>
                                         <option value="Super Mart">Super Mart</option>
+                                        <option value="Sub Dealer">Sub Dealer</option>
                                         <option value="Other">Other</option>
                                     </select>
                                 </div>
