@@ -95,6 +95,15 @@
         }).showToast();
     </script>
     @endif
+    <script>
+         $(document).on('keydown', function(event) {
+    // Check if F2 is pressed
+    if (event.key === 'F2') {
+        event.preventDefault();  // Prevent any default action (if any)
+        $('#code').focus();  // Focus on the input field
+    }
+});
+    </script>
     @yield('page-js')
 </body>
 

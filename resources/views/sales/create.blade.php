@@ -14,10 +14,9 @@
                     </div>
                 </div><!--end row-->
                 <div class="card-body">
-                    <form action="{{ route('sale.store') }}" method="post">
-                        @csrf
+
                         <div class="row">
-                            <div class="col-12">
+                            <div class="col-9">
                                 <div class="form-group">
                                     <label for="product">Product</label>
                                     <select name="product" class="selectize" id="product">
@@ -30,8 +29,18 @@
                                     </select>
                                 </div>
                             </div>
-                            <div class="col-12">
+                            <div class="col-3">
+                                <div class="form-group">
+                                    <form method="get" id="code_form">
+                                        <label for="code">Code (Shortcut key : F2)</label>
+                                        <input type="number" class="form-control" id="code">
+                                    </form>
+                                </div>
+                            </div>
 
+                            <div class="col-12">
+                                <form action="{{ route('sale.store') }}" method="post">
+                                    @csrf
                                 <table class="table table-striped table-hover">
                                     <thead>
                                         <th width="20%">Product</th>
@@ -306,6 +315,39 @@
             $('#row_'+id).remove();
             updateTotal();
         }
+
+        $("#code_form").on("submit", function(e)
+    {
+        e.preventDefault();
+        var code = $("#code").val();
+        $("#code").val('');
+        $.ajax({
+                url: "{{ url('product/searchByCode/') }}/" + code,
+                method: "GET",
+                success: function(response) {
+                    if(response == "Not Found")
+                    {
+                        Toastify({
+                        text: "Product Not Found",
+                        className: "info",
+                        close: true,
+                        gravity: "top", // `top` or `bottom`
+                        position: "center", // `left`, `center` or `right`
+                        stopOnFocus: true, // Prevents dismissing of toast on hover
+                        style: {
+                            background: "linear-gradient(to right, #FF5733, #E70000)",
+                        }
+                        }).showToast();
+                    }
+                    else
+                    {
+                        getSingleProduct(response);
+                    }
+                }
+            }
+        );
+
+    });
 
     </script>
 @endsection

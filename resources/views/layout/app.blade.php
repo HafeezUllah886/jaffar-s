@@ -247,6 +247,8 @@
 
         window.open(route, '_blank', `width=${width},height=${height}`);
     }
+
+
 </script>
 
     @yield('page-js')
