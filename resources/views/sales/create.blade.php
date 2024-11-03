@@ -37,132 +37,131 @@
                                     </form>
                                 </div>
                             </div>
-
-                            <div class="col-12">
-                                <form action="{{ route('sale.store') }}" method="post">
-                                    @csrf
-                                <table class="table table-striped table-hover">
-                                    <thead>
-                                        <th width="20%">Product</th>
-                                        <th class="text-center">Qty</th>
-                                        <th width="10%" class="text-center">Unit</th>
-                                        <th class="text-center">Price</th>
-                                        <th class="text-center">Disc</th>
-                                        <th class="text-center">Tax Inc</th>
-                                        <th class="text-center">RP</th>
-                                        <th class="text-center">GST%</th>
-                                        <th class="text-center">GST</th>
-                                        <th class="text-center">Bonus</th>
-                                        <th></th>
-                                    </thead>
-                                    <tbody id="products_list"></tbody>
-                                    <tfoot>
-                                        <tr>
-                                            <th colspan="4" class="text-end">Total</th>
-                                            <th class="text-end" id="totalDiscount">0.00</th>
-                                            <th class="text-end" id="totalTI">0.00</th>
+                        </div>
+                        <form action="{{ route('sale.store') }}" method="post">
+                            <div class="row">
+                                @csrf
+                                <div class="col-12">
+                                    <table class="table table-striped table-hover">
+                                        <thead>
+                                            <th width="20%">Product</th>
+                                            <th class="text-center">Qty</th>
+                                            <th width="10%" class="text-center">Unit</th>
+                                            <th class="text-center">Price</th>
+                                            <th class="text-center">Disc</th>
+                                            <th class="text-center">Tax Inc</th>
+                                            <th class="text-center">RP</th>
+                                            <th class="text-center">GST%</th>
+                                            <th class="text-center">GST</th>
+                                            <th class="text-center">Bonus</th>
                                             <th></th>
-                                            <th></th>
-                                            <th class="text-end" id="totalGST">0.00</th>
-                                        </tr>
-                                    </tfoot>
-                                </table>
-                            </div>
-                            <div class="col-2">
-                                <div class="form-group">
-                                    <label for="orderbooker">Order Booker</label>
-                                    <select name="orderbookerID" id="orderbooker" class="selectize1">
-                                        @foreach ($orderbookers as $booker)
-                                            <option value="{{ $booker->id }}">{{ $booker->name }}</option>
-                                        @endforeach
-                                    </select>
+                                        </thead>
+                                        <tbody id="products_list"></tbody>
+                                        <tfoot>
+                                            <tr>
+                                                <th colspan="4" class="text-end">Total</th>
+                                                <th class="text-end" id="totalDiscount">0.00</th>
+                                                <th class="text-end" id="totalTI">0.00</th>
+                                                <th></th>
+                                                <th></th>
+                                                <th class="text-end" id="totalGST">0.00</th>
+                                            </tr>
+                                        </tfoot>
+                                    </table>
                                 </div>
-                            </div>
-                            <div class="col-2">
-                                <div class="form-group">
-                                    <label for="discount">Discount</label>
-                                    <input type="number" name="discount1" oninput="updateTotal()" id="discount" step="any" value="0" class="form-control">
+                                <div class="col-2">
+                                    <div class="form-group">
+                                        <label for="orderbooker">Order Booker</label>
+                                        <select name="orderbookerID" id="orderbooker" class="selectize1">
+                                            @foreach ($orderbookers as $booker)
+                                                <option value="{{ $booker->id }}">{{ $booker->name }}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="col-2">
-                                <div class="form-group">
-                                    <label for="fright">Fright(-)</label>
-                                    <input type="number" name="fright" id="fright" oninput="updateTotal()" min="0" step="any" value="0" class="form-control">
+                                <div class="col-2">
+                                    <div class="form-group">
+                                        <label for="discount">Discount</label>
+                                        <input type="number" name="discount1" oninput="updateTotal()" id="discount" step="any" value="0" class="form-control">
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="col-2">
-                                <div class="form-group">
-                                    <label for="fright1">Fright(+)</label>
-                                    <input type="number" name="fright1" id="fright1" oninput="updateTotal()" min="0" step="any" value="0" class="form-control">
+                                <div class="col-2">
+                                    <div class="form-group">
+                                        <label for="fright">Fright(-)</label>
+                                        <input type="number" name="fright" id="fright" oninput="updateTotal()" min="0" step="any" value="0" class="form-control">
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="col-2">
-                                <div class="form-group">
-                                    <label for="whTax">WH Tax</label>
-                                    <div class="input-group mb-3">
-                                        <input type="number" name="whTax" id="whTax" oninput="updateTotal()" max="50" min="0" step="any" value="0" aria-describedby="basic-addon2" class="form-control">
-                                        <span class="input-group-text whTaxValue" id="basic-addon2">0</span>
-                                      </div>
+                                <div class="col-2">
+                                    <div class="form-group">
+                                        <label for="fright1">Fright(+)</label>
+                                        <input type="number" name="fright1" id="fright1" oninput="updateTotal()" min="0" step="any" value="0" class="form-control">
+                                    </div>
+                                </div>
+                                <div class="col-2">
+                                    <div class="form-group">
+                                        <label for="whTax">WH Tax</label>
+                                        <div class="input-group mb-3">
+                                            <input type="number" name="whTax" id="whTax" oninput="updateTotal()" max="50" min="0" step="any" value="0" aria-describedby="basic-addon2" class="form-control">
+                                            <span class="input-group-text whTaxValue" id="basic-addon2">0</span>
+                                        </div>
+
+                                    </div>
 
                                 </div>
-
-                            </div>
-                            <div class="col-2">
-                                <div class="form-group">
-                                    <label for="net">Net Amount</label>
-                                    <input type="number" name="net" id="net" step="any" readonly value="0" class="form-control">
+                                <div class="col-2">
+                                    <div class="form-group">
+                                        <label for="net">Net Amount</label>
+                                        <input type="number" name="net" id="net" step="any" readonly value="0" class="form-control">
+                                    </div>
+                                </div>
+                                <div class="col-3">
+                                    <div class="form-group">
+                                        <label for="date">Date</label>
+                                        <input type="date" name="date" id="date" value="{{ date('Y-m-d') }}"
+                                            class="form-control">
+                                    </div>
+                                </div>
+                                <div class="col-3">
+                                    <div class="form-group">
+                                        <label for="customer">Customer</label>
+                                        <select name="customerID" id="customer" class="selectize1">
+                                            @foreach ($customers as $customer)
+                                                <option value="{{ $customer->id }}">{{ $customer->title }}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-3">
+                                    <div class="form-group">
+                                        <label for="account">Account</label>
+                                        <select name="accountID" id="account" class="selectize1">
+                                            @foreach ($accounts as $account)
+                                                <option value="{{ $account->id }}">{{ $account->title }}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-3">
+                                    <div class="form-group">
+                                        <label for="status">Payment Status</label>
+                                        <select name="status" id="status" class="selectize1">
+                                            <option value="paid">Paid</option>
+                                            <option value="pending">Pending</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-12 mt-2">
+                                    <div class="form-group">
+                                        <label for="notes">Notes</label>
+                                        <textarea name="notes" id="notes" class="form-control" cols="30" rows="5"></textarea>
+                                    </div>
+                                </div>
+                                <div class="col-12 mt-2">
+                                    <button type="submit" class="btn btn-primary w-100">Create Sale</button>
                                 </div>
                             </div>
-                            <div class="col-3">
-                                <div class="form-group">
-                                    <label for="date">Date</label>
-                                    <input type="date" name="date" id="date" value="{{ date('Y-m-d') }}"
-                                        class="form-control">
-                                </div>
-                            </div>
-                            <div class="col-3">
-                                <div class="form-group">
-                                    <label for="customer">Customer</label>
-                                    <select name="customerID" id="customer" class="selectize1">
-                                        @foreach ($customers as $customer)
-                                            <option value="{{ $customer->id }}">{{ $customer->title }}</option>
-                                        @endforeach
-                                    </select>
-                                </div>
-                            </div>
-
-                            <div class="col-3">
-                                <div class="form-group">
-                                    <label for="account">Account</label>
-                                    <select name="accountID" id="account" class="selectize1">
-                                        @foreach ($accounts as $account)
-                                            <option value="{{ $account->id }}">{{ $account->title }}</option>
-                                        @endforeach
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="col-3">
-                                <div class="form-group">
-                                    <label for="status">Payment Status</label>
-                                    <select name="status" id="status" class="selectize1">
-                                        <option value="paid">Paid</option>
-                                        <option value="pending">Pending</option>
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="col-12 mt-2">
-                                <div class="form-group">
-                                    <label for="notes">Notes</label>
-                                    <textarea name="notes" id="notes" class="form-control" cols="30" rows="5"></textarea>
-                                </div>
-                            </div>
-                            <div class="col-12 mt-2">
-                                <button type="submit" class="btn btn-primary w-100">Create Sale</button>
-                            </div>
-                </div>
-            </form>
+                        </form>
             </div>
-
         </div>
         <!--end card-->
     </div>
@@ -184,7 +183,7 @@
 @section('page-js')
     <script src="{{ asset('assets/libs/selectize/selectize.min.js') }}"></script>
     <script>
-        $(".selectize1").selectize();
+
         $(".selectize").selectize({
             onChange: function(value) {
                 if (!value.length) return;
@@ -348,6 +347,7 @@
         );
 
     });
+    $(".selectize1").selectize();
 
     </script>
 @endsection

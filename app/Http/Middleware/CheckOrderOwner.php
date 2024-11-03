@@ -29,7 +29,7 @@ class CheckOrderOwner
             // If the user is not the owner, return a 403 forbidden response
             return response()->json(['message' => 'Order Already Completed'], 403);
         }
-        if ($order->orderbookerID !== Auth::id() || auth()->user()->role !== "Admin" ) {
+        if (auth()->user()->role !== "Admin" ) {
             return response()->json(['message' => 'You are not allowed to delete this order'], 403);
         }
 

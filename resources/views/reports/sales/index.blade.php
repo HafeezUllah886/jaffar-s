@@ -16,6 +16,18 @@
                                 <input type="date" name="to" id="to" value="{{lastDayOfMonth()}}" class="form-control">
                     </div>
                     <div class="form-group mt-2">
+                        <label for="c_type">Customer Category</label>
+                        <select name="c_type" id="c_type" class="form-control">
+                            <option value="All">All</option>
+                            <option value="Distributor">Distributor</option>
+                            <option value="Retailer">Retailer</option>
+                            <option value="Wholeseller">Wholeseller</option>
+                            <option value="Super Mart">Super Mart</option>
+                            <option value="Sub Dealer">Sub Dealer</option>
+                            <option value="Other">Other</option>
+                        </select>
+                    </div>
+                    <div class="form-group mt-2">
                         <button class="btn btn-success w-100" id="viewBtn">View Report</button>
                     </div>
                 </div>
@@ -32,9 +44,11 @@
         $("#viewBtn").on("click", function (){
             var from = $("#from").val();
             var to = $("#to").val();
-            var url = "{{ route('reportSalesData', ['from' => ':from', 'to' => ':to']) }}"
+            var type = $("#c_type").find(":selected").val();
+            var url = "{{ route('reportSalesData', ['from' => ':from', 'to' => ':to', 'type' => ':type']) }}"
         .replace(':from', from)
         .replace(':to', to);
+        .replace(':type', type)
             window.open(url, "_blank", "width=1000,height=800");
         });
     </script>
