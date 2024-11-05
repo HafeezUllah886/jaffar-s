@@ -102,9 +102,7 @@
                         </tbody>
                     </table>
                 </div>
-                <div class="card-footer">
-                    {{$purchases->links()}}
-                </div>
+
             </div>
         </div>
     </div>
