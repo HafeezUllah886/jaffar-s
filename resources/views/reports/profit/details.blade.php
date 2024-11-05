@@ -64,10 +64,22 @@
                                         <tbody >
                                             @php
                                                 $total = 0;
+                                                $totalPR = 0;
+                                                $totalSP = 0;
+                                                $totalS = 0;
+                                                $totalStock = 0;
+                                                $totalValue = 0;
+                                                $totalPPU = 0;
                                             @endphp
                                         @foreach ($data as $key => $item)
                                         @php
                                             $total += $item['profit'];
+                                            $totalPR = $item['purchaseRate'];
+                                            $totalSP = $item['saleRate'];
+                                            $totalS = $item['sold'];
+                                            $totalStock = $item['stock'];
+                                            $totalValue = $item['stockValue'];
+                                            $totalPPU = $item['ppu'];
                                         @endphp
                                             <tr>
                                                 <td>{{ $key+1 }}</td>
@@ -84,8 +96,14 @@
                                         </tbody>
                                         <tfoot>
                                             <tr>
-                                                <th colspan="6" class="text-end">Total</th>
+                                                <th colspan="2" class="text-end">Total</th>
+                                                <th class="text-end">{{number_format($totalPR, 2)}}</th>
+                                                <th class="text-end">{{number_format($totalSP, 2)}}</th>
+                                                <th class="text-end">{{number_format($totalS, 2)}}</th>
+                                                <th class="text-end">{{number_format($totalPPU, 2)}}</th>
                                                 <th class="text-end">{{number_format($total, 2)}}</th>
+                                                <th class="text-end">{{number_format($totalStock, 2)}}</th>
+                                                <th class="text-end">{{number_format($totalValue, 2)}}</th>
                                             </tr>
                                             <tr>
                                                 <th colspan="6" class="text-end">Expense</th>

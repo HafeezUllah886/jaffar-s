@@ -66,12 +66,20 @@
                                             </tr>
                                         </thead>
                                         <tbody>
+                                            @php
+                                                $totalQty = 0;
+                                                $totalDiscount = 0;
+                                            @endphp
                                            @foreach ($order->details as $key => $product)
+                                           @php
+                                               $totalQty += $product->qty / $product->unitValue;
+                                               $totalDiscount += $product->qty * $product->discount;
+                                           @endphp
                                                <tr class="border-1 border-dark">
                                                 <td class="m-1 p-1 border-1 border-dark">{{$key+1}}</td>
                                                 <td class="text-start m-1 p-1 border-1 border-dark">{{$product->product->name}}</td>
                                                 <td class="text-start m-1 p-1 border-1 border-dark">{{$product->unit->name}}</td>
-                                                <td class="text-end m-1 p-1 border-1 border-dark">{{number_format($product->qty / $product->unitValue)}}</td>
+                                                <td class="text-end m-1 p-1 border-1 border-dark">{{number_format($product->qty / $product->unitValue,2)}}</td>
                                                 <td class="text-end m-1 p-1 border-1 border-dark">{{number_format($product->bonus)}}</td>
                                                 <td class="text-end m-1 p-1 border-1 border-dark">{{number_format($product->price, 2)}}</td>
                                                 <td class="text-end m-1 p-1 border-1 border-dark">{{number_format($product->discount, 2)}}</td>
@@ -81,7 +89,11 @@
                                         </tbody>
                                         <tfoot>
                                             <tr class="m-0 p-0">
-                                                <th colspan="7" class="text-end p-0 m-0">Total Order</th>
+                                                <th colspan="3" class="text-end p-0 m-0">Total Order</th>
+                                                <th class="text-end p-0 m-0">{{number_format($totalQty,2)}}</th>
+                                                <th></th>
+                                                <th></th>
+                                                <th class="text-end p-0 m-0">{{number_format($totalDiscount,2)}}</th>
                                                 <th class="text-end p-0 m-0">{{number_format($order->details->sum('amount'),2)}}</th>
                                             </tr>
                                         </tfoot>

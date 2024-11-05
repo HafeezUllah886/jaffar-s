@@ -49,7 +49,13 @@
                                     <tbody id="products_list"></tbody>
                                     <tfoot>
                                         <tr>
-                                            <th colspan="7" class="text-end">Total</th>
+                                            <th colspan="" class="text-end">Total</th>
+                                            <th class="text-end" id="totalQty">0.00</th>
+                                            <th></th>
+                                            <th></th>
+                                            <th></th>
+                                            <th></th>
+                                            <th></th>
                                             <th class="text-end" id="totalGst">0.00</th>
                                             <th class="text-end" id="totalAmount">0.00</th>
                                             <th></th>
@@ -259,6 +265,15 @@
             });
 
             $("#totalGst").html(gst.toFixed(2));
+
+            var totalQty = 0;
+            $("input[id^='qty_']").each(function() {
+                var inputId = $(this).attr('id');
+                var inputValue = $(this).val();
+                totalQty += parseFloat(inputValue);
+            });
+
+            $("#totalQty").html(totalQty.toFixed(2));
 
             var discount = parseFloat($("#discount").val());
             var fright = parseFloat($("#fright").val());

@@ -59,7 +59,10 @@
                                         <tbody id="products_list"></tbody>
                                         <tfoot>
                                             <tr>
-                                                <th colspan="4" class="text-end">Total</th>
+                                                <th colspan="" class="text-end">Total</th>
+                                                <th class="text-end" id="totalQty">0.00</th>
+                                                <th></th>
+                                                <th></th>
                                                 <th class="text-end" id="totalDiscount">0.00</th>
                                                 <th class="text-end" id="totalTI">0.00</th>
                                                 <th></th>
@@ -220,7 +223,7 @@
                             });
                         html += '</select></td>';
                         html += '<td class="no-padding"><input type="number" name="price[]" oninput="updateChanges(' + id + ')" required step="any" value="'+product.price+'" min="0" class="form-control text-center" id="price_' + id + '"></td>';
-                        html += '<td class="no-padding"><input type="number" name="discount[]" oninput="updateChanges(' + id + ')" required step="any" value="'+product.discount+'" min="0" class="form-control text-center" id="discount_' + id + '"></td>';
+                        html += '<td class="no-padding"><input type="number" name="discount[]" oninput="updateChanges(' + id + ')" required step="any" value="'+product.discount+'" min="0" class="form-control text-center" id="discount_' + id + '"><input type="hidden" step="any" value="'+product.discount+'" id="packdiscount_' + id + '"></td>';
                         html += '<td class="no-padding"><input type="number" name="ti[]" required step="any" value="0.00" min="0" class="form-control text-center" id="ti_' + id + '"></td>';
                         html += '<td class="no-padding"><input type="number" name="tp[]" oninput="updateChanges(' + id + ')" required step="any" value="'+product.tp+'" min="0" class="form-control text-center" id="tp_' + id + '"></td>';
                         html += '<td class="no-padding"><input type="number" name="gst[]" oninput="updateChanges(' + id + ')" required step="any" value="18" min="0" class="form-control text-center" id="gst_' + id + '"></td>';
@@ -251,6 +254,7 @@
             var ti = (newQty * price) - (newQty * discount);
             $("#ti_"+id).val(ti);
 
+            $("#packdiscount_"+id).val(newQty * discount);
             var tp = $("#tp_"+id).val();
             var gst = $("#gst_"+id).val();
 
@@ -270,7 +274,7 @@
 
 
             var totalDiscount = 0;
-            $("input[id^='discount_']").each(function() {
+            $("input[id^='packdiscount_']").each(function() {
                 var inputId = $(this).attr('id');
                 var inputValue = $(this).val();
                 totalDiscount += parseFloat(inputValue);
@@ -292,6 +296,15 @@
                 totalGST += parseFloat(inputValue);
             });
             $("#totalGST").html(totalGST.toFixed(2));
+
+            var totalQty = 0;
+            $("input[id^='qty_']").each(function() {
+                var inputId = $(this).attr('id');
+                var inputValue = $(this).val();
+                totalQty += parseFloat(inputValue);
+            });
+
+            $("#totalQty").html(totalQty.toFixed(2));
 
             var discount = parseFloat($("#discount").val());
             var fright = parseFloat($("#fright").val());

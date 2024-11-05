@@ -83,7 +83,7 @@
                                                    <div class="col-6 text-end">
                                                        <div class="input-step flex-shrink-0 w-100">
                                                            <button type="button" onclick="minus({{$id}})">–</button>
-                                                           <input type="number" id="qty_{{$id}}" oninput="updateChanges({{$id}})" class="w-100" name="qty[]" value="{{$product->qty / $product->unitValue}}" min="1">
+                                                           <input type="number" id="qty_{{$id}}" oninput="updateChanges({{$id}})" class="w-100" name="qty[]" step="any" value="{{$product->qty / $product->unitValue}}" min="1">
                                                            <button type="button" onclick="plus({{$id}})">+</button>
                                                        </div>
                                                    </div>
@@ -219,7 +219,7 @@
                                     html += '<div class="col-6 text-end">';
                                         html += '<div class="input-step flex-shrink-0 w-100">';
                                             html += '<button type="button" onclick="minus('+id+')">–</button>';
-                                            html += '<input type="number" id="qty_' + id + '" class="w-100" oninput="updateChanges('+id+')" name="qty[]" value="1" min="1">';
+                                            html += '<input type="number" id="qty_' + id + '" class="w-100" oninput="updateChanges('+id+')" step="any" name="qty[]" value="1" min="1">';
                                             html += '<button type="button" onclick="plus('+id+')">+</button>';
                                         html += '</div>';
                                     html += '</div>';
