@@ -74,12 +74,12 @@
                                         @foreach ($data as $key => $item)
                                         @php
                                             $total += $item['profit'];
-                                            $totalPR = $item['purchaseRate'];
-                                            $totalSP = $item['saleRate'];
-                                            $totalS = $item['sold'];
-                                            $totalStock = $item['stock'];
-                                            $totalValue = $item['stockValue'];
-                                            $totalPPU = $item['ppu'];
+                                            $totalPR += $item['purchaseRate'];
+                                            $totalSP += $item['saleRate'];
+                                            $totalS += $item['sold'];
+                                            $totalStock += $item['stock'];
+                                            $totalValue += $item['stockValue'];
+                                            $totalPPU += $item['ppu'];
                                         @endphp
                                             <tr>
                                                 <td>{{ $key+1 }}</td>

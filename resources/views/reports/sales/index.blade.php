@@ -47,8 +47,8 @@
             var type = $("#c_type").find(":selected").val();
             var url = "{{ route('reportSalesData', ['from' => ':from', 'to' => ':to', 'type' => ':type']) }}"
         .replace(':from', from)
-        .replace(':to', to);
-        .replace(':type', type)
+        .replace(':to', to)
+        .replace(':type', type);
             window.open(url, "_blank", "width=1000,height=800");
         });
     </script>
