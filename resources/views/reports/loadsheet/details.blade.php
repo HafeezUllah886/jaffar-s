@@ -59,12 +59,14 @@
                                         </thead>
                                         <tbody >
                                             @php
-                                            $total_amount = 0;
+                                            $total_qty = 0;
+                                            $total_ctn = 0;
                                             @endphp
                                             @foreach ($salesData['sale_details'] as $key => $productDetails)
-                                                @php
-                                                    $total_amount += $productDetails['total_amount'];
-                                                @endphp
+                                            @php
+                                                $total_qty += $productDetails['total_qty'];
+                                                $total_ctn += $productDetails['total_qty'] / $productDetails['pack_size'];
+                                            @endphp
                                                 <tr>
                                                     <td>{{ $key+1 }}</td>
                                                     <td class="text-start">{{ $productDetails['name'] }}</td>
@@ -73,12 +75,13 @@
                                                     {{-- <td class="text-end">{{ number_format($productDetails['total_amount'], 2) }}</td>  </tr> --}}
                                                 @endforeach
                                         </tbody>
-                                        {{-- <tfoot>
+                                        <tfoot>
                                             <tr>
-                                                <th colspan="4" class="text-end">Total</th>
-                                                <th class="text-end">{{number_format($total_amount, 2)}}</th>
+                                                <th colspan="2" class="text-end">Total</th>
+                                                <th class="text-end">{{number_format($total_qty, 2)}}</th>
+                                                <th class="text-end">{{number_format($total_ctn, 2)}}</th>
                                             </tr>
-                                        </tfoot> --}}
+                                        </tfoot>
                                     </table><!--end table-->
                                 </div>
 

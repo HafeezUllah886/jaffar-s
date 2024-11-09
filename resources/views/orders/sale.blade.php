@@ -81,7 +81,7 @@
                                             <td class="no-padding">
                                                 <div class="input-group">
                                                     <span class="input-group-text" id="stockValue_{{ $id }}">{{ $new_balance }}</span>
-                                                    <input type="number" name="qty[]" oninput="updateChanges({{ $id }})" min="0.1"
+                                                    <input type="number" name="qty[]" oninput="updateChanges({{ $id }})"
                                                     required step="any" value="{{$product->qty / $unitValue}}" class="form-control text-center" id="qty_{{ $id }}">
                                                 </div>
                                             </td>
@@ -269,7 +269,7 @@
                                 html += '<option data-unit="'+unit.value+'" value="' + unit.id + '" ' + (isSelected ? 'selected' : '') + '>' + unit.name + '</option>';
                             });
                         html += '</select></td>';
-                        html += '<td class="no-padding"><div class="input-group">  <span class="input-group-text" id="stockValue_'+id+'">'+product.stock +'</span><input type="number" max="'+product.stock+'" name="qty[]" oninput="updateChanges(' + id +')" min="0.1" required step="any" value="1" class="form-control text-center" id="qty_' + id + '"></div></td>';
+                        html += '<td class="no-padding"><div class="input-group">  <span class="input-group-text" id="stockValue_'+id+'">'+product.stock +'</span><input type="number" max="'+product.stock+'" name="qty[]" oninput="updateChanges(' + id +')" required step="any" value="1" class="form-control text-center" id="qty_' + id + '"></div></td>';
                         html += '<td class="no-padding"><input type="number" name="price[]" oninput="updateChanges(' + id + ')" required step="any" value="'+product.price+'" min="1" class="form-control text-center" id="price_' + id + '"></td>';
                         html += '<td class="no-padding"><input type="number" name="discount[]" oninput="updateChanges(' + id + ')" required step="any" value="'+product.discount+'" min="0" class="form-control text-center" id="discount_' + id + '"><input type="hidden" step="any" value="'+product.discount+'" id="packdiscount_' + id + '"></td>';
                         html += '<td class="no-padding"><input type="number" name="ti[]" required step="any" value="0.00" min="0" class="form-control text-center" id="ti_' + id + '"></td>';
