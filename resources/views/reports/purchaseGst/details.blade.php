@@ -54,6 +54,7 @@
                                                 <th scope="col" class="text-start">Vendor Name</th>
                                                 <th scope="col">Bill Date</th>
                                                 <th scope="col">Tax Exc</th>
+                                                <th scope="col">Bill Amount (RP)</th>
                                                 <th scope="col" class="text-end">GST (18%)</th>
                                                 <th scope="col" class="text-end">Qty</th>
                                             </tr>
@@ -64,26 +65,31 @@
                                                 $totalGst = 0;
                                                 $totalQty = 0;
                                                 $totalTe = 0;
+                                                $totalBA = 0;
                                             @endphp
+
                                         @foreach ($purchases as $key => $item)
                                         @php
-                                        $ti = $item->details->sum('amount');
-                                        $gst = $item->details->sum('gstValue');
-                                        $qty = $item->details->sum('qty');
-                                        $te = $ti - $gst;
-                                        $totalTi += $ti;
-                                        $totalGst += $gst;
-                                        $totalQty += $qty;
-                                        $totalTe += $te;
-
-                                        @endphp
+                                                $ti = $item->details->sum('ti');
+                                                $gst = $item->details->sum('gstValue');
+                                                $qty = $item->details->sum('qty');
+                                                $bonus = $item->details->sum('bonus');
+                                                $ba = $item->totalBill;
+                                                $te = $ti - $gst;
+                                                $totalTi += $ti;
+                                                $totalGst += $gst;
+                                                $totalQty += ($qty + $bonus);
+                                                $totalTe += $te;
+                                                $totalBA += $ba;
+                                            @endphp
                                             <tr>
                                                 <td>{{ $item->id}}</td>
                                                 <td class="text-start">{{ $item->vendor->title }}</td>
                                                 <td>{{ date("d M Y", strtotime($item->date))}}</td>
                                                 <td class="text-end">{{ number_format($te, 2) }}</td>
+                                                <td class="text-end">{{ number_format($ba, 2) }}</td>
                                                 <td class="text-end">{{ number_format($gst, 2) }}</td>
-                                                <td class="text-end">{{ number_format($qty, 2) }}</td>
+                                                <td class="text-end">{{ number_format($qty + $bonus, 2) }}</td>
                                             </tr>
                                         @endforeach
                                         </tbody>
@@ -91,6 +97,7 @@
                                             <tr>
                                                 <th colspan="3" class="text-end">Total</th>
                                                 <th class="text-end">{{number_format($totalTe, 2)}}</th>
+                                                <th class="text-end">{{number_format($totalBA, 2)}}</th>
                                                 <th class="text-end">{{number_format($totalGst, 2)}}</th>
                                                 <th class="text-end">{{number_format($totalQty, 2)}}</th>
                                             </tr>
