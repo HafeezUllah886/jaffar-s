@@ -146,7 +146,7 @@
                                     html += '<div class="col-6 text-end">';
                                         html += '<div class="input-step flex-shrink-0 w-100">';
                                             html += '<button type="button" onclick="minus('+id+')">–</button>';
-                                            html += '<input type="number" id="qty_' + id + '" class="w-100" oninput=" updateChanges('+id+')" step="any" name="qty[]" value="1">';
+                                            html += '<input type="number" id="qty_' + id + '" class="w-100" oninput="updateChanges('+id+')" step="any" name="qty[]" value="1">';
                                             html += '<button type="button" onclick="plus('+id+')">+</button>';
                                         html += '</div>';
                                     html += '</div>';
@@ -155,14 +155,14 @@
                                     html += '<div class="col-6">';
                                         html += '<div>';
                                             html += '<td class="no-padding">';
-                                                html += '<input type="number" oninput="updateChanges('+id+')" placeholder="Discount" class="form-control text-center" id="discount_' + id + '" value="'+discount+'" name="discount[]">';
+                                                html += '<input type="number" oninput="updateChanges('+id+')" placeholder="Discount" step="any" class="form-control text-center" id="discount_' + id + '" value="'+discount+'" name="discount[]">';
                                             html += '</td>';
                                         html += '</div>';
                                     html += '</div>';
                                     html += '<div class="col-6">';
                                         html += '<div>';
                                             html += '<td class="no-padding">';
-                                                html += '<input type="number" placeholder="Bonus" class="form-control text-center" id="bonus_' + id + '" name="bonus[]">';
+                                                html += '<input type="number" placeholder="Bonus" step="any" class="form-control text-center" id="bonus_' + id + '" name="bonus[]">';
                                             html += '</td>';
                                         html += '</div>';
                                     html += '</div>';

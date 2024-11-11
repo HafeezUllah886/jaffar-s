@@ -92,14 +92,14 @@
                                                 <div class="col-6">
                                                     <div>
                                                         <td class="no-padding">
-                                                            <input type="number" oninput="updateChanges({{$id}})" placeholder="Discount" class="form-control text-center" id="discount_{{$id}}" value="{{$product->discount}}" name="discount[]">
+                                                            <input type="number" oninput="updateChanges({{$id}})" placeholder="Discount" step="any" class="form-control text-center" id="discount_{{$id}}" value="{{$product->discount}}" name="discount[]">
                                                         </td>
                                                     </div>
                                                 </div>
                                                 <div class="col-6">
                                                     <div>
                                                         <td class="no-padding">
-                                                            <input type="number" placeholder="Bonus" class="form-control text-center" value="{{$product->bonus}}" id="bonus_{{$id}}" name="bonus[]">
+                                                            <input type="number" placeholder="Bonus" class="form-control text-center" step="any" value="{{$product->bonus}}" id="bonus_{{$id}}" name="bonus[]">
                                                         </td>
                                                     </div>
                                                 </div>
@@ -228,14 +228,14 @@
                                     html += '<div class="col-6">';
                                         html += '<div>';
                                             html += '<td class="no-padding">';
-                                                html += '<input type="number" oninput="updateChanges('+id+')" placeholder="Discount" class="form-control text-center" id="discount_' + id + '" value="'+discount+'" name="discount[]">';
+                                                html += '<input type="number" oninput="updateChanges('+id+')" placeholder="Discount" step="any" class="form-control text-center" id="discount_' + id + '" value="'+discount+'" name="discount[]">';
                                             html += '</td>';
                                         html += '</div>';
                                     html += '</div>';
                                     html += '<div class="col-6">';
                                         html += '<div>';
                                             html += '<td class="no-padding">';
-                                                html += '<input type="number" placeholder="Bonus" class="form-control text-center" id="bonus_' + id + '" name="bonus[]">';
+                                                html += '<input type="number" placeholder="Bonus" class="form-control text-center" step="any" id="bonus_' + id + '" name="bonus[]">';
                                             html += '</td>';
                                         html += '</div>';
                                     html += '</div>';
