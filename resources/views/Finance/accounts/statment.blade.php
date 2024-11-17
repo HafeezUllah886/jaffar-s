@@ -6,13 +6,14 @@
                     <div class="row">
                         <div class="col-lg-12">
                             <div class="hstack gap-2 justify-content-end d-print-none p-2 mt-4">
+                                <a href="https://web.whatsapp.com/" target="_blank" class="btn btn-success ml-4"><i class="ri-whatsapp-line mr-4"></i> Whatsapp</a>
                                 <a href="javascript:window.print()" class="btn btn-success ml-4"><i class="ri-printer-line mr-4"></i> Print</a>
                             </div>
                             <div class="card-header border-bottom-dashed p-4">
                                 <div class="d-flex">
                                     <div class="flex-grow-1">
                                         <h1>JAFFAR & BROTHERS</h1>
-                                        
+
                                     </div>
                                     <div class="flex-shrink-0 mt-sm-0 mt-3">
                                         <h3>Account Statement</h3>

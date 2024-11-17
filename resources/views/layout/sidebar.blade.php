@@ -221,8 +221,16 @@
                                     data-key="t-basic-elements">Sales Report</a>
                             </li>
                             <li class="nav-item">
+                                <a href="{{ route('reportSaleProducts') }}" class="nav-link"
+                                    data-key="t-basic-elements">Products Sales Report</a>
+                            </li>
+                            <li class="nav-item">
                                 <a href="{{ route('reportPurchases') }}" class="nav-link"
                                     data-key="t-basic-elements">Purchases Report</a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="{{ route('reportPurchaseProducts') }}" class="nav-link"
+                                    data-key="t-basic-elements">Products Purchases Report</a>
                             </li>
                             <li class="nav-item">
                                 <a href="{{ route('reportComparison') }}" class="nav-link"
@@ -235,6 +243,10 @@
                             <li class="nav-item">
                                 <a href="{{ route('reportBalanceSheet') }}" class="nav-link"
                                     data-key="t-basic-elements">Balance Sheet</a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="{{ route('reportCustomersBalance') }}" class="nav-link"
+                                    data-key="t-basic-elements">Customers Balance</a>
                             </li>
                         </ul>
                     </div>

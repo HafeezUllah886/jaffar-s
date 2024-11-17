@@ -6,6 +6,7 @@
                     <div class="row">
                         <div class="col-lg-12">
                             <div class="hstack gap-2 justify-content-end d-print-none p-2 mt-4">
+                                <a href="https://web.whatsapp.com/" target="_blank" class="btn btn-success ml-4"><i class="ri-whatsapp-line mr-4"></i> Whatsapp</a>
                                 <a href="javascript:window.print()" class="btn btn-success ml-4"><i class="ri-printer-line mr-4"></i> Print</a>
                             </div>
                             <div class="card-header border-bottom-dashed p-4">
@@ -20,7 +21,7 @@
                             </div>
                             <!--end card-header-->
                         </div><!--end col-->
-                        
+
                         <div class="col-lg-12">
                             <div class="card-body p-4">
                                 <div class="table-responsive">
@@ -39,9 +40,19 @@
                                             </tr>
                                         </thead>
                                         <tbody >
-                                           
+                                            @php
+                                                $total_sold = 0;
+                                                $total_amount = 0;
+                                                $total_profit = 0;
+                                                $total_stock = 0;
+                                            @endphp
                                         @foreach ($topProductsArray as $key => $item)
-                                        
+                                        @php
+                                        $total_sold += $item['sold'] / $item['unitValue'];
+                                        $total_amount += $item['amount'];
+                                        $total_profit += $item['profit'];
+                                        $total_stock += $item['stock'] / $item['unitValue'];
+                                    @endphp
                                             <tr>
                                                 <td>{{ $key+1 }}</td>
                                                 <td class="text-start">{{ $item['name'] }}</td>
@@ -55,6 +66,17 @@
                                             </tr>
                                         @endforeach
                                         </tbody>
+                                        <tfoot>
+                                            <tr>
+                                                <th class="text-end" colspan="3">Total</th>
+                                                <th></th>
+                                                <th></th>
+                                                <th class="text-end">{{number_format($total_sold,0)}}</th>
+                                                <th class="text-end">{{number_format($total_amount,0)}}</th>
+                                                <th class="text-end">{{number_format($total_profit,0)}}</th>
+                                                <th class="text-end">{{number_format($total_stock,0)}}</th>
+                                            </tr>
+                                        </tfoot>
                                     </table><!--end table-->
                                 </div>
 
@@ -69,6 +91,26 @@
         </div>
         <!--end row-->
 
+@endsection
+@section('page-css')
+<link rel="stylesheet" href="{{ asset('assets/libs/datatable/datatable.bootstrap5.min.css') }}" />
+<!--datatable responsive css-->
+<link rel="stylesheet" href="{{ asset('assets/libs/datatable/responsive.bootstrap.min.css') }}" />
+
+<link rel="stylesheet" href="{{ asset('assets/libs/datatable/buttons.dataTables.min.css') }}">
+@endsection
+@section('page-js')
+    <script src="{{ asset('assets/libs/datatable/jquery.dataTables.min.js')}}"></script>
+    <script src="{{ asset('assets/libs/datatable/dataTables.bootstrap5.min.js')}}"></script>
+    <script src="{{ asset('assets/libs/datatable/dataTables.responsive.min.js')}}"></script>
+    <script src="{{ asset('assets/libs/datatable/dataTables.buttons.min.js')}}"></script>
+    <script src="{{ asset('assets/libs/datatable/buttons.print.min.js')}}"></script>
+    <script src="{{ asset('assets/libs/datatable/buttons.html5.min.js')}}"></script>
+    <script src="{{ asset('assets/libs/datatable/vfs_fonts.js')}}"></script>
+    <script src="{{ asset('assets/libs/datatable/pdfmake.min.js')}}"></script>
+    <script src="{{ asset('assets/libs/datatable/jszip.min.js')}}"></script>
+
+    <script src="{{ asset('assets/js/pages/datatables.init.js') }}"></script>
 @endsection
 
 

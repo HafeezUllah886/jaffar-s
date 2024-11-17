@@ -15,7 +15,7 @@
                                         <h1>JAFFAR & BROTHERS</h1>
                                     </div>
                                     <div class="flex-shrink-0 mt-sm-0 mt-3">
-                                        <h3>Sales Report</h3>
+                                        <h3>Products Sales Report</h3>
                                     </div>
                                 </div>
                             </div>
@@ -52,41 +52,44 @@
                                         <thead>
                                             <tr class="table-active">
                                                 <th scope="col" style="width: 50px;">#</th>
-                                                <th scope="col" class="text-start">Customer Name</th>
-                                                <th scope="col" class="text-start">Order Booker</th>
-                                                <th scope="col">Date</th>
-                                                <th scope="col">Discount</th>
-                                                <th scope="col">Fright (-)</th>
-                                                <th scope="col">Fright (+)</th>
-                                                <th scope="col">Amount</th>
+                                                <th scope="col" class="text-start">Product</th>
+                                                <th scope="col" class="text-end">Avg Price</th>
+                                                <th scope="col" class="text-end">Qty</th>
+                                                <th scope="col" class="text-end">Bonus</th>
+
                                             </tr>
                                         </thead>
-                                        <tbody >
-                                        @foreach ($sales as $key => $item)
-                                            <tr>
-                                                <td>{{ $item->id}}</td>
+                                        <tbody>
+                                            @php
+                                                $ser = 0;
+                                            @endphp
+                                        @foreach ($products as $key => $item)
+                                        @if ($item->qty > 0 || $item->bonus > 0)
+                                        @php
+                                            $ser += 1;
+                                        @endphp
+                                        <tr>
+                                            <td>{{ $ser}}</td>
+                                            <td class="text-start">{{ $item->name}}</td>
+                                            <td class="text-end">{{ number_format($item->price, 2) }}</td>
+                                            <td class="text-end">{{ number_format($item->qty, 2) }}</td>
+                                            <td class="text-end">{{ number_format($item->bonus, 2) }}</td>
+                                        </tr>
+                                        @endif
 
-                                                <td class="text-start">{{ $item->customer->title }}</td>
-                                                <td class="text-start">{{ $item->orderbooker->name }}</td>
-                                                <td>{{ date("d M Y", strtotime($item->date))}}</td>
-                                                <td class="text-end">{{ number_format($item->discount, 2) }}</td>
-                                                <td class="text-end">{{ number_format($item->fright, 2) }}</td>
-                                                <td class="text-end">{{ number_format($item->fright1, 2) }}</td>
-                                                <td class="text-end">{{ number_format($item->net, 2) }}</td>
-                                            </tr>
                                         @endforeach
                                         </tbody>
                                         <tfoot>
                                             <tr>
-                                                <th colspan="4" class="text-end">Total</th>
-                                                <th class="text-end">{{number_format($sales->sum('discount'), 2)}}</th>
-                                                <th class="text-end">{{number_format($sales->sum('fright'), 2)}}</th>
-                                                <th class="text-end">{{number_format($sales->sum('fright1'), 2)}}</th>
-                                                <th class="text-end">{{number_format($sales->sum('net'), 2)}}</th>
+                                                <th colspan="2" class="text-end">Total</th>
+                                                <th></th>
+                                                <th class="text-end">{{number_format($products->sum('qty'), 2)}}</th>
+                                                <th class="text-end">{{number_format($products->sum('bonus'), 2)}}</th>
                                             </tr>
                                         </tfoot>
                                     </table><!--end table-->
                                 </div>
+
                             </div>
                             <!--end card-body-->
                         </div><!--end col-->
@@ -97,6 +100,7 @@
             <!--end col-->
         </div>
         <!--end row-->
+
 @endsection
 @section('page-css')
 <link rel="stylesheet" href="{{ asset('assets/libs/datatable/datatable.bootstrap5.min.css') }}" />
