@@ -53,6 +53,7 @@
                                             <tr class="table-active">
                                                 <th scope="col" style="width: 50px;">#</th>
                                                 <th scope="col" class="text-start">Product</th>
+                                                <th scope="col" class="text-start">Category</th>
                                                 <th scope="col" class="text-end">Quantity</th>
                                                 <th scope="col" class="text-end">CTN / Boxes</th>
                                                 <th scope="col" class="text-end">Amount</th>
@@ -74,6 +75,7 @@
                                                 <tr>
                                                     <td>{{ $key+1 }}</td>
                                                     <td class="text-start">{{ $productDetails['name'] }}</td>
+                                                    <td class="text-start">{{ $productDetails['cat'] }}</td>
                                                     <td class="text-end">{{ $productDetails['total_qty'] }}</td>
                                                     <td class="text-end">{{ number_format($productDetails['total_qty'] / $productDetails['pack_size'], 2)}} {{$productDetails['pack_size'] > 1 ? "Box" : "Nos"}}</td>
                                                     <td class="text-end">{{ number_format($productDetails['total_amount'], 2) }}</td>  </tr>

@@ -30,6 +30,7 @@
                                             <tr class="table-active">
                                                 <th scope="col" style="width: 50px;">#</th>
                                                 <th scope="col" class="text-start">Product</th>
+                                                <th scope="col" class="text-start">Category</th>
                                                 <th scope="col" class="text-start">Packing</th>
                                                 <th scope="col" class="text-end">Avg Purchase Rate</th>
                                                 <th scope="col" class="text-end">Avg Sale Price</th>
@@ -56,6 +57,7 @@
                                             <tr>
                                                 <td>{{ $key+1 }}</td>
                                                 <td class="text-start">{{ $item['name'] }}</td>
+                                                <td class="text-start">{{ $item['cat'] }}</td>
                                                 <td class="text-start">{{ $item['unit'] }}</td>
                                                 <td class="text-end">{{ number_format($item['pprice'] * $item['unitValue'],2) }}</td>
                                                 <td class="text-end">{{ number_format($item['price'] * $item['unitValue'],2) }}</td>
@@ -68,7 +70,7 @@
                                         </tbody>
                                         <tfoot>
                                             <tr>
-                                                <th class="text-end" colspan="3">Total</th>
+                                                <th class="text-end" colspan="4">Total</th>
                                                 <th></th>
                                                 <th></th>
                                                 <th class="text-end">{{number_format($total_sold,0)}}</th>

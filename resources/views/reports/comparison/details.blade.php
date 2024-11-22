@@ -58,6 +58,7 @@
                                         <thead>
                                             <tr class="table-active">
                                                 <th scope="col" class="text-start">Product</th>
+                                                <th scope="col" class="text-start">Category</th>
                                                 <th scope="col" class="text-start">Unit</th>
                                                 <th scope="col" class="text-end">Year One</th>
                                                 <th scope="col" class="text-end">Year Two</th>
@@ -68,6 +69,7 @@
                                         @foreach ($products as $key => $product)
                                         <tr>
                                             <td class="text-start">{{$product->name}}</td>
+                                            <td class="text-start">{{$product->category->name}}</td>
                                             <td class="text-start">{{$product->unit->name}}</td>
                                             <td class="text-end">{{number_format($product->sold1)}}</td>
                                             <td class="text-end">{{number_format($product->sold2)}}</td>
@@ -76,7 +78,7 @@
                                         @endforeach
                                         </tbody>
                                         <tfoot>
-                                            <th class="text-end" colspan="2">Total</th>
+                                            <th class="text-end" colspan="3">Total</th>
                                             <td class="text-end">{{number_format($products->sum('sold1'))}}</td>
                                             <td class="text-end">{{number_format($products->sum('sold2'))}}</td>
                                             <td class="text-end">{{number_format(calculateGrowthPercentage($products->sum('sold1'), $products->sum('sold2')),2)}}%</td>

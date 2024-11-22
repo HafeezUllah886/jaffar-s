@@ -25,7 +25,11 @@ function initializeTables() {
         }
     }), new DataTable("#buttons-datatables", {
         dom: "Bfrtip",
-        buttons: ["copy", "csv", "excel", "print"]
+        buttons: ["copy", "csv", "excel", {
+            extend: "print",
+            footer: true, // Include the footer in the print view
+
+        }],
     }), new DataTable("#ajax-datatables", {
         ajax: "assets/json/datatable.json"
     });

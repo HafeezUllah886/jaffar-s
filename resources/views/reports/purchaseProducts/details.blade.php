@@ -53,6 +53,7 @@
                                             <tr class="table-active">
                                                 <th scope="col" style="width: 50px;">#</th>
                                                 <th scope="col" class="text-start">Product</th>
+                                                <th scope="col" class="text-start">Category</th>
                                                 <th scope="col" class="text-end">Avg Price</th>
                                                 <th scope="col" class="text-end">Qty</th>
                                                 <th scope="col" class="text-end">Bonus</th>
@@ -71,6 +72,7 @@
                                         <tr>
                                             <td>{{ $ser}}</td>
                                             <td class="text-start">{{ $item->name}}</td>
+                                            <td class="text-start">{{ $item->category->name}}</td>
                                             <td class="text-end">{{ number_format($item->price, 2) }}</td>
                                             <td class="text-end">{{ number_format($item->qty, 2) }}</td>
                                             <td class="text-end">{{ number_format($item->bonus, 2) }}</td>
@@ -81,7 +83,7 @@
                                         </tbody>
                                         <tfoot>
                                             <tr>
-                                                <th colspan="2" class="text-end">Total</th>
+                                                <th colspan="3" class="text-end">Total</th>
                                                 <th></th>
                                                 <th class="text-end">{{number_format($products->sum('qty'), 2)}}</th>
                                                 <th class="text-end">{{number_format($products->sum('bonus'), 2)}}</th>

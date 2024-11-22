@@ -52,7 +52,8 @@
                                         <thead>
                                             <tr class="table-active">
                                                 <th scope="col" style="width: 50px;">#</th>
-                                                <th scope="col">Product</th>
+                                                <th scope="col" class="text-start">Product</th>
+                                                <th scope="col" class="text-start">Category</th>
                                                 <th scope="col" class="text-end">Avg Purchase Rate</th>
                                                 <th scope="col" class="text-end">Avg Sale Price</th>
                                                 <th scope="col" class="text-end">Sold Qty</th>
@@ -84,7 +85,8 @@
                                         @endphp
                                             <tr>
                                                 <td>{{ $key+1 }}</td>
-                                                <td>{{ $item['name'] }}</td>
+                                                <td class="text-start">{{ $item['name'] }}</td>
+                                                <td class="text-start">{{ $item['cat'] }}</td>
                                                 <td class="text-end">{{ number_format($item['purchaseRate'],2) }}</td>
                                                 <td class="text-end">{{ number_format($item['saleRate'],2) }}</td>
                                                 <td class="text-end">{{ number_format($item['sold'],2) }}</td>
@@ -97,7 +99,7 @@
                                         </tbody>
                                         <tfoot>
                                             <tr>
-                                                <th colspan="2" class="text-end">Total</th>
+                                                <th colspan="3" class="text-end">Total</th>
                                                 <th class="text-end">{{number_format($totalPR, 2)}}</th>
                                                 <th class="text-end">{{number_format($totalSP, 2)}}</th>
                                                 <th class="text-end">{{number_format($totalS, 2)}}</th>
@@ -107,12 +109,16 @@
                                                 <th class="text-end">{{number_format($totalValue, 2)}}</th>
                                             </tr>
                                             <tr>
-                                                <th colspan="6" class="text-end">Expense</th>
+                                                <th colspan="7" class="text-end">Expense</th>
                                                 <th class="text-end">{{number_format($expenses, 2)}}</th>
+                                                <th></th>
+                                                <th></th>
                                             </tr>
                                             <tr>
-                                                <th colspan="6" class="text-end">Net Profit</th>
+                                                <th colspan="7" class="text-end">Net Profit</th>
                                                 <th class="text-end">{{number_format($total - $expenses, 2)}}</th>
+                                                <th></th>
+                                                <th></th>
                                             </tr>
                                         </tfoot>
                                     </table><!--end table-->
