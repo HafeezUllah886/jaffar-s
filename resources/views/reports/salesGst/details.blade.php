@@ -80,10 +80,11 @@
                                         $ba = $item->totalBill;
                                         $te = $ti - $gst;
                                         $totalTi += $ti;
-                                        $totalGst += $gst;
+
                                         $totalQty += ($qty + $bonus);
                                         $totalTe += $te;
                                         $totalBA += $ba;
+                                        $totalGst += $gst;
                                         @endphp
                                             <tr>
                                                 <td>{{ $item->id}}</td>
@@ -104,7 +105,7 @@
                                                 <th colspan="6" class="text-end">Total</th>
                                                 <th class="text-end">{{number_format($totalTe, 2)}}</th>
                                                 <th class="text-end">{{number_format($totalBA, 2)}}</th>
-                                                <th class="text-end">{{number_format($totalGst, 2)}}</th>
+                                                <th class="text-end">{{number_format($totalBA * 18 / 100, 2)}}</th>
                                                 <th class="text-end">{{number_format($totalQty, 2)}}</th>
                                             </tr>
                                         </tfoot>

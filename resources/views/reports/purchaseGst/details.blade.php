@@ -96,7 +96,7 @@
                                                 <th colspan="3" class="text-end">Total</th>
                                                 <th class="text-end">{{number_format($totalTe, 2)}}</th>
                                                 <th class="text-end">{{number_format($totalBA, 2)}}</th>
-                                                <th class="text-end">{{number_format($totalGst, 2)}}</th>
+                                                <th class="text-end">{{number_format($totalBA * 18 / 100, 2)}}</th>
                                                 <th class="text-end">{{number_format($totalQty, 2)}}</th>
                                             </tr>
                                         </tfoot>
