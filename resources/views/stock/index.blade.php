@@ -12,6 +12,7 @@
                             <th>#</th>
                             <th>Product</th>
                             <th>Stock</th>
+                            <th>Value</th>
                             <th>Action</th>
                         </thead>
                         <tbody>
@@ -20,6 +21,7 @@
                                     <td>{{ $key + 1 }}</td>
                                     <td>{{ $product->name }}</td>
                                     <td>{{ number_format(getStock($product->id) / $product->unit->value, 2) }} {{$product->unit->name}}</td>
+                                    <td>{{ number_format(productStockValue($product->id))}}</td>
                                     <td>
                                         <button class="btn btn-info" onclick="ViewDetails({{ $product->id }}, {{$product->unitID}})">
                                                 Details
