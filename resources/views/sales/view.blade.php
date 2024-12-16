@@ -68,17 +68,21 @@
                                                 <th scope="col" class="text-end">GST {{$sale->details[0]->gst}}%</th>
                                             </tr>
                                         </thead>
+
                                         <tbody id="products-list">
                                             @php
                                                 $totalQty = 0;
                                                 $totalBonus = 0;
                                                 $discount= 0;
+                                                $totalRP = 0;
                                             @endphp
                                            @foreach ($sale->details as $key => $product)
                                            @php
                                                 $discount += $product->qty * $product->discount;
-                                               $totalQty += $product->qty / $product->unitValue;
+                                                $qty = $product->qty / $product->unitValue;
+                                               $totalQty += $qty;
                                                $totalBonus += $product->bonus;
+                                               $totalRP += $product->tp * ($qty + $product->bonus);
                                            @endphp
                                                <tr class="border-1 border-dark">
                                                 <td class="m-1 p-1 border-1 border-dark">{{$key+1}}</td>

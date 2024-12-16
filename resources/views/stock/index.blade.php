@@ -16,7 +16,15 @@
                             <th>Action</th>
                         </thead>
                         <tbody>
+                            @php
+                                $totalStock = 0;
+                                $totalValue = 0;
+                            @endphp
                             @foreach ($products as $key => $product)
+                            @php
+                                $totalStock += getStock($product->id) / $product->unit->value;
+                                $totalValue += productStockValue($product->id);
+                            @endphp
                                 <tr>
                                     <td>{{ $key + 1 }}</td>
                                     <td>{{ $product->name }}</td>
@@ -30,6 +38,11 @@
                                 </tr>
                             @endforeach
                         </tbody>
+                        <tfoot>
+                            <th colspan="2">Total</th>
+                            <th>{{number_format($totalStock,2)}}</th>
+                            <th>{{number_format($totalValue,2)}}</th>
+                        </tfoot>
                     </table>
                 </div>
             </div>
