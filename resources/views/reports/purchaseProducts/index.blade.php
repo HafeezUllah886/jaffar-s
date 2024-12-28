@@ -16,6 +16,16 @@
                                 <input type="date" name="to" id="to" value="{{lastDayOfMonth()}}" class="form-control">
                     </div>
                     <div class="form-group mt-2">
+                        <label for="catID">Category</label>
+                             <select name="catID" id="catID" class="form-control">
+                                <option value="all">All</option>
+                                @foreach ($categories as $cat)
+                                    <option value="{{$cat->id}}">{{$cat->name}}</option>
+                                @endforeach
+                             </select>
+                    </div>
+
+                    <div class="form-group mt-2">
                         <button class="btn btn-success w-100" id="viewBtn">View Report</button>
                     </div>
                 </div>
@@ -28,14 +38,17 @@
 @section('page-js')
 
     <script>
-
         $("#viewBtn").on("click", function (){
+
             var from = $("#from").val();
             var to = $("#to").val();
-            var url = "{{ route('reportPurchaseProductsData', ['from' => ':from', 'to' => ':to']) }}"
+            var catID = $("#catID").find(":selected").val();
+            var url = "{{ route('reportPurchaseProductsData', ['from' => ':from', 'to' => ':to', 'catID' => ':catID']) }}"
         .replace(':from', from)
-        .replace(':to', to);
-            window.open(url, "_blank", "width=1000,height=800");
+        .replace(':to', to)
+        .replace(':catID', catID);
+
+        window.open(url, "_blank", "width=1000,height=800");
         });
     </script>
 @endsection
