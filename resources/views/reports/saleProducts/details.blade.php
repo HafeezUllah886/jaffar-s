@@ -48,7 +48,7 @@
                         <div class="col-lg-12">
                             <div class="card-body p-4">
                                 <div class="table-responsive">
-                                    <table class="table table-borderless text-center table-nowrap align-middle mb-0" id="buttons-datatables">
+                                    <table class="table table-borderless text-center table-nowrap align-middle mb-0" id="datatables">
                                         <thead>
                                             <tr class="table-active">
                                                 <th scope="col" style="width: 50px;">#</th>
@@ -123,6 +123,49 @@
     <script src="{{ asset('assets/libs/datatable/jszip.min.js')}}"></script>
 
     <script src="{{ asset('assets/js/pages/datatables.init.js') }}"></script>
+
+    <script>
+        $('#datatables').DataTable({
+    responsive: false,
+    dom: 'Bfrtip',
+    buttons: ['print', 'excel', 'pdf'],
+    footerCallback: function (row, data, start, end, display) {
+        var api = this.api();
+
+        // Helper function to get integer or float from string
+        var intVal = function (i) {
+            return typeof i === 'string'
+                ? i.replace(/[\$,]/g, '') * 1
+                : typeof i === 'number'
+                ? i
+                : 0;
+        };
+
+        // Total for Tax Exc column
+
+        // Total for GST (18%) column
+        var totalGst = api
+            .column(4, { search: 'applied' })
+            .data()
+            .reduce(function (a, b) {
+                return intVal(a) + intVal(b);
+            }, 0);
+
+        // Total for Qty column
+        var totalQty = api
+            .column(5, { search: 'applied' })
+            .data()
+            .reduce(function (a, b) {
+                return intVal(a) + intVal(b);
+            }, 0);
+
+        // Update the footer
+        
+        $(api.column(4).footer()).html(totalGst.toFixed(2));
+        $(api.column(5).footer()).html(totalQty.toFixed(2));
+    },
+});
+    </script>
 @endsection
 
 

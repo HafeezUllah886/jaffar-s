@@ -54,7 +54,7 @@
                         <div class="col-lg-12">
                             <div class="card-body p-4">
                                 <div class="table-responsive">
-                                    <table class="table table-borderless text-center table-nowrap align-middle mb-0" id="buttons-datatables">
+                                    <table class="table table-borderless text-center table-nowrap align-middle mb-0" id="datatables">
                                         <thead>
                                             <tr class="table-active">
                                                 <th scope="col" class="text-start">Product</th>
@@ -117,6 +117,46 @@
     <script src="{{ asset('assets/libs/datatable/jszip.min.js')}}"></script>
 
     <script src="{{ asset('assets/js/pages/datatables.init.js') }}"></script>
+
+    <script>
+        $('#datatables').DataTable({
+    responsive: false,
+    dom: 'Bfrtip',
+    buttons: ['print', 'excel', 'pdf'],
+    footerCallback: function (row, data, start, end, display) {
+        var api = this.api();
+
+        // Helper function to get integer or float from string
+        var intVal = function (i) {
+            return typeof i === 'string'
+                ? i.replace(/[\$,]/g, '') * 1
+                : typeof i === 'number'
+                ? i
+                : 0;
+        };
+
+        // Total for Tax Exc column
+        var totalTaxExc1 = api
+            .column(4, { search: 'applied' })
+            .data()
+            .reduce(function (a, b) {
+                return intVal(a) + intVal(b);
+            }, 0);
+
+        var totalTaxExc = api
+            .column(3, { search: 'applied' })
+            .data()
+            .reduce(function (a, b) {
+                return intVal(a) + intVal(b);
+            }, 0);
+
+      
+        // Update the footer
+        $(api.column(4).footer()).html(totalTaxExc1.toFixed(2));
+        $(api.column(3).footer()).html(totalTaxExc.toFixed(2));
+    },
+});
+    </script>
 @endsection
 
 
