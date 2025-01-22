@@ -59,6 +59,7 @@
                                                 <th scope="col">Products Discount</th>
                                                 <th scope="col">Fright (-)</th>
                                                 <th scope="col">Fright (+)</th>
+                                                <th scope="col">WH</th>
                                                 <th scope="col">Amount</th>
                                             </tr>
                                         </thead>
@@ -74,6 +75,7 @@
                                                 <td class="text-end">{{ number_format($item->pdiscount, 2) }}</td>
                                                 <td class="text-end">{{ number_format($item->fright, 2) }}</td>
                                                 <td class="text-end">{{ number_format($item->fright1, 2) }}</td>
+                                                <td class="text-end">{{ number_format($item->whValue, 2) }}</td>
                                                 <td class="text-end">{{ number_format($item->net, 2) }}</td>
                                             </tr>
                                         @endforeach
@@ -85,6 +87,7 @@
                                                 <th class="text-end">{{number_format($sales->sum('pdiscount'), 2)}}</th>
                                                 <th class="text-end">{{number_format($sales->sum('fright'), 2)}}</th>
                                                 <th class="text-end">{{number_format($sales->sum('fright1'), 2)}}</th>
+                                                <th class="text-end">{{number_format($sales->sum('whValue'), 2)}}</th>
                                                 <th class="text-end">{{number_format($sales->sum('net'), 2)}}</th>
                                             </tr>
                                         </tfoot>
@@ -175,6 +178,12 @@
             .reduce(function (a, b) {
                 return intVal(a) + intVal(b);
             }, 0);
+        var totalWH= api
+            .column(9, { search: 'applied' })
+            .data()
+            .reduce(function (a, b) {
+                return intVal(a) + intVal(b);
+            }, 0);
 
         // Update the footer
         $(api.column(4).footer()).html(totalTaxExc1.toFixed(2));
@@ -182,6 +191,7 @@
         $(api.column(6).footer()).html(totalBillAmount.toFixed(2));
         $(api.column(7).footer()).html(totalGst.toFixed(2));
         $(api.column(8).footer()).html(totalQty.toFixed(2));
+        $(api.column(9).footer()).html(totalWH.toFixed(2));
     },
 });
     </script>

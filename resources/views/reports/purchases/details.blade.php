@@ -72,7 +72,7 @@
                                                 <td class="text-end">{{ number_format($item->discount, 2) }}</td>
                                                 <td class="text-end">{{ number_format($item->fright, 2) }}</td>
                                                 <td class="text-end">{{ number_format($item->fright1, 2) }}</td>
-                                                <td class="text-end">{{ number_format($item->wh, 2) }}</td>
+                                                <td class="text-end">{{ number_format($item->whValue, 2) }}</td>
                                                 <td class="text-end">{{ number_format($item->net, 2) }}</td>
                                             </tr>
                                         @endforeach
@@ -83,7 +83,7 @@
                                                 <th class="text-end">{{number_format($purchases->sum('discount'), 2)}}</th>
                                                 <th class="text-end">{{number_format($purchases->sum('fright'), 2)}}</th>
                                                 <th class="text-end">{{number_format($purchases->sum('fright1'), 2)}}</th>
-                                                <th class="text-end">{{number_format($purchases->sum('wh'), 2)}}</th>
+                                                <th class="text-end">{{number_format($purchases->sum('whValue'), 2)}}</th>
                                                 <th class="text-end">{{number_format($purchases->sum('net'), 2)}}</th>
                                             </tr>
                                         </tfoot>
