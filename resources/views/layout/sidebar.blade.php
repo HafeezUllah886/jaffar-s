@@ -248,6 +248,10 @@
                                 <a href="{{ route('reportCustomersBalance') }}" class="nav-link"
                                     data-key="t-basic-elements">Customers Balance</a>
                             </li>
+                            <li class="nav-item">
+                                <a href="{{ route('reportCustomerProducts') }}" class="nav-link"
+                                    data-key="t-basic-elements">Customer Products</a>
+                            </li>
                         </ul>
                     </div>
                 </li>
