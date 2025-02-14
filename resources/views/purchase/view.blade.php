@@ -66,6 +66,7 @@
                                                 <thead>
                                                     <tr class="table-active">
                                                         <th scope="col" style="width: 50px;">#</th>
+                                                        <th scope="col" class="text-start">Code</th>
                                                         <th scope="col" class="text-start">Product</th>
                                                         <th scope="col" class="text-start">Unit</th>
                                                         <th scope="col" class="text-end">CTN</th>
@@ -89,7 +90,8 @@
                                                     @endphp
                                                        <tr>
                                                         <td class="p-1 m-1">{{$key+1}}</td>
-                                                        <td class="text-start p-1 m-1">{{$product->product->code}} | {{$product->product->name}}</td>
+                                                        <td class="text-start p-1 m-1">{{$product->product->code}}</td>
+                                                        <td class="text-start p-1 m-1">{{$product->product->name}}</td>
                                                         <td class="text-start m-1 p-1">{{$product->unit->name}}</td>
                                                         <td class="text-end m-1 p-1">{{number_format($product->qty / $product->unitValue)}}</td>
                                                         <td class="text-end p-1 m-1">{{number_format($product->qty)}}</td>
@@ -105,7 +107,7 @@
                                                 </tbody>
                                                 <tfoot>
                                                     <tr>
-                                                        <th colspan="3" class="text-end">Total</th>
+                                                        <th colspan="4" class="text-end">Total</th>
                                                         <th class="text-end">{{number_format($totalQty)}}</th>
                                                         <th class="text-end">{{number_format($purchase->details->sum('qty'))}}</th>
                                                         <th></th>

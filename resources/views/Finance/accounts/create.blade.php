@@ -55,6 +55,9 @@
                                         <option value="Wholeseller">Wholeseller</option>
                                         <option value="Super Mart">Super Mart</option>
                                         <option value="Sub Dealer">Sub Dealer</option>
+                                        <option value="Karyana Store">Karyana Store</option>
+                                        <option value="Medical Store">Medical Store</option>
+                                        <option value="Bakery Shop">Bakery Shop</option>
                                         <option value="Other">Other</option>
                                     </select>
                                 </div>

@@ -33,6 +33,7 @@ class CustomerProductReportController extends Controller
             AVG(tp) as avg_tp,
             SUM(qty * unitValue) as total_qty,
             SUM(bonus) as total_bonus,
+            SUM(discount) as total_discount,
             SUM(ti) as total_ti,
             SUM(gstValue) as total_gst
         ')

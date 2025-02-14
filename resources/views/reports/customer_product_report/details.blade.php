@@ -61,6 +61,7 @@
                                                 <th scope="col" class="text-start">Avg TP</th>
                                                 <th scope="col" class="text-start">Qty Sold</th>
                                                 <th scope="col" class="text-start">Bonus</th>
+                                                <th scope="col" class="text-start">Discounts</th>
                                                 <th scope="col">Total GST</th>
                                                 <th scope="col">Total Amount</th>
                                             </tr>
@@ -75,6 +76,7 @@
                                                 <td class="text-start">{{ number_format($product->avg_tp,2) }}</td>
                                                 <td class="text-start">{{ number_format($product->total_qty) }}</td>
                                                 <td class="text-start">{{ number_format($product->total_bonus) }}</td>
+                                                <td class="text-end">{{ number_format($product->total_discount) }}</td>
                                                 <td class="text-end">{{ number_format($product->total_gst, 2) }}</td>
                                                 <td class="text-end">{{ number_format($product->total_ti, 2) }}</td>
                                             </tr>
@@ -83,6 +85,7 @@
                                         <tfoot>
                                             <tr>
                                                 <th colspan="6" class="text-end">Total</th>
+                                                <th class="text-end">{{number_format($salesDetails->sum('total_discount'), 2)}}</th>
                                                 <th class="text-end">{{number_format($salesDetails->sum('total_gst'), 2)}}</th>
                                                 <th class="text-end">{{number_format($salesDetails->sum('total_ti'), 2)}}</th>
                                             </tr>
@@ -151,12 +154,19 @@
             .reduce(function (a, b) {
                 return intVal(a) + intVal(b);
             }, 0);
+        var totalTi = api
+            .column(8, { search: 'applied' })
+            .data()
+            .reduce(function (a, b) {
+                return intVal(a) + intVal(b);
+            }, 0);
 
       
 
         // Update the footer
         $(api.column(6).footer()).html(totalBillAmount.toFixed(2));
         $(api.column(7).footer()).html(totalGst.toFixed(2));
+        $(api.column(8).footer()).html(totalTi.toFixed(2));
     },
 });
     </script>
