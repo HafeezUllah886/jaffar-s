@@ -1,0 +1,2 @@
+<?php
+ namespace App\Http\Controllers\reports; use App\Http\Controllers\Controller; use App\Models\accounts; use Illuminate\Http\Request; class CustomersReportController extends Controller { public function index() { $accounts = accounts::Customer()->where("\x69\144", "\41\x3d", 2)->get(); return view("\162\145\160\x6f\162\x74\163\56\143\165\x73\164\x6f\155\x65\x72\163\122\x65\160\x6f\162\164\56\x64\x65\x74\141\x69\x6c\x73", compact("\x61\143\x63\157\x75\x6e\164\x73")); } }
