@@ -106,6 +106,24 @@
                     </div>
                 </li>
                 <li class="nav-item">
+                    <a class="nav-link menu-link" href="#purchase_order" data-bs-toggle="collapse" role="button"
+                        aria-expanded="false" aria-controls="sidebarApps">
+                        <i class="ri-shopping-cart-line"></i><span data-key="t-apps">Purchase Order</span>
+                    </a>
+                    <div class="collapse menu-dropdown" id="purchase_order">
+                        <ul class="nav nav-sm flex-column">
+                            <li class="nav-item">
+                                <a onclick="newWindow('{{ route('purchase_order.create') }}')" class="nav-link"
+                                    data-key="t-chat">Create Purchase Order</a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="{{ route('purchase_order.index', ['start' => firstDayOfMonth(), 'end' => now()->toDateString()]) }}" class="nav-link" data-key="t-chat"> Purchase
+                                    Order History </a>
+                            </li>
+                        </ul>
+                    </div>
+                </li>
+                <li class="nav-item">
                     <a class="nav-link menu-link" href="#stock" data-bs-toggle="collapse" role="button"
                         aria-expanded="false" aria-controls="sidebarApps">
                         <i class="ri-stack-line"></i><span data-key="t-apps">Stocks</span>
