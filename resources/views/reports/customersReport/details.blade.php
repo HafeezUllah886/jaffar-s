@@ -15,7 +15,7 @@
                                         <h1>JAFFAR & BROTHERS</h1>
                                     </div>
                                     <div class="flex-shrink-0 mt-sm-0 mt-3">
-                                        <h3>Customers Report</h3>
+                                        <h3>Customers CNIC Report</h3>
                                     </div>
                                 </div>
                             </div>

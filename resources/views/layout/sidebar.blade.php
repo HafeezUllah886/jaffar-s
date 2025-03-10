@@ -262,9 +262,9 @@
                                 <a href="{{ route('reportBalanceSheet') }}" class="nav-link"
                                     data-key="t-basic-elements">Balance Sheet</a>
                             </li>
-                             <li class="nav-item">
+                            <li class="nav-item">
                                 <a href="{{ route('reportCustomersReport') }}" class="nav-link"
-                                    data-key="t-basic-elements">Customers</a>
+                                    data-key="t-basic-elements">Customers CNIC Report</a>
                             </li>
                             <li class="nav-item">
                                 <a href="{{ route('reportCustomersBalance') }}" class="nav-link"

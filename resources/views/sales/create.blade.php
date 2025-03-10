@@ -195,7 +195,6 @@
                     this.clear();
                     this.focus();
                 }
-
             },
         });
         var units = @json($units);
@@ -358,7 +357,6 @@
                 }
             }
         );
-
     });
     $(".selectize1").selectize();
 
