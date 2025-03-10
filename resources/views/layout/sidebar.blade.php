@@ -227,6 +227,10 @@
                                     data-key="t-basic-elements">Sales GST</a>
                             </li>
                             <li class="nav-item">
+                                <a href="{{ route('reportSalesWHT') }}" class="nav-link"
+                                    data-key="t-basic-elements">Sales WHT</a>
+                            </li>
+                            <li class="nav-item">
                                 <a href="{{ route('reportPurchasesGst') }}" class="nav-link"
                                     data-key="t-basic-elements">Purchases GST</a>
                             </li>
