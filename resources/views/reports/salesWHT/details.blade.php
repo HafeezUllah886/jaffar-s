@@ -89,7 +89,7 @@
                                                 <td >{{ $item->customer->ntn ?? "-" }}</td>
                                                 <td >{{ $item->customer->strn ?? "-" }}</td>
                                                 <td>{{ date("d M Y", strtotime($item->date))}}</td>
-                                                <td class="text-end">{{ number_format($ba, 2) }}</td>
+                                                <td class="text-end">{{ number_format($ti, 2) }}</td>
                                                 <td class="text-end">{{ number_format($item->wh, 2) }}</td>
                                                 <td class="text-end">{{ number_format($wht, 2) }}</td>
                                                 <td class="text-end">{{ number_format($qty + $bonus, 2) }}</td>
