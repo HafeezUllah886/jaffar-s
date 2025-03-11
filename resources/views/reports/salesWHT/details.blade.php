@@ -73,10 +73,10 @@
                                         @foreach ($sales as $key => $item)
                                         @php
                                         $ti = $item->details->sum('ti');
-                                        $wht = $item->details->sum('whValue');
+                                        $wht = $item->whValue;
                                         $qty = $item->details->sum('qty');
                                         $bonus = $item->details->sum('bonus');
-                                        $ba = $item->totalBill;
+                                        $ba = $item->totalBill - $wht;
                                         $totalTi += $ti;
                                         $totalQty += ($qty + $bonus);
                                         $totalBA += $ba;
