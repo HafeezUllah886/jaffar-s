@@ -1,2 +1,65 @@
 <?php
- namespace App\Http\Controllers\reports; use App\Http\Controllers\Controller; use App\Models\categories; use App\Models\products; use App\Models\purchase; use App\Models\purchase_details; use Illuminate\Http\Request; class purchaseProductsReportController extends Controller { public function index() { $categories = categories::all(); return view("\162\145\160\157\162\164\163\x2e\x70\x75\x72\143\x68\x61\x73\x65\x50\x72\157\x64\x75\x63\164\163\56\x69\x6e\x64\x65\x78", compact("\x63\x61\164\x65\x67\157\162\x69\145\x73")); } public function data($from, $to, $catID) { if ($catID == "\101\x6c\154") { $products = products::all(); } else { $products = products::where("\143\141\164\111\104", $catID)->get(); } foreach ($products as $product) { $qty = purchase_details::where("\160\162\157\144\x75\143\x74\111\104", $product->id)->whereBetween("\x64\141\164\145", array($from, $to))->sum("\161\164\171"); $bonus = purchase_details::where("\x70\162\157\x64\165\x63\x74\x49\x44", $product->id)->whereBetween("\x64\x61\164\x65", array($from, $to))->sum("\142\x6f\156\x75\163"); $product->qty = $qty; $product->bonus = $bonus; $product->price = avgPurchasePrice($from, $to, $product->id); } return view("\x72\x65\x70\x6f\x72\164\163\x2e\160\165\162\x63\x68\x61\163\145\120\162\157\x64\x75\x63\164\163\56\x64\145\164\141\x69\154\163", compact("\146\x72\x6f\155", "\164\x6f", "\160\162\157\x64\x75\x63\164\x73")); } }
+
+namespace App\Http\Controllers\reports;
+
+use App\Http\Controllers\Controller;
+use App\Models\categories;
+use App\Models\products;
+use App\Models\purchase;
+use App\Models\purchase_details;
+use Illuminate\Http\Request;
+
+class purchaseProductsReportController extends Controller
+{
+    public function index()
+    {
+        $categories = categories::all();
+        return view('reports.purchaseProducts.index', compact('categories'));
+    }
+
+    public function data($from, $to, $catID)
+    {
+        if($catID == 'All')
+        {
+            $products = products::all();
+        }
+        else
+        {
+            $products = products::where('catID', $catID)->get();
+        }
+
+       foreach($products as $product)
+       {
+            $qty = purchase_details::where('productID', $product->id)->whereBetween('date', [$from, $to])->sum('qty');
+            $bonus = purchase_details::where('productID', $product->id)->whereBetween('date', [$from, $to])->sum('bonus');
+            $product->qty = $qty;
+            $product->bonus = $bonus;
+            $product->price = avgPurchasePrice($from,$to,$product->id);
+       }
+
+        return view('reports.purchaseProducts.details', compact('from', 'to', 'products', 'catID'));
+    }
+
+    public function print($from, $to, $catID)
+    {
+        if($catID == 'All')
+        {
+            $products = products::all();
+        }
+        else
+        {
+            $products = products::where('catID', $catID)->get();
+        }
+
+       foreach($products as $product)
+       {
+            $qty = purchase_details::where('productID', $product->id)->whereBetween('date', [$from, $to])->sum('qty');
+            $bonus = purchase_details::where('productID', $product->id)->whereBetween('date', [$from, $to])->sum('bonus');
+            $product->qty = $qty;
+            $product->bonus = $bonus;
+            $product->price = avgPurchasePrice($from,$to,$product->id);
+       }
+
+        return view('reports.purchaseProducts.print', compact('from', 'to', 'products'));
+    }
+}

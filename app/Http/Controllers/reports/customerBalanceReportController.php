@@ -1,2 +1,38 @@
 <?php
- namespace App\Http\Controllers\reports; use App\Http\Controllers\Controller; use App\Models\accounts; use App\Models\products; use App\Models\sale_details; use Illuminate\Http\Request; class customerBalanceReportController extends Controller { public function index() { $accounts = accounts::Customer()->get(); foreach ($accounts as $account) { $account->balance = getAccountBalance($account->id); } return view("\162\145\160\157\162\164\x73\x2e\x63\x75\x73\164\x6f\155\145\162\102\x61\154\141\x6e\143\145\163\56\144\145\x74\x61\151\154\163", compact("\141\x63\x63\x6f\x75\156\x74\x73")); } }
+
+namespace App\Http\Controllers\reports;
+
+use App\Http\Controllers\Controller;
+use App\Models\accounts;
+use App\Models\products;
+use App\Models\sale_details;
+use Illuminate\Http\Request;
+
+class customerBalanceReportController extends Controller
+{
+    public function index()
+    {
+        $accounts = accounts::Customer()->get();
+
+        foreach($accounts as $account)
+        {
+          $account->balance = getAccountBalance($account->id);
+        }
+
+        return view('reports.customerBalances.details', compact('accounts'));
+    }
+
+    public function print()
+    {
+        $accounts = accounts::Customer()->get();
+
+        foreach($accounts as $account)
+        {
+          $account->balance = getAccountBalance($account->id);
+        }
+
+        return view('reports.customerBalances.print', compact('accounts'));
+    }
+
+
+}

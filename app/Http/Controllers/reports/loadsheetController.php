@@ -1,2 +1,71 @@
 <?php
- namespace App\Http\Controllers\reports; use App\Http\Controllers\Controller; use App\Models\sales; use Illuminate\Http\Request; use App\Models\User; class loadsheetController extends Controller { public function index() { $orderbookers = User::all(); return view("\x72\x65\x70\157\162\x74\x73\56\x6c\x6f\141\x64\163\x68\x65\x65\164\x2e\151\156\144\x65\x78", compact("\157\162\x64\x65\x72\x62\157\157\x6b\x65\162\163")); } public function data($id, $date) { $sales = sales::whereDate("\144\x61\164\145", $date)->where("\x6f\162\144\145\162\142\x6f\x6f\x6b\x65\x72\111\104", $id)->with("\x64\145\x74\x61\151\x6c\x73")->get(); if ($sales->isEmpty()) { return back()->with("\145\x72\x72\x6f\x72", "\x4e\x6f\x20\104\x61\x74\x61\x20\106\157\x75\x6e\144"); } $salesData = array("\163\141\154\145\137\x69\x6e\x66\157" => $sales->map->toArray(), "\163\x61\x6c\x65\137\x64\145\164\x61\x69\x6c\x73" => array(), "\x74\x6f\164\141\154\x5f\x73\x61\x6c\x65\x5f\x61\155\157\x75\x6e\164" => 0); $allProducts = array(); foreach ($sales as $sale) { $productSales = $sale->details->groupBy("\x70\162\157\x64\x75\x63\x74\x49\104"); foreach ($productSales as $productID => $saleDetails) { $totalQty = $saleDetails->sum("\x71\164\x79"); $totalAmount = $saleDetails->sum("\164\151"); if (!isset($allProducts[$productID])) { $product = $saleDetails->first()->product; $allProducts[$productID] = array("\160\162\157\144\x75\143\x74\111\104" => $productID, "\156\141\155\145" => $product->name, "\x63\141\x74" => $product->category->name, "\x74\x6f\x74\x61\x6c\137\x71\164\171" => 0, "\164\x6f\164\x61\154\137\x61\x6d\x6f\165\x6e\x74" => 0, "\x70\x61\143\153\x5f\x73\x69\x7a\x65" => $product->unit->value); } $allProducts[$productID]["\x74\x6f\164\141\154\137\x71\x74\171"] += $totalQty; $allProducts[$productID]["\x74\x6f\164\141\154\137\141\155\x6f\165\156\164"] += $totalAmount; } $salesData["\164\x6f\x74\141\154\x5f\x73\x61\154\145\x5f\x61\x6d\x6f\165\x6e\164"] += $sale->details->sum("\x74\151"); $salesData["\157\162\x64\x65\162\142\x6f\x6f\x6b\145\162"] = $sale->orderbooker->name; $salesData["\x64\x61\x74\145"] = $sale->date; } $salesData["\163\x61\154\x65\x5f\x64\x65\164\x61\151\154\163"] = array_values($allProducts); return view("\162\x65\160\157\162\164\163\x2e\x6c\157\141\x64\163\x68\145\145\x74\x2e\144\x65\x74\x61\151\x6c\163", compact("\x73\x61\154\x65\x73\104\141\164\141")); } }
+
+namespace App\Http\Controllers\reports;
+
+use App\Http\Controllers\Controller;
+use App\Models\sales;
+use Illuminate\Http\Request;
+use App\Models\User;
+
+class loadsheetController extends Controller
+{
+    public function index()
+    {
+        $orderbookers = User::all();
+
+        return view('reports.loadsheet.index', compact('orderbookers'));
+    }
+
+    public function data($id, $date)
+    {
+        $sales = sales::whereDate('date', $date)
+        ->where('orderbookerID', $id)
+        ->with('details') // Eager load sale details
+        ->get();
+
+        if ($sales->isEmpty()) {
+            return back()->with('error', "No Data Found");
+        }
+
+        $salesData = [
+            'sale_info' => $sales->map->toArray(), // Sale details for all sales
+            'sale_details' => [], // Initialize as an empty array
+            'total_sale_amount' => 0,
+        ];
+
+        $allProducts = []; // Store product details with accumulated quantities and amounts
+
+        foreach ($sales as $sale) {
+            $productSales = $sale->details->groupBy('productID');
+
+            foreach ($productSales as $productID => $saleDetails) {
+                $totalQty = $saleDetails->sum('qty');
+                $totalAmount = $saleDetails->sum('ti');
+
+                // Check if product exists in $allProducts
+                if (!isset($allProducts[$productID])) {
+                    $product = $saleDetails->first()->product; // Access product details
+                    $allProducts[$productID] = [
+                    'productID' => $productID,
+                    'name' => $product->name,
+                    'cat' => $product->category->name,
+                    'total_qty' => 0,
+                    'total_amount' => 0,
+                    'pack_size' => $product->unit->value
+                    ];
+                }
+
+                $allProducts[$productID]['total_qty'] += $totalQty;
+                $allProducts[$productID]['total_amount'] += $totalAmount;
+            }
+
+            $salesData['total_sale_amount'] += $sale->details->sum('ti');
+            $salesData['orderbooker'] = $sale->orderbooker->name;
+            $salesData['date'] = $sale->date;
+        }
+
+        $salesData['sale_details'] = array_values($allProducts); // Convert to a plain array
+        return view('reports.loadsheet.details', compact('salesData'));
+    }
+
+}

@@ -1,2 +1,66 @@
 <?php
- namespace App\Http\Controllers\reports; use App\Http\Controllers\Controller; use App\Models\accounts; use App\Models\sale_details; use Illuminate\Http\Request; class CustomerProductReportController extends Controller { public function index() { $customers = accounts::customer()->get(); return view("\162\145\x70\157\x72\x74\x73\56\x63\x75\x73\164\x6f\155\145\x72\x5f\x70\x72\157\144\165\x63\x74\137\x72\x65\x70\157\162\164\x2e\x69\x6e\144\x65\170", compact("\x63\x75\x73\164\157\x6d\x65\x72\163")); } public function data($from, $to, $customer) { $customer = Accounts::find($customer); if (!$customer) { return redirect()->back()->with("\x65\162\162\157\x72", "\103\x75\x73\164\x6f\x6d\145\x72\40\156\x6f\164\40\146\157\x75\156\144\56"); } $sales = $customer->sale()->whereBetween("\144\x61\x74\145", array($from, $to))->pluck("\x69\144"); $salesDetails = sale_details::whereIn("\x73\x61\x6c\145\x73\x49\x44", $sales)->groupBy("\160\x72\157\x64\x75\143\164\x49\x44")->selectRaw("\12\40\x20\x20\x20\x20\x20\40\x20\40\40\40\40\x70\162\157\144\x75\143\x74\111\104\54\12\40\40\x20\40\40\x20\x20\40\x20\x20\40\40\x41\x56\107\50\x70\x72\x69\x63\x65\x29\x20\141\163\x20\x61\x76\147\x5f\x70\x72\151\143\x65\x2c\12\x20\40\x20\40\40\x20\x20\40\x20\40\x20\x20\x41\x56\x47\50\164\x70\51\40\141\163\40\x61\x76\x67\137\x74\160\x2c\12\40\x20\40\40\x20\x20\x20\40\x20\x20\40\x20\123\x55\x4d\x28\x71\x74\171\x20\x2a\x20\165\x6e\151\x74\126\141\x6c\165\x65\51\40\x61\x73\x20\164\157\164\141\x6c\137\x71\164\x79\54\xa\40\40\40\40\40\40\40\40\40\40\x20\40\x53\x55\115\x28\142\157\x6e\x75\163\51\40\x61\x73\40\164\157\164\x61\x6c\137\x62\157\156\x75\x73\54\12\40\x20\40\40\40\40\40\40\x20\40\40\x20\123\125\115\x28\x64\x69\163\x63\x6f\165\156\164\x29\x20\x61\x73\x20\164\x6f\164\x61\x6c\137\144\151\163\x63\x6f\165\156\x74\x2c\xa\40\x20\x20\40\40\x20\40\40\x20\40\x20\x20\123\125\x4d\50\x74\151\51\40\x61\163\x20\x74\157\x74\141\154\x5f\x74\151\x2c\xa\x20\40\x20\40\x20\x20\40\x20\x20\x20\x20\x20\123\125\115\x28\147\163\164\x56\x61\x6c\165\x65\x29\x20\141\x73\x20\x74\x6f\x74\141\154\137\x67\x73\164\12\40\40\x20\40\x20\x20\x20\40")->with("\160\x72\157\x64\165\143\164")->get(); return view("\162\145\x70\x6f\x72\x74\x73\56\x63\x75\163\164\157\x6d\145\162\137\160\162\157\x64\165\x63\x74\x5f\x72\x65\160\157\x72\164\56\144\x65\x74\x61\151\154\x73", compact("\163\141\154\x65\163\104\x65\164\x61\151\x6c\163", "\x66\162\x6f\x6d", "\x74\x6f", "\x63\165\x73\164\x6f\155\x65\x72")); } }
+
+namespace App\Http\Controllers\reports;
+
+use App\Http\Controllers\Controller;
+use App\Models\accounts;
+use App\Models\sale_details;
+use Illuminate\Http\Request;
+
+class CustomerProductReportController extends Controller
+{
+    public function index()
+    {
+        $customers = accounts::customer()->get();
+        return view('reports.customer_product_report.index', compact('customers'));
+    }
+
+    public function data($from, $to, $customer)
+    {
+        $customer = Accounts::find($customer);
+
+    if (!$customer) {
+        return redirect()->back()->with('error', 'Customer not found.');
+    }
+
+    $sales = $customer->sale()->whereBetween('date', [$from, $to])->pluck('id'); // Get sale IDs in range
+
+    $salesDetails = sale_details::whereIn('salesID', $sales)
+        ->groupBy('productID')
+        ->selectRaw('
+            productID,
+            AVG(price) as avg_price,
+            AVG(tp) as avg_tp,
+            SUM(qty * unitValue) as total_qty,
+            SUM(bonus) as total_bonus,
+            SUM(discount) as total_discount,
+            SUM(ti) as total_ti,
+            SUM(gstValue) as total_gst
+        ')
+        ->with('product') // Load product relationship
+        ->get();
+
+
+
+        return view('reports.customer_product_report.details', compact('salesDetails', 'from', 'to', 'customer'));
+    }
+
+    public function print($from, $to, $customer)
+    {
+        $customer = Accounts::find($customer);
+
+        if (!$customer) {
+            return redirect()->back()->with('error', 'Customer not found.');
+        }
+
+        $sales = $customer->sale()->whereBetween('date', [$from, $to])->pluck('id'); // Get sale IDs in range
+
+        $salesDetails = sale_details::whereIn('salesID', $sales)
+            ->groupBy('productID')
+            ->selectRaw('productID, AVG(price) as avg_price, AVG(tp) as avg_tp, SUM(qty * unitValue) as total_qty, SUM(bonus) as total_bonus, SUM(discount) as total_discount, SUM(ti) as total_ti, SUM(gstValue) as total_gst')
+            ->with('product') // Load product relationship
+            ->get();
+
+        return view('reports.customer_product_report.print', compact('salesDetails', 'from', 'to', 'customer'));
+    }
+}

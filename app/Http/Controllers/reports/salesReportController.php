@@ -1,2 +1,69 @@
 <?php
- namespace App\Http\Controllers\reports; use App\Http\Controllers\Controller; use App\Models\accounts; use App\Models\sales; use Illuminate\Http\Request; class salesReportController extends Controller { public function index() { return view("\x72\x65\160\157\162\x74\x73\x2e\163\141\154\145\x73\x2e\151\156\x64\145\170"); } public function data($from, $to, $type) { if ($type == "\101\154\x6c") { $sales = sales::with("\143\165\163\x74\157\155\x65\162", "\144\145\164\141\151\154\x73")->whereBetween("\x64\141\x74\x65", array($from, $to))->get(); } else { $customers = accounts::where("\x74\171\x70\145", "\103\165\163\164\157\155\x65\x72")->where("\x63\137\x74\171\x70\145", $type)->pluck("\151\144")->toArray(); $sales = sales::with("\143\x75\x73\164\x6f\155\145\x72", "\x64\145\x74\141\x69\154\163")->whereIn("\x63\x75\x73\164\157\x6d\x65\x72\111\104", $customers)->whereBetween("\144\x61\x74\145", array($from, $to))->get(); } foreach ($sales as $sale) { $pdiscount = 0; foreach ($sale->details as $detail) { $pdiscount += $detail->discount * $detail->qty; } $sale->pdiscount = $pdiscount; } return view("\162\145\x70\157\162\164\163\x2e\163\x61\x6c\x65\163\x2e\x64\145\164\141\151\154\x73", compact("\146\x72\x6f\155", "\x74\157", "\163\141\154\145\163")); } }
+
+namespace App\Http\Controllers\reports;
+
+use App\Http\Controllers\Controller;
+use App\Models\accounts;
+use App\Models\sales;
+use Illuminate\Http\Request;
+
+class salesReportController extends Controller
+{
+    public function index()
+    {
+        return view('reports.sales.index');
+    }
+
+    public function data($from, $to, $type)
+    {
+        if($type == "All")
+        {
+            $sales = sales::with('customer', 'details')->whereBetween('date', [$from, $to])->get();
+        }
+        else
+        {
+            $customers = accounts::where('type', 'Customer')->where('c_type', $type)->pluck('id')->toArray();
+            $sales = sales::with('customer', 'details')->whereIn('customerID', $customers)->whereBetween('date', [$from, $to])->get();
+        }
+
+        
+        foreach($sales as $sale)
+        {
+            $pdiscount = 0;
+            foreach($sale->details as $detail)
+            {
+                $pdiscount += $detail->discount * $detail->qty;
+            }
+            $sale->pdiscount = $pdiscount;
+        }
+
+
+        return view('reports.sales.details', compact('from', 'to', 'sales', 'type'));
+    }
+
+    public function print($from, $to, $type)
+    {
+        if($type == "All")
+        {
+            $sales = sales::with('customer', 'details')->whereBetween('date', [$from, $to])->get();
+        }
+        else
+        {
+            $customers = accounts::where('type', 'Customer')->where('c_type', $type)->pluck('id')->toArray();
+            $sales = sales::with('customer', 'details')->whereIn('customerID', $customers)->whereBetween('date', [$from, $to])->get();
+        }
+
+        
+        foreach($sales as $sale)
+        {
+            $pdiscount = 0;
+            foreach($sale->details as $detail)
+            {
+                $pdiscount += $detail->discount * $detail->qty;
+            }
+            $sale->pdiscount = $pdiscount;
+        }
+
+        return view('reports.sales.print', compact('from', 'to', 'sales'));
+    }
+}

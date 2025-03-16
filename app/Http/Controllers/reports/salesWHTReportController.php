@@ -1,2 +1,49 @@
 <?php
- namespace App\Http\Controllers\reports; use App\Http\Controllers\Controller; use App\Models\sales; use Illuminate\Http\Request; class salesWHTReportController extends Controller { public function index() { return view("\162\145\160\157\x72\x74\163\x2e\163\141\x6c\x65\x73\x57\110\124\x2e\x69\156\x64\145\170"); } public function data($from, $to) { $sales = sales::with("\143\x75\163\164\x6f\155\145\162", "\144\145\164\141\x69\x6c\163")->whereBetween("\x64\x61\164\145", array($from, $to))->get(); foreach ($sales as $sale) { $totalRP = 0; foreach ($sale->details as $product) { $totalRP += ($product->qty + $product->bonus) * $product->tp; } $sale->totalBill = $totalRP; } return view("\x72\145\160\157\x72\x74\x73\56\x73\141\154\145\163\x57\110\124\x2e\x64\145\164\x61\151\154\x73", compact("\146\162\x6f\155", "\x74\x6f", "\163\x61\x6c\x65\x73")); } }
+
+namespace App\Http\Controllers\reports;
+
+use App\Http\Controllers\Controller;
+use App\Models\sales;
+use Illuminate\Http\Request;
+
+class salesWHTReportController extends Controller
+{
+    public function index()
+    {
+        return view('reports.salesWHT.index');
+    }
+
+    public function data($from, $to)
+    {
+        $sales = sales::with('customer', 'details')->whereBetween('date', [$from, $to])->get();
+
+        foreach($sales as $sale)
+        {
+            $totalRP = 0;
+            foreach($sale->details as $product)
+            {
+                $totalRP += ($product->qty + $product->bonus) * $product->tp;
+            }
+            $sale->totalBill = $totalRP;
+        }
+
+        return view('reports.salesWHT.details', compact('from', 'to', 'sales'));
+    }
+
+    public function print($from, $to)
+    {
+        $sales = sales::with('customer', 'details')->whereBetween('date', [$from, $to])->get();
+
+        foreach($sales as $sale)
+        {
+            $totalRP = 0;
+            foreach($sale->details as $product)
+            {
+                $totalRP += ($product->qty + $product->bonus) * $product->tp;
+            }
+            $sale->totalBill = $totalRP;
+        }
+
+        return view('reports.salesWHT.print', compact('from', 'to', 'sales'));
+    }
+}

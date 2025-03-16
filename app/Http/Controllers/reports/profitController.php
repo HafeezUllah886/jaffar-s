@@ -1,2 +1,61 @@
 <?php
- namespace App\Http\Controllers\reports; use App\Http\Controllers\Controller; use App\Models\expenses; use App\Models\products; use App\Models\sale_details; use Illuminate\Http\Request; class profitController extends Controller { public function index() { return view("\162\x65\160\157\x72\x74\163\x2e\x70\162\x6f\x66\151\x74\56\151\156\144\x65\170"); } public function data($from, $to) { $products = products::all(); $data = array(); foreach ($products as $product) { $purchaseRate = avgPurchasePrice($from, $to, $product->id); $saleRate = avgSalePrice($from, $to, $product->id); $sold = sale_details::where("\x70\x72\x6f\144\x75\x63\x74\x49\x44", $product->id)->whereBetween("\144\x61\164\145", array($from, $to))->sum("\x71\164\x79"); $ppu = $saleRate - $purchaseRate; $profit = $ppu * $sold; $stock = getStock($product->id); $stockValue = productStockValue($product->id); $data[] = array("\x6e\x61\x6d\145" => $product->name, "\143\x61\x74" => $product->category->name, "\x70\x75\162\143\150\141\163\x65\x52\x61\x74\145" => $purchaseRate, "\x73\141\x6c\x65\122\x61\x74\145" => $saleRate, "\163\x6f\154\x64" => $sold, "\160\x70\165" => $ppu, "\160\162\x6f\146\x69\164" => $profit, "\163\164\157\143\x6b" => $stock, "\x73\164\x6f\143\153\x56\x61\x6c\165\145" => $stockValue); } $expenses = expenses::whereBetween("\144\x61\164\145", array($from, $to))->sum("\x61\x6d\x6f\165\x6e\x74"); return view("\x72\145\160\x6f\x72\x74\163\56\160\x72\x6f\x66\151\x74\56\144\x65\164\x61\151\154\x73", compact("\x66\x72\157\155", "\164\x6f", "\144\x61\x74\141", "\x65\x78\x70\145\x6e\x73\145\x73")); } }
+
+namespace App\Http\Controllers\reports;
+
+use App\Http\Controllers\Controller;
+use App\Models\expenses;
+use App\Models\products;
+use App\Models\sale_details;
+use Illuminate\Http\Request;
+
+class profitController extends Controller
+{
+    public function index()
+    {
+        return view('reports.profit.index');
+    }
+
+    public function data($from, $to)
+    {
+        $products = products::all();
+        $data = [];
+        foreach($products as $product)
+        {
+            $purchaseRate = avgPurchasePrice($from, $to, $product->id);
+            $saleRate = avgSalePrice($from, $to, $product->id);
+            $sold = sale_details::where('productID', $product->id)->whereBetween('date', [$from, $to])->sum('qty');
+            $ppu = $saleRate - $purchaseRate;
+            $profit = $ppu * $sold;
+            $stock = getStock($product->id);
+            $stockValue = productStockValue($product->id);
+
+            $data[] = ['name' => $product->name, 'cat' => $product->category->name, 'purchaseRate' => $purchaseRate, 'saleRate' => $saleRate, 'sold' => $sold, 'ppu' => $ppu, 'profit' => $profit, 'stock' => $stock, 'stockValue' => $stockValue];
+        }
+
+        $expenses = expenses::whereBetween('date', [$from, $to])->sum('amount');
+
+        return view('reports.profit.details', compact('from', 'to', 'data', 'expenses'));
+    }
+
+    public function print($from, $to)
+    {
+        $products = products::all();
+        $data = [];
+        foreach($products as $product)
+        {
+            $purchaseRate = avgPurchasePrice($from, $to, $product->id);
+            $saleRate = avgSalePrice($from, $to, $product->id);
+            $sold = sale_details::where('productID', $product->id)->whereBetween('date', [$from, $to])->sum('qty');
+            $ppu = $saleRate - $purchaseRate;
+            $profit = $ppu * $sold;
+            $stock = getStock($product->id);
+            $stockValue = productStockValue($product->id);
+
+            $data[] = ['name' => $product->name, 'cat' => $product->category->name, 'purchaseRate' => $purchaseRate, 'saleRate' => $saleRate, 'sold' => $sold, 'ppu' => $ppu, 'profit' => $profit, 'stock' => $stock, 'stockValue' => $stockValue];
+        }
+
+        $expenses = expenses::whereBetween('date', [$from, $to])->sum('amount');
+
+        return view('reports.profit.print', compact('from', 'to', 'data', 'expenses'));
+    }
+}

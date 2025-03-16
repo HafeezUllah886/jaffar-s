@@ -1,2 +1,48 @@
 <?php
- namespace App\Http\Controllers\reports; use App\Http\Controllers\Controller; use App\Models\purchase; use Illuminate\Http\Request; class purchaseGstReportController extends Controller { public function index() { return view("\x72\x65\x70\157\x72\164\x73\x2e\x70\x75\x72\x63\150\x61\163\145\x47\163\x74\x2e\x69\x6e\144\145\170"); } public function data($from, $to) { $purchases = purchase::with("\x76\x65\156\x64\x6f\162", "\x64\145\164\141\x69\x6c\x73")->whereBetween("\144\x61\164\x65", array($from, $to))->get(); foreach ($purchases as $purchase) { $totalRP = 0; foreach ($purchase->details as $product) { $totalRP += ($product->qty + $product->bonus) * $product->tp; } $purchase->totalBill = $totalRP; } return view("\x72\145\x70\x6f\162\164\x73\56\x70\165\162\143\x68\141\163\145\x47\x73\164\x2e\x64\145\164\141\151\154\x73", compact("\146\162\157\155", "\164\x6f", "\160\x75\x72\x63\x68\x61\x73\145\x73")); } }
+
+namespace App\Http\Controllers\reports;
+
+use App\Http\Controllers\Controller;
+use App\Models\purchase;
+use Illuminate\Http\Request;
+
+class purchaseGstReportController extends Controller
+{
+    public function index()
+    {
+        return view('reports.purchaseGst.index');
+    }
+
+    public function data($from, $to)
+    {
+        $purchases = purchase::with('vendor', 'details')->whereBetween('date', [$from, $to])->get();
+
+        foreach($purchases as $purchase)
+        {
+            $totalRP = 0;
+            foreach($purchase->details as $product)
+            {
+                $totalRP += ($product->qty + $product->bonus) * $product->tp;
+            }
+            $purchase->totalBill = $totalRP;
+        }
+            return view('reports.purchaseGst.details', compact('from', 'to', 'purchases'));
+    }
+
+    public function print($from, $to)
+    {
+        $purchases = purchase::with('vendor', 'details')->whereBetween('date', [$from, $to])->get();
+
+        foreach($purchases as $purchase)
+        {
+            $totalRP = 0;
+            foreach($purchase->details as $product)
+            {
+                $totalRP += ($product->qty + $product->bonus) * $product->tp;
+            }
+            $purchase->totalBill = $totalRP;
+        }
+
+        return view('reports.purchaseGst.print', compact('from', 'to', 'purchases'));
+    }
+}

@@ -1,2 +1,61 @@
 <?php
- namespace App\Http\Controllers\reports; use App\Http\Controllers\Controller; use App\Models\products; use App\Models\sale_details; use Illuminate\Http\Request; class productSummaryReport extends Controller { public function index() { $topProducts = products::withSum("\163\x61\x6c\145\104\x65\x74\141\151\x6c\163", "\x71\x74\171")->withSum("\163\141\154\x65\x44\x65\164\141\151\x6c\x73", "\164\151")->orderByDesc("\x73\x61\x6c\x65\x5f\x64\x65\164\x61\x69\154\163\137\163\165\x6d\x5f\x71\164\x79")->get(); $topProductsArray = array(); foreach ($topProducts as $product) { $stock = getStock($product->id); $price = avgSalePrice("\x61\154\x6c", "\141\154\154", $product->id); $pprice = avgPurchasePrice("\141\154\x6c", "\141\154\x6c", $product->id); $ppu = $price - $pprice; $profit = $ppu * $product->sale_details_sum_qty; $stockValue = $pprice * $stock; $topProductsArray[] = array("\156\141\155\145" => $product->name, "\x63\141\164" => $product->category->name, "\x75\156\151\x74" => $product->unit->name, "\165\156\151\x74\126\x61\154\165\x65" => $product->unit->value, "\160\x72\151\x63\x65" => $price, "\160\x70\162\151\143\x65" => $pprice, "\160\162\x6f\146\151\164" => $profit, "\163\x74\157\x63\153" => $stock, "\163\x74\157\143\153\x56\141\154\165\145" => $stockValue, "\141\155\x6f\x75\156\x74" => $product->sale_details_sum_ti, "\163\x6f\154\x64" => $product->sale_details_sum_qty); } return view("\162\x65\x70\157\x72\164\x73\56\160\162\x6f\144\x75\x63\x74\x53\165\155\x6d\141\162\171\56\144\x65\164\x61\x69\154\x73", compact("\164\x6f\160\120\162\x6f\x64\165\143\164\163\101\162\x72\x61\171")); } }
+
+namespace App\Http\Controllers\reports;
+
+use App\Http\Controllers\Controller;
+use App\Models\products;
+use App\Models\sale_details;
+use Illuminate\Http\Request;
+
+class productSummaryReport extends Controller
+{
+    public function index()
+    {
+        $topProducts = products::withSum('saleDetails', 'qty')->withSum('saleDetails', 'ti')
+        ->orderByDesc('sale_details_sum_qty')
+        ->get();
+
+        $topProductsArray = [];
+
+        foreach($topProducts as $product)
+        {
+            $stock = getStock($product->id);
+            $price = avgSalePrice('all', 'all', $product->id);
+            $pprice = avgPurchasePrice('all', 'all', $product->id);
+
+            $ppu = $price - $pprice;
+            $profit = $ppu * $product->sale_details_sum_qty;
+            $stockValue = $pprice * $stock;
+
+            $topProductsArray[] = ['name' => $product->name, 'cat' => $product->category->name, 'unit' => $product->unit->name, 'unitValue' => $product->unit->value, 'price' => $price, 'pprice' => $pprice, 'profit' => $profit, 'stock' => $stock, 'stockValue' => $stockValue, 'amount' => $product->sale_details_sum_ti, 'sold' => $product->sale_details_sum_qty];
+        }
+
+        return view('reports.productSummary.details', compact('topProductsArray'));
+    }
+
+    public function print()
+    {
+        $topProducts = products::withSum('saleDetails', 'qty')->withSum('saleDetails', 'ti')
+        ->orderByDesc('sale_details_sum_qty')
+        ->get();
+
+        $topProductsArray = [];
+
+        foreach($topProducts as $product)
+        {
+            $stock = getStock($product->id);
+            $price = avgSalePrice('all', 'all', $product->id);
+            $pprice = avgPurchasePrice('all', 'all', $product->id);
+
+            $ppu = $price - $pprice;
+            $profit = $ppu * $product->sale_details_sum_qty;
+            $stockValue = $pprice * $stock;
+
+            $topProductsArray[] = ['name' => $product->name, 'cat' => $product->category->name, 'unit' => $product->unit->name, 'unitValue' => $product->unit->value, 'price' => $price, 'pprice' => $pprice, 'profit' => $profit, 'stock' => $stock, 'stockValue' => $stockValue, 'amount' => $product->sale_details_sum_ti, 'sold' => $product->sale_details_sum_qty];
+        }
+
+        return view('reports.productSummary.print', compact('topProductsArray'));
+    }
+
+
+}

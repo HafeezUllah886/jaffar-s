@@ -1,2 +1,51 @@
 <?php
- namespace App\Http\Controllers\reports; use App\Http\Controllers\Controller; use App\Models\sales; use Illuminate\Http\Request; class salesGstReportController extends Controller { public function index() { return view("\x72\x65\160\x6f\x72\x74\163\x2e\163\x61\x6c\x65\163\x47\x73\x74\56\x69\156\x64\x65\170"); } public function data($from, $to) { $sales = sales::with("\143\165\163\164\x6f\155\145\x72", "\144\x65\164\x61\x69\x6c\x73")->whereBetween("\144\141\x74\x65", array($from, $to))->get(); foreach ($sales as $sale) { $totalRP = 0; foreach ($sale->details as $product) { $totalRP += ($product->qty + $product->bonus) * $product->tp; } $sale->totalBill = $totalRP; $sale->tax = $totalRP / 18 * 100; } return view("\x72\145\160\157\x72\x74\163\x2e\x73\141\x6c\145\x73\x47\163\164\x2e\144\145\164\141\x69\x6c\163", compact("\x66\162\x6f\155", "\x74\x6f", "\x73\141\154\x65\x73")); } }
+
+namespace App\Http\Controllers\reports;
+
+use App\Http\Controllers\Controller;
+use App\Models\sales;
+use Illuminate\Http\Request;
+
+class salesGstReportController extends Controller
+{
+    public function index()
+    {
+        return view('reports.salesGst.index');
+    }
+
+    public function data($from, $to)
+    {
+        $sales = sales::with('customer', 'details')->whereBetween('date', [$from, $to])->get();
+
+        foreach($sales as $sale)
+        {
+            $totalRP = 0;
+            foreach($sale->details as $product)
+            {
+                $totalRP += ($product->qty + $product->bonus) * $product->tp;
+            }
+            $sale->totalBill = $totalRP;
+            $sale->tax = $totalRP / 18 * 100;
+        }
+
+        return view('reports.salesGst.details', compact('from', 'to', 'sales'));
+    }
+
+    public function print($from, $to)
+    {
+        $sales = sales::with('customer', 'details')->whereBetween('date', [$from, $to])->get();
+
+        foreach($sales as $sale)
+        {
+            $totalRP = 0;
+            foreach($sale->details as $product)
+            {
+                $totalRP += ($product->qty + $product->bonus) * $product->tp;
+            }
+            $sale->totalBill = $totalRP;
+            $sale->tax = $totalRP / 18 * 100;
+        }
+
+        return view('reports.salesGst.print', compact('from', 'to', 'sales'));
+    }
+}

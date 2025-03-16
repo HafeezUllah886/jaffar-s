@@ -5,10 +5,7 @@
                 <div class="card" id="demo">
                     <div class="row">
                         <div class="col-lg-12">
-                            <div class="hstack gap-2 justify-content-end d-print-none p-2 mt-4">
-                                <a href="https://web.whatsapp.com/" target="_blank" class="btn btn-success ml-4"><i class="ri-whatsapp-line mr-4"></i> Whatsapp</a>
-                                <a href="{{ route('reportCustomersReportPrint') }}" class="btn btn-success ml-4"><i class="ri-printer-line mr-4"></i> Print</a>
-                            </div>
+                           
                             <div class="card-header border-bottom-dashed p-4">
                                 <div class="d-flex">
                                     <div class="flex-grow-1">
@@ -68,58 +65,12 @@
         <!--end row-->
 
 @endsection
-@section('page-css')
-<link rel="stylesheet" href="{{ asset('assets/libs/datatable/datatable.bootstrap5.min.css') }}" />
-<!--datatable responsive css-->
-<link rel="stylesheet" href="{{ asset('assets/libs/datatable/responsive.bootstrap.min.css') }}" />
-
-<link rel="stylesheet" href="{{ asset('assets/libs/datatable/buttons.dataTables.min.css') }}">
-@endsection
-@section('page-js')
-    <script src="{{ asset('assets/libs/datatable/jquery.dataTables.min.js')}}"></script>
-    <script src="{{ asset('assets/libs/datatable/dataTables.bootstrap5.min.js')}}"></script>
-    <script src="{{ asset('assets/libs/datatable/dataTables.responsive.min.js')}}"></script>
-    <script src="{{ asset('assets/libs/datatable/dataTables.buttons.min.js')}}"></script>
-    <script src="{{ asset('assets/libs/datatable/buttons.print.min.js')}}"></script>
-    <script src="{{ asset('assets/libs/datatable/buttons.html5.min.js')}}"></script>
-    <script src="{{ asset('assets/libs/datatable/vfs_fonts.js')}}"></script>
-    <script src="{{ asset('assets/libs/datatable/pdfmake.min.js')}}"></script>
-    <script src="{{ asset('assets/libs/datatable/jszip.min.js')}}"></script>
-
-    <script src="{{ asset('assets/js/pages/datatables.init.js') }}"></script>
-    <script>
-        $('#datatables').DataTable({
-    responsive: false,
-    dom: 'Bfrtip',
-    buttons: ['print', 'excel', 'pdf'],
-    footerCallback: function (row, data, start, end, display) {
-        var api = this.api();
-
-        // Helper function to get integer or float from string
-        var intVal = function (i) {
-            return typeof i === 'string'
-                ? i.replace(/[\$,]/g, '') * 1
-                : typeof i === 'number'
-                ? i
-                : 0;
-        };
-
-        // Total for Tax Exc column
-        var totalTaxExc1 = api
-            .column(3, { search: 'applied' })
-            .data()
-            .reduce(function (a, b) {
-                return intVal(a) + intVal(b);
-            }, 0);
-
-
-      
-        // Update the footer
-        $(api.column(3).footer()).html(totalTaxExc1.toFixed(2));
-    },
-});
-    </script>
-@endsection
+<script>
+    setTimeout(() => {
+        window.print();
+        window.history.back();
+    }, 1000);
+</script>
 
 
 
