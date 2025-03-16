@@ -291,6 +291,11 @@
                         <i class="ri-apps-2-line"></i> <span data-key="t-apps">Targets</span>
                     </a>
                 </li>
+                <li class="nav-item">
+                    <a class="nav-link menu-link" href="{{ route('self_targets.index') }}" >
+                        <i class="ri-apps-2-line"></i> <span data-key="t-apps">Self Targets</span>
+                    </a>
+                </li>
                 @endif
             </ul>
         </div>

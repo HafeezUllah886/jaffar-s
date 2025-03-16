@@ -4,14 +4,14 @@
         <div class="col-12">
             <div class="card">
                 <div class="card-header d-flex justify-content-between">
-                    <h3>Targets</h3>
-                    <button type="button" class="btn btn-primary" onclick="newWindow('{{ route('targets.create') }}')">Create New</button>
+                    <h3>Self Targets</h3>
+                    <button type="button" class="btn btn-primary" onclick="newWindow('{{ route('self_targets.create') }}')">Create New</button>
                 </div>
                 <div class="card-body">
                     <table class="table" id="buttons-datatables">
                         <thead>
                             <th>#</th>
-                            <th>Customer</th>
+                            <th>Vendor</th>
                             <th>Achieved</th>
                             <th>Dates</th>
                             <th>Status</th>
@@ -21,7 +21,7 @@
                             @foreach ($targets as $key => $item)
                                 <tr>
                                     <td>{{ $key + 1 }}</td>
-                                    <td>{{ $item->customer->title }}</td>
+                                    <td>{{ $item->vendor->title }}</td>
                                     <td>{{ number_format($item->totalPer,2) }}%</td>
                                     <td>{{ date('d M Y', strtotime($item->startDate)) }} <br>{{ date('d M Y', strtotime($item->endDate)) }}</td>
                                     <td>
@@ -37,15 +37,15 @@
                                             </button>
                                             <ul class="dropdown-menu dropdown-menu-end">
                                                 <li>
-                                                    <button class="dropdown-item" onclick="newWindow('{{route('targets.show', $item->id)}}')"
+                                                    <button class="dropdown-item" onclick="newWindow('{{route('self_targets.show', $item->id)}}')"
                                                         onclick=""><i
                                                             class="ri-eye-fill align-bottom me-2 text-muted"></i>
                                                         View
                                                     </button>
                                                 </li>
-                                                
+                                               
                                                 <li>
-                                                    <a class="dropdown-item text-danger" href="{{route('target.delete', $item->id)}}">
+                                                    <a class="dropdown-item text-danger" href="{{route('self_target.delete', $item->id)}}">
                                                         <i class="ri-delete-bin-2-fill align-bottom me-2 text-danger"></i>
                                                         Delete
                                                     </a>
