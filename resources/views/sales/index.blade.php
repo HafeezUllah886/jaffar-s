@@ -4,20 +4,23 @@
         <div class="col-12">
             <form>
                 <div class="row">
-                    <div class="col-md-5">
+                    <div class="col-md-4">
                         <div class="input-group mb-3">
                             <span class="input-group-text" id="basic-addon1">From</span>
-                            <input type="date" class="form-control" placeholder="Username" name="start" value="{{$start}}" aria-label="Username" aria-describedby="basic-addon1">
+                            <input type="date" class="form-control" placeholder="Username" id="start" name="start" value="{{$start}}" aria-label="Username" aria-describedby="basic-addon1">
                         </div>
                     </div>
-                    <div class="col-md-5">
+                    <div class="col-md-4">
                         <div class="input-group mb-3">
                             <span class="input-group-text" id="basic-addon1">To</span>
-                            <input type="date" class="form-control" placeholder="Username" name="end" value="{{$end}}" aria-label="Username" aria-describedby="basic-addon1">
+                            <input type="date" class="form-control" placeholder="Username" id="end" name="end" value="{{$end}}" aria-label="Username" aria-describedby="basic-addon1">
                         </div>
                     </div>
                     <div class="col-md-2">
                        <input type="submit" value="Filter" class="btn btn-success w-100">
+                    </div>
+                    <div class="col-md-2">
+                       <button type="button" class="btn btn-info w-100" onclick="printAll()">Print All</button>
                     </div>
                 </div>
             </form>
@@ -133,4 +136,13 @@
     <script src="{{ asset('assets/libs/datatable/jszip.min.js')}}"></script>
 
     <script src="{{ asset('assets/js/pages/datatables.init.js') }}"></script>
+
+    <script>
+        function printAll()
+        {
+            var from = $("#start").val();
+            var to = $("#end").val();
+            window.open("{{ url('sales/printall') }}/" + from + "/" + to, '_blank');
+        }
+    </script>
 @endsection
