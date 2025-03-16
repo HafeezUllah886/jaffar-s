@@ -54,7 +54,7 @@
                                     <td>{{ $order->orderbooker->name }}</td>
                                     <td>{{ $order->customer->title }}</td>
                                     <td>{{ date('d M Y', strtotime($order->date)) }}</td>
-                                    <td>{{ $order->details->sum('amount') }}</td>
+                                    <td>{{ number_format($order->net,2) }}</td>
                                     <td>{{ $order->status }}</td>
                                     <td>
                                         <div class="dropdown">

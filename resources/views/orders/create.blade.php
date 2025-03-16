@@ -35,6 +35,7 @@
 
                             </div>
                             <div class="col-12 w-100 text-center mt-2"><h4>Total : <span id="totalAmount">0</span></h4></div>
+                            
                             <div class="col-12 mt-2">
                                 <div class="form-group">
                                     <label for="date">Date</label>
@@ -44,12 +45,22 @@
                             </div>
                             <div class="col-12">
                                 <div class="form-group mt-2">
-                                    <label for="customer">Customer</label>
+                                    <label for="customer">Customer | NTN : <span id="ntn"></span> | STRN : <span id="strn"></span></label>
                                     <select name="customerID" id="customer" class="selectize1">
                                         @foreach ($customers as $customer)
                                             <option value="{{ $customer->id }}">{{ $customer->title }}</option>
                                         @endforeach
                                     </select>
+                                </div>
+                            </div>
+                            <div class="col-12">
+                                <div class="form-group">
+                                    <label for="whTax">WH Tax</label>
+                                    <div class="input-group mb-3">
+                                        <input type="number" name="whTax" id="whTax" oninput="updateTotal()" max="50" min="0" step="any" value="0" aria-describedby="basic-addon2" class="form-control">
+                                        <span class="input-group-text whTaxValue" id="basic-addon2">0</span>
+                                    </div>
+
                                 </div>
                             </div>
                             <div class="col-12 mt-2">
@@ -200,7 +211,14 @@
                 var inputValue = $(this).val();
                 totalAmount += parseFloat(inputValue);
             });
-            $("#totalAmount").html(totalAmount.toFixed(2));
+            
+           
+            var whTax = parseFloat($("#whTax").val());
+
+            var taxValue = totalAmount * whTax / 100;
+
+            $(".whTaxValue").html(taxValue.toFixed(2));
+            $("#totalAmount").html((totalAmount + taxValue).toFixed(2));
         }
 
         function deleteRow(id) {
@@ -231,6 +249,19 @@
             qtyInput.val(currentValue);
             updateChanges(id);
         }
+
+        $("#customer").on('change', function() {
+            var customerID = $(this).find('option:selected').val();
+            $.ajax({
+                url: "{{ url('order/getcustomer') }}/" + customerID,
+                method: "GET",
+                success: function(customer) {
+                    console.log(customer);
+                    $("#ntn").html(customer.ntn);
+                    $("#strn").html(customer.strn);
+                }
+            });
+        });
 
     </script>
 @endsection

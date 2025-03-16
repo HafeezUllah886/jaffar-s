@@ -125,6 +125,16 @@
                                     </select>
                                 </div>
                             </div>
+                            <div class="col-12">
+                                <div class="form-group">
+                                    <label for="whTax">WH Tax</label>
+                                    <div class="input-group mb-3">
+                                        <input type="number" name="whTax" id="whTax" oninput="updateTotal()" max="50" min="0" step="any" value="0" aria-describedby="basic-addon2" class="form-control">
+                                        <span class="input-group-text whTaxValue" id="basic-addon2">0</span>
+                                    </div>
+
+                                </div>
+                            </div>
                             <div class="col-12 mt-2">
                                 <div class="form-group">
                                     <label for="notes">Notes</label>
@@ -273,7 +283,12 @@
                 var inputValue = $(this).val();
                 totalAmount += parseFloat(inputValue);
             });
-            $("#totalAmount").html(totalAmount.toFixed(2));
+            var whTax = parseFloat($("#whTax").val());
+
+            var taxValue = totalAmount * whTax / 100;
+
+            $(".whTaxValue").html(taxValue.toFixed(2));
+            $("#totalAmount").html((totalAmount + taxValue).toFixed(2));
         }
 
         function deleteRow(id) {

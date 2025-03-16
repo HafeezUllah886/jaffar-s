@@ -96,6 +96,14 @@
                                                 <th class="text-end p-0 m-0">{{number_format($totalDiscount,2)}}</th>
                                                 <th class="text-end p-0 m-0">{{number_format($order->details->sum('amount'),2)}}</th>
                                             </tr>
+                                            <tr class="m-0 p-0">
+                                                <th colspan="7" class="text-end p-0 m-0">WH Tax ({{ $order->wh }}%)</th>
+                                                <th class="text-end p-0 m-0">{{number_format($order->whValue,2)}}</th>
+                                            </tr>
+                                            <tr class="m-0 p-0">
+                                                <th colspan="7" class="text-end p-0 m-0">Net Value</th>
+                                                <th class="text-end p-0 m-0">{{number_format($order->net,2)}}</th>
+                                            </tr>
                                         </tfoot>
                                     </table><!--end table-->
                                 </div>

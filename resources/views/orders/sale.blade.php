@@ -150,8 +150,8 @@
                                 <div class="form-group">
                                     <label for="whTax">WH Tax</label>
                                     <div class="input-group mb-3">
-                                        <input type="number" name="whTax" id="whTax" oninput="updateTotal()" max="50" min="0" step="any" value="0" aria-describedby="basic-addon2" class="form-control">
-                                        <span class="input-group-text whTaxValue" id="basic-addon2">0</span>
+                                        <input type="number" name="whTax" id="whTax" oninput="updateTotal()" max="50" min="0" step="any" value="{{$order->wh}}" aria-describedby="basic-addon2" class="form-control">
+                                        <span class="input-group-text whTaxValue" id="basic-addon2">{{$order->whValue}}</span>
                                       </div>
 
                                 </div>

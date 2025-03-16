@@ -14,6 +14,10 @@
                             @if ($filter == 'Business')
                                 <th>Category</th>
                             @endif
+                            @if ($filter == 'Customer')
+                                <th>NTN</th>
+                                <th>STRN</th>
+                            @endif
                             <th>Current Balance</th>
                             <th>Action</th>
                         </thead>
@@ -24,6 +28,10 @@
                                     <td>{{ $account->title }}</td>
                                     @if ($filter == 'Business')
                                         <td>{{ $account->category }}</td>
+                                    @endif
+                                    @if ($filter == 'Customer')
+                                        <td>{{ $account->ntn }}</td>
+                                        <td>{{ $account->strn }}</td>
                                     @endif
                                     <td>{{ number_format(getAccountBalance($account->id)) }}</td>
                                     <td>
