@@ -259,6 +259,10 @@
                                     data-key="t-basic-elements">Comparison Report</a>
                             </li>
                             <li class="nav-item">
+                                <a href="{{ route('reportOrderbooker') }}" class="nav-link"
+                                    data-key="t-basic-elements">Orderbooker Report</a>
+                            </li>
+                            <li class="nav-item">
                                 <a href="{{ route('reportCashbook') }}" class="nav-link"
                                     data-key="t-basic-elements">Daily Cash Book</a>
                             </li>

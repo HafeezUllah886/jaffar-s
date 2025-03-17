@@ -78,13 +78,13 @@
                                                 $totalRP = 0;
                                             @endphp
                                            @foreach ($sale->details as $key => $product)
-                                           @php
-                                                $discount += $product->qty * $product->discount;
-                                                $qty = $product->qty / $product->unitValue;
-                                               $totalQty += $qty;
-                                               $totalBonus += $product->bonus;
-                                               $totalRP += $product->tp * ($qty + $product->bonus);
-                                           @endphp
+                                                @php
+                                                        $discount += $product->qty * $product->discount;
+                                                        $qty = $product->qty / $product->unitValue;
+                                                    $totalQty += $qty;
+                                                    $totalBonus += $product->bonus;
+                                                    $totalRP += $product->tp * ($qty + $product->bonus);
+                                                @endphp
                                                <tr class="border-1 border-dark">
                                                 <td class="m-1 p-1 border-1 border-dark">{{$key+1}}</td>
                                                 <td class="text-start m-1 p-1 border-1 border-dark">{{$product->product->code}}</td>
