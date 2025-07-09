@@ -1,2 +1,234 @@
 <?php
- namespace App\Http\Controllers; use App\Models\SelfTarget; use App\Http\Controllers\Controller; use App\Models\accounts; use App\Models\products; use App\Models\SelfTagetDetails; use App\Models\SelfTargetDetails; use App\Models\units; use Illuminate\Http\Request; use Illuminate\Support\Facades\DB; class SelfTargetController extends Controller { public function index() { $targets = SelfTarget::orderBy("\145\x6e\144\x44\141\x74\145", "\144\145\x73\143")->get(); foreach ($targets as $target) { $totalTarget = 0; $totalSold = 0; foreach ($target->details as $product) { $qtySold = DB::table("\x70\165\x72\x63\x68\x61\163\145\163")->join("\x70\165\x72\x63\150\x61\x73\x65\137\x64\145\164\x61\151\x6c\x73", "\x70\x75\162\x63\x68\x61\x73\145\x73\56\151\144", "\75", "\160\165\x72\x63\x68\x61\x73\145\137\x64\145\164\141\151\154\163\x2e\x70\x75\x72\x63\150\x61\163\145\x49\104")->where("\160\x75\x72\x63\150\x61\163\145\163\x2e\166\145\156\x64\157\162\111\104", $target->vendorID)->where("\x70\x75\x72\143\x68\141\163\x65\x5f\x64\145\164\x61\151\x6c\x73\x2e\x70\x72\157\x64\x75\x63\x74\111\104", $product->productID)->whereBetween("\x70\165\x72\x63\150\x61\x73\145\x5f\144\x65\164\x61\151\x6c\163\56\144\141\x74\x65", array($target->startDate, $target->endDate))->sum("\x70\165\x72\x63\x68\x61\x73\145\137\144\x65\164\x61\x69\x6c\163\x2e\161\x74\171"); $product->sold = $qtySold; $targetQty = $product->qty; if ($qtySold > $targetQty) { $qtySold = $targetQty; } $product->per = $qtySold / $targetQty * 100; $totalTarget += $targetQty; $totalSold += $qtySold; } $totalPer = $totalSold / $totalTarget * 100; $target->totalPer = $totalPer; if ($target->endDate > now()) { $target->campain = "\x4f\x70\x65\156"; $target->campain_color = "\x73\165\143\x63\x65\163\x73"; } else { $target->campain = "\103\154\157\163\145\x64"; $target->campain_color = "\x77\x61\162\156\x69\156\147"; } if ($totalPer >= 100) { $target->goal = "\x54\141\162\x67\x65\164\40\101\x63\150\x69\145\x76\x65\144"; $target->goal_color = "\x73\x75\x63\x63\145\x73\163"; } elseif ($target->endDate > now() && $totalPer < 100) { $target->goal = "\111\156\x20\120\x72\157\147\162\x65\163\163"; $target->goal_color = "\151\x6e\x66\x6f"; } else { $target->goal = "\x4e\157\x74\x20\101\x63\x68\151\145\166\145\144"; $target->goal_color = "\144\x61\156\x67\145\162"; } } return view("\x73\145\x6c\x66\x5f\164\141\162\147\145\164\x2e\151\x6e\144\145\x78", compact("\x74\x61\162\x67\x65\164\x73")); } public function create() { $products = products::orderby("\156\x61\x6d\145", "\x61\x73\x63")->get(); $units = units::all(); $vendors = accounts::vendor()->get(); return view("\163\x65\154\x66\x5f\164\141\162\x67\145\x74\x2e\x63\x72\145\141\164\145", compact("\x70\162\x6f\144\x75\143\164\x73", "\165\x6e\151\x74\163", "\166\x65\156\x64\x6f\162\163")); } public function store(Request $request) { try { DB::beginTransaction(); $target = SelfTarget::create(array("\x76\x65\156\x64\157\162\111\104" => $request->vendorID, "\163\164\141\162\x74\104\141\164\x65" => $request->startDate, "\145\x6e\144\x44\141\164\145" => $request->endDate, "\156\x6f\164\145\163" => $request->notes)); $ids = $request->id; foreach ($ids as $key => $id) { $unit = units::find($request->unit[$key]); $qty = $request->qty[$key] * $unit->value; SelfTargetDetails::create(array("\164\x61\x72\147\x65\x74\x49\104" => $target->id, "\x70\x72\x6f\x64\x75\x63\164\x49\x44" => $id, "\x71\164\171" => $qty, "\x75\x6e\151\x74\111\x44" => $unit->id)); } DB::commit(); return back()->with("\x73\x75\x63\143\145\163\163", "\124\x61\x72\147\145\164\40\123\x61\166\145\144"); } catch (\Exception $e) { DB::rollBack(); return back()->with("\145\162\x72\x6f\x72", $e->getMessage()); } } public function show($id) { $target = SelfTarget::find($id); $totalTarget = 0; $totalSold = 0; foreach ($target->details as $product) { $qtySold = DB::table("\160\x75\162\143\150\141\163\x65\163")->join("\160\x75\162\143\150\141\x73\x65\137\x64\145\164\x61\151\154\x73", "\x70\165\x72\x63\x68\x61\163\x65\x73\56\x69\x64", "\75", "\x70\x75\x72\x63\150\x61\x73\145\137\144\145\164\141\151\x6c\x73\56\x70\x75\x72\x63\x68\141\163\x65\111\x44")->where("\x70\165\162\x63\150\x61\x73\145\163\56\x76\x65\x6e\144\x6f\162\x49\104", $target->vendorID)->where("\160\165\162\x63\150\x61\163\145\137\x64\x65\x74\x61\151\x6c\163\x2e\160\162\157\x64\165\143\164\111\x44", $product->productID)->whereBetween("\160\165\x72\143\150\x61\163\x65\137\x64\x65\x74\141\x69\154\163\56\x64\141\x74\x65", array($target->startDate, $target->endDate))->sum("\x70\x75\x72\143\150\x61\x73\x65\137\144\x65\164\141\x69\154\163\x2e\x71\x74\x79"); $targetQty = $product->qty; if ($qtySold > $targetQty) { $qtySold = $targetQty; } $product->sold = $qtySold; $product->per = $qtySold / $targetQty * 100; $totalTarget += $targetQty; $totalSold += $qtySold; } $totalPer = $totalSold / $totalTarget * 100; $target->totalPer = $totalPer; if ($target->endDate > now()) { $target->campain = "\x4f\x70\145\x6e"; $target->campain_color = "\x73\x75\143\143\x65\x73\x73"; } else { $target->campain = "\x43\154\x6f\x73\x65\x64"; $target->campain_color = "\x77\x61\x72\156\x69\156\147"; } if ($totalPer >= 100) { $target->goal = "\124\x61\162\147\x65\x74\x20\x41\x63\150\151\x65\x76\145\x64"; $target->goal_color = "\163\x75\143\x63\x65\x73\x73"; } elseif ($target->endDate > now() && $totalPer < 100) { $target->goal = "\x49\156\x20\120\x72\157\x67\x72\x65\163\x73"; $target->goal_color = "\x69\156\146\x6f"; } else { $target->goal = "\116\x6f\x74\40\101\143\x68\x69\x65\x76\x65\144"; $target->goal_color = "\144\x61\x6e\147\145\162"; } return view("\163\145\x6c\146\x5f\x74\x61\162\147\145\164\56\x76\151\x65\167", compact("\164\x61\x72\147\145\x74")); } public function edit(targets $targets) { } public function update(Request $request, targets $targets) { } public function destroy($id) { $target = SelfTarget::find($id); $target->details()->delete(); $target->delete(); session()->forget("\143\157\x6e\146\x69\162\x6d\145\x64\x5f\x70\x61\x73\163\167\157\x72\x64"); return to_route("\x73\145\x6c\146\137\x74\141\162\x67\x65\164\x73\56\x69\x6e\144\145\170")->with("\x73\x75\143\x63\x65\163\x73", "\x54\141\x72\147\x65\164\40\x44\x65\154\x65\x74\x65\x73"); } }
+
+namespace App\Http\Controllers;
+
+use App\Models\SelfTarget;
+use App\Http\Controllers\Controller;
+use App\Models\accounts;
+use App\Models\categories;
+use App\Models\products;
+use App\Models\SelfTagetDetails;
+use App\Models\SelfTargetDetails;
+use App\Models\units;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+
+class SelfTargetController extends Controller
+{
+    public function index()
+    {
+        $targets = SelfTarget::orderBy("endDate", 'desc')->get();
+        foreach($targets as $target)
+        {
+            $totalTarget = 0;
+            $totalSold = 0;
+            
+           foreach($target->details as $product)
+           {
+                $qtySold = DB::table('purchases')
+                ->join('purchase_details', 'purchases.id', '=', 'purchase_details.purchaseID')
+                ->where('purchases.vendorID', $target->vendorID)  // Filter by customer ID
+                ->where('purchase_details.productID', $product->productID)  // Filter by product ID
+                ->whereBetween('purchase_details.date', [$target->startDate, $target->endDate])  // Filter by date range
+                ->sum('purchase_details.qty');
+                $product->sold = $qtySold;
+                $targetQty = $product->qty;
+
+                if($qtySold > $targetQty)
+                {
+                    $qtySold = $targetQty;
+                }
+                $product->per = $qtySold / $targetQty * 100;
+               
+
+                $totalTarget += $targetQty;
+                $totalSold += $qtySold;
+           }
+           $totalPer = $totalSold / $totalTarget  * 100;
+           $target->totalPer = $totalPer;
+
+            if($target->endDate > now())
+            {
+
+                $target->campain = "Open";
+                $target->campain_color = "success";
+            }
+            else
+            {
+                $target->campain = "Closed";
+                $target->campain_color = "warning";
+            }
+
+            if($totalPer >= 100)
+            {
+                $target->goal = "Target Achieved";
+                $target->goal_color = "success";
+            }
+            elseif($target->endDate > now() && $totalPer < 100)
+            {
+                $target->goal = "In Progress";
+                $target->goal_color = "info";
+            }
+            else
+            {
+                $target->goal = "Not Achieved";
+                $target->goal_color = "danger";
+            }
+        }
+        return view('self_target.index', compact('targets'));
+    }
+
+    /**
+     * Show the form for creating a new resource.
+     */
+    public function create()
+    {
+       
+        $vendors = accounts::vendor()->get();
+        $categories = categories::all();
+        
+        return view('self_target.create', compact('categories', 'vendors'));
+    }
+
+    /**
+     * Store a newly created resource in storage.
+     */
+    public function store(Request $request)
+    {
+        try
+        {
+            DB::beginTransaction();
+            $target = SelfTarget::create(
+                [
+                    'vendorID'    => $request->vendorID,
+                    'startDate'     => $request->startDate,
+                    'endDate'       => $request->endDate,
+                    'notes'         => $request->notes,
+                ]
+            );
+
+            $ids = $request->id;
+
+            foreach($ids as $key => $id)
+            {
+                $unit = units::find($request->unit[$key]);
+                $qty = $request->qty[$key] * $unit->value;
+                SelfTargetDetails::create(
+                    [
+                        'targetID'      => $target->id,
+                        'productID'     => $id,
+                        'qty'           => $qty,
+                        'unitID'        => $unit->id,
+                    ]
+                );
+            }
+            DB::commit();
+            return back()->with("success", "Target Saved");
+        }
+        catch(\Exception $e)
+        {
+            DB::rollBack();
+            return back()->with("error", $e->getMessage());
+        }
+    }
+
+    /**
+     * Display the specified resource.
+     */
+    public function show($id)
+    {
+        $target = SelfTarget::find($id);
+       
+            $totalTarget = 0;
+            $totalSold = 0;
+            
+           foreach($target->details as $product)
+           {
+                $qtySold = DB::table('purchases')
+                ->join('purchase_details', 'purchases.id', '=', 'purchase_details.purchaseID')
+                ->where('purchases.vendorID', $target->vendorID)  // Filter by customer ID
+                ->where('purchase_details.productID', $product->productID)  // Filter by product ID
+                ->whereBetween('purchase_details.date', [$target->startDate, $target->endDate])  // Filter by date range
+                ->sum('purchase_details.qty');
+                
+                $targetQty = $product->qty;
+
+                if($qtySold > $targetQty)
+                {
+                    $qtySold = $targetQty;
+                }
+                $product->sold = $qtySold;
+                $product->per = $qtySold / $targetQty * 100;
+
+                $totalTarget += $targetQty;
+                $totalSold += $qtySold;
+           }
+           $totalPer = $totalSold / $totalTarget * 100;
+           $target->totalPer = $totalPer;
+
+            if($target->endDate > now())
+            {
+
+                $target->campain = "Open";
+                $target->campain_color = "success";
+            }
+            else
+            {
+                $target->campain = "Closed";
+                $target->campain_color = "warning";
+            }
+
+            if($totalPer >= 100)
+            {
+                $target->goal = "Target Achieved";
+                $target->goal_color = "success";
+            }
+            elseif($target->endDate > now() && $totalPer < 100)
+            {
+                $target->goal = "In Progress";
+                $target->goal_color = "info";
+            }
+            else
+            {
+                $target->goal = "Not Achieved";
+                $target->goal_color = "danger";
+            }
+        return view('self_target.view', compact('target'));
+    }
+
+    /**
+     * Show the form for editing the specified resource.
+     */
+    public function edit(targets $targets)
+    {
+        //
+    }
+
+    /**
+     * Update the specified resource in storage.
+     */
+    public function update(Request $request, targets $targets)
+    {
+        //
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     */
+    public function destroy($id)
+    {
+        $target = SelfTarget::find($id);
+        $target->details()->delete();
+        $target->delete();
+        session()->forget('confirmed_password');
+        return to_route('self_targets.index')->with("success", "Target Deletes");
+    }
+
+    public function getcat($id)
+    {
+        $category = categories::find($id);
+        
+        return $category;
+    }
+
+}

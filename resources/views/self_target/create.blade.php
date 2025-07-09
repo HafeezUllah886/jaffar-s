@@ -19,11 +19,11 @@
                         <div class="row">
                             <div class="col-12">
                                 <div class="form-group">
-                                    <label for="product">Product</label>
-                                    <select name="product" class="selectize" id="product">
+                                    <label for="category">Category</label>
+                                    <select name="category" class="selectize" id="category">
                                         <option value=""></option>
-                                        @foreach ($products as $product)
-                                            <option value="{{ $product->id }}">{{ $product->name }}</option>
+                                        @foreach ($categories as $category)
+                                            <option value="{{ $category->id }}">{{ $category->name }}</option>
                                         @endforeach
                                     </select>
                                 </div>
@@ -111,7 +111,6 @@
 
             },
         });
-        var units = @json($units);
         var existingProducts = [];
 
         function getSingleProduct(id) {
