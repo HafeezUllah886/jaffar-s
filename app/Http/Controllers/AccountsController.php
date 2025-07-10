@@ -1,2 +1,164 @@
 <?php
- namespace App\Http\Controllers; use App\Models\accounts; use App\Models\transactions; use Illuminate\Http\Request; use Illuminate\Support\Facades\DB; use Symfony\Component\Finder\Exception\AccessDeniedException; class AccountsController extends Controller { public function index($filter) { $accounts = accounts::where("\164\x79\x70\x65", $filter)->orderBy("\164\151\x74\154\x65", "\141\163\143")->get(); return view("\106\151\x6e\141\x6e\x63\x65\x2e\141\143\x63\x6f\x75\x6e\x74\x73\x2e\151\x6e\144\x65\170", compact("\x61\x63\143\x6f\165\x6e\x74\163", "\146\x69\154\x74\145\162")); } public function create() { return view("\106\151\x6e\x61\x6e\143\145\56\141\x63\143\x6f\x75\x6e\x74\163\x2e\143\162\x65\x61\164\145"); } public function store(Request $request) { $request->validate(array("\x74\151\164\x6c\145" => "\162\145\161\165\x69\162\x65\x64\174\x75\x6e\151\x71\165\145\x3a\x61\143\143\x6f\165\x6e\164\163\x2c\x74\x69\x74\x6c\x65"), array("\x74\x69\164\154\145\x2e\162\x65\161\x75\x69\x72\145\x64" => "\120\154\145\141\163\x65\x20\x45\x6e\x74\x65\x72\40\x41\143\143\157\165\x6e\x74\x20\124\x69\x74\x6c\x65", "\164\151\164\154\145\x2e\x75\x6e\x69\161\165\145" => "\x41\143\143\x6f\x75\156\164\40\x77\x69\x74\150\40\164\x68\151\x73\40\164\x69\x74\x6c\x65\x20\141\x6c\x72\145\141\x64\x79\x20\x65\x78\x69\x73\164\163")); try { DB::beginTransaction(); $ref = getRef(); if ($request->type == "\103\x75\163\164\x6f\155\145\x72") { $account = accounts::create(array("\x74\x69\164\x6c\145" => $request->title, "\x74\x79\160\145" => $request->type, "\x63\141\x74\145\x67\157\162\x79" => $request->category, "\143\x6e\151\x63" => $request->cnic, "\143\x6f\x6e\x74\141\x63\164" => $request->contact, "\x61\144\144\x72\x65\x73\x73" => $request->address, "\156\164\156" => $request->ntn, "\163\x74\162\156" => $request->strn, "\x63\x5f\164\171\x70\145" => $request->c_type)); } else { $account = accounts::create(array("\x74\x69\x74\x6c\x65" => $request->title, "\x74\x79\160\x65" => $request->type, "\143\x61\164\145\147\157\x72\x79" => $request->category)); } if ($request->initial > 0) { if ($request->initialType == "\60") { createTransaction($account->id, now(), $request->initial, 0, "\x49\x6e\x69\x74\151\141\154\40\101\x6d\x6f\165\156\164", $ref); } else { createTransaction($account->id, now(), 0, $request->initial, "\111\156\151\x74\151\141\x6c\40\x41\155\157\x75\156\x74", $ref); } } DB::commit(); return back()->with("\163\165\x63\x63\145\163\x73", "\x41\143\x63\x6f\x75\156\164\40\103\162\145\x61\x74\x65\144\x20\x53\165\143\x63\x65\163\x73\146\x75\x6c\x6c\x79"); } catch (\Exception $e) { return back()->with("\145\162\x72\x6f\162", $e->getMessage()); } } public function show($id, $from, $to) { $account = accounts::find($id); $transactions = transactions::where("\141\143\143\x6f\x75\x6e\x74\x49\104", $id)->whereBetween("\x64\141\x74\145", array($from, $to))->get(); $pre_cr = transactions::where("\x61\143\x63\x6f\x75\156\x74\111\104", $id)->whereDate("\144\141\164\145", "\x3c", $from)->sum("\x63\x72"); $pre_db = transactions::where("\141\x63\x63\157\x75\156\164\111\104", $id)->whereDate("\x64\141\164\145", "\x3c", $from)->sum("\x64\x62"); $pre_balance = $pre_cr - $pre_db; $cur_cr = transactions::where("\x61\143\143\x6f\165\x6e\164\111\104", $id)->sum("\x63\x72"); $cur_db = transactions::where("\x61\143\x63\157\165\156\164\111\104", $id)->sum("\144\x62"); $cur_balance = $cur_cr - $cur_db; return view("\x46\x69\x6e\141\156\x63\x65\56\x61\x63\x63\x6f\165\156\x74\163\56\x73\x74\141\164\x6d\145\156\164", compact("\141\x63\x63\x6f\x75\x6e\164", "\164\x72\x61\156\x73\141\x63\164\x69\x6f\156\163", "\160\x72\x65\x5f\142\x61\154\x61\156\143\x65", "\x63\165\x72\137\x62\141\x6c\141\156\x63\145", "\146\162\157\x6d", "\164\x6f")); } public function edit(accounts $account) { return view("\106\x69\x6e\x61\156\x63\145\x2e\x61\143\x63\x6f\x75\156\164\163\x2e\x65\144\151\x74", compact("\x61\x63\143\x6f\165\156\x74")); } public function update(Request $request, accounts $account) { $request->validate(array("\x74\x69\x74\154\x65" => "\162\145\161\165\x69\x72\x65\144\x7c\x75\156\151\161\165\x65\x3a\141\x63\143\157\x75\156\164\163\x2c\164\x69\x74\154\145\x2c" . $request->accountID), array("\x74\151\164\154\x65\x2e\162\145\x71\x75\151\x72\145\144" => "\x50\x6c\145\141\163\145\x20\105\x6e\x74\145\x72\40\101\x63\x63\157\x75\x6e\164\x20\x54\151\164\154\x65", "\164\x69\x74\x6c\145\56\x75\156\151\161\x75\145" => "\x41\143\143\x6f\x75\156\164\x20\x77\x69\x74\x68\x20\164\x68\151\163\40\164\x69\164\x6c\145\x20\141\154\162\x65\141\x64\171\40\x65\170\151\163\164\163")); $account = accounts::find($request->accountID)->update(array("\164\x69\x74\154\145" => $request->title, "\143\141\x74\x65\x67\157\162\x79" => $request->category, "\x63\x6e\151\x63" => $request->cnic ?? null, "\x63\157\156\x74\141\143\x74" => $request->contact ?? null, "\141\x64\x64\162\x65\x73\x73" => $request->address ?? null, "\x6e\164\x6e" => $request->ntn ?? null, "\x73\164\162\x6e" => $request->strn ?? null, "\143\x5f\164\x79\x70\145" => $request->c_type ?? "\x4f\164\x68\145\162")); return redirect()->route("\141\143\x63\x6f\x75\156\x74\x73\x4c\x69\163\164", $request->type)->with("\163\x75\143\143\x65\163\x73", "\x41\143\143\x6f\165\156\164\40\x55\160\144\x61\x74\x65\x64"); } public function destroy(accounts $accounts) { } }
+
+namespace App\Http\Controllers;
+
+use App\Models\accounts;
+use App\Models\transactions;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Symfony\Component\Finder\Exception\AccessDeniedException;
+
+class AccountsController extends Controller
+{
+    /**
+     * Display a listing of the resource.
+     */
+    public function index($filter)
+    {
+        $accounts = accounts::where('type', $filter)->orderBy('title', 'asc')->get();
+
+        return view('Finance.accounts.index', compact('accounts', 'filter'));
+    }
+
+    /**
+     * Show the form for creating a new resource.
+     */
+    public function create()
+    {
+        return view('Finance.accounts.create');
+    }
+
+    /**
+     * Store a newly created resource in storage.
+     */
+    public function store(Request $request)
+    {
+        $request->validate(
+            [
+                'title' => 'required|unique:accounts,title'
+            ],
+            [
+                'title.required' => "Please Enter Account Title",
+                'title.unique'  => "Account with this title already exists"
+            ]
+        );
+
+        try
+        {
+            DB::beginTransaction();
+
+                $ref = getRef();
+                if($request->type == "Customer")
+                {
+                    $account = accounts::create(
+                        [
+                            'title' => $request->title,
+                            'type' => $request->type,
+                            'category' => $request->category,
+                            'cnic' => $request->cnic,
+                            'contact' => $request->contact,
+                            'address' => $request->address,
+                            'ntn' => $request->ntn,
+                            'strn' => $request->strn,
+                            'c_type' => $request->c_type,
+                        ]
+                    );
+                }
+                else
+                {
+                    $account = accounts::create(
+                        [
+                            'title' => $request->title,
+                            'type' => $request->type,
+                            'category' => $request->category
+                        ]
+                    );
+                }
+
+                if($request->initial > 0)
+                {
+                    if($request->initialType == '0')
+                    {
+                        createTransaction($account->id,now(), $request->initial,0, "Initial Amount", $ref);
+                    }
+                    else
+                    {
+                        createTransaction($account->id,now(), 0, $request->initial, "Initial Amount", $ref);
+                    }
+                }
+           DB::commit();
+           return back()->with('success', "Account Created Successfully");
+        }
+        catch(\Exception $e)
+        {
+            return back()->with('error', $e->getMessage());
+        }
+    }
+
+    /**
+     * Display the specified resource.
+     */
+    public function show($id, $from, $to)
+    {
+        $account = accounts::find($id);
+
+        $transactions = transactions::where('accountID', $id)->whereBetween('date', [$from, $to])->orderBy('date', 'asc')->get();
+
+        $pre_cr = transactions::where('accountID', $id)->whereDate('date', '<', $from)->sum('cr');
+        $pre_db = transactions::where('accountID', $id)->whereDate('date', '<', $from)->sum('db');
+        $pre_balance = $pre_cr - $pre_db;
+
+        $cur_cr = transactions::where('accountID', $id)->sum('cr');
+        $cur_db = transactions::where('accountID', $id)->sum('db');
+
+        $cur_balance = $cur_cr - $cur_db;
+
+        return view('Finance.accounts.statment', compact('account', 'transactions', 'pre_balance', 'cur_balance', 'from', 'to'));
+    }
+
+    /**
+     * Show the form for editing the specified resource.
+     */
+    public function edit(accounts $account)
+    {
+        return view('Finance.accounts.edit', compact('account'));
+    }
+
+    /**
+     * Update the specified resource in storage.
+     */
+    public function update(Request $request, accounts $account)
+    {
+        $request->validate(
+            [
+                'title' => "required|unique:accounts,title,". $request->accountID,
+            ],
+            [
+                'title.required' => "Please Enter Account Title",
+                'title.unique'  => "Account with this title already exists"
+            ]
+        );
+        $account = accounts::find($request->accountID)->update(
+            [
+                'title' => $request->title,
+                'category' => $request->category,
+                'cnic' => $request->cnic ?? null,
+                'contact' => $request->contact ?? null,
+                'address' => $request->address ?? null,
+                'ntn' => $request->ntn ?? null,
+                'strn' => $request->strn ?? null,
+                'c_type' => $request->c_type ?? "Other",
+            ]
+        );
+
+        return redirect()->route('accountsList', $request->type)->with('success', "Account Updated");
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     */
+    public function destroy(accounts $accounts)
+    {
+        //
+    }
+}
