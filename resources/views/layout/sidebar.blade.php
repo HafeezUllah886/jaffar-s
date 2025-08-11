@@ -282,6 +282,10 @@
                                 <a href="{{ route('reportCustomerProducts') }}" class="nav-link"
                                     data-key="t-basic-elements">Customer Products</a>
                             </li>
+                            <li class="nav-item">
+                                <a href="{{ route('reportStockMovement') }}" class="nav-link"
+                                    data-key="t-basic-elements">Stock Movement</a>
+                            </li>
                         </ul>
                     </div>
                 </li>

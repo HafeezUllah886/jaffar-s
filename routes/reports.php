@@ -20,6 +20,7 @@ use App\Http\Controllers\reports\salesGstReportController;
 use App\Http\Controllers\reports\salesManReportController;
 use App\Http\Controllers\reports\salesReportController;
 use App\Http\Controllers\reports\salesWHTReportController as ReportsSalesWHTReportController;
+use App\Http\Controllers\reports\stockMovementReportController;
 use App\Http\Controllers\salesWHTReportController;
 use App\Http\Middleware\adminCheck;
 use Illuminate\Support\Facades\Route;
@@ -88,4 +89,7 @@ Route::middleware('auth', adminCheck::class)->group(function () {
     Route::get('/reports/orderbooker', [OrderbookerReportController::class, 'index'])->name('reportOrderbooker');
     Route::get('/reports/orderbooker/details/{from}/{to}/{orderbooker}', [OrderbookerReportController::class, 'data'])->name('reportOrderbookerData');
     Route::get('/reports/orderbooker/print/{from}/{to}/{orderbooker}', [OrderbookerReportController::class, 'print'])->name('reportOrderbookerPrint');
+
+    Route::get('/reports/stockmovementreport', [stockMovementReportController::class, 'index'])->name('reportStockMovement');
+    Route::get('/reports/stockmovementreportData', [stockMovementReportController::class, 'data'])->name('reportStockMovementData');
 });
