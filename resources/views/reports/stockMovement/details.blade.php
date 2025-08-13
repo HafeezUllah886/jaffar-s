@@ -52,8 +52,9 @@
                                                 <th scope="col" class="bg-success">Stock In</th>
                                                 <th scope="col" class="bg-danger">Stock Out</th>
                                                 <th scope="col">Closing</th>
+                                                <th scope="col">Closing Value</th>
                                                 <th scope="col">Current</th>
-                                                <th scope="col">Stock Value</th>
+                                                <th scope="col">Current Value</th>
                                             </tr>
                                            
                                         </thead>
@@ -71,8 +72,9 @@
                                                 <td class="text-end p-1 m-0 text-success">{{ $product->stock_in }}</td>
                                                 <td class="text-end p-1 m-0 text-danger">{{ $product->stock_out }}</td>
                                                 <td class="text-end p-1 m-0 ">{{ $product->closing_stock }}</td>
+                                                <td class="text-end p-1 m-0 ">{{ number_format($product->closing_value,0) }}</td>
                                                 <td class="text-end p-1 m-0 ">{{ $product->current_stock }}</td>
-                                                <td class="text-end p-1 m-0 ">{{ number_format(productStockValue($product->id),0) }}</td>
+                                                <td class="text-end p-1 m-0 ">{{ number_format($product->current_value,0) }}</td>
                                             </tr>
                                         @endif
                                         @endforeach

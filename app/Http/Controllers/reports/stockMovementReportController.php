@@ -38,12 +38,22 @@ class stockMovementReportController extends Controller
 
             $closing_stock = $opening_stock + $credit - $debit;
             $current_stock = getStock($product->id);
+            $current_value = productStockValue($product->id);
+            if($current_stock > 0){
+                $value_per_pc = $current_value / $current_stock;
+                $closing_value = $closing_stock * $value_per_pc;
+            }else{
+                $value_per_pc = 0;
+                $closing_value = 0;
+            }
 
             $product->opening_stock = $opening_stock;
             $product->stock_in = $credit;
             $product->stock_out = $debit;
             $product->closing_stock = $closing_stock;
             $product->current_stock = $current_stock;
+            $product->current_value = $current_value;
+            $product->closing_value = $closing_value;
         }
         return view('reports.stockMovement.details', compact('products', 'from', 'to'));
     }
