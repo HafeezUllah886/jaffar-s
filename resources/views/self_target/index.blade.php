@@ -11,7 +11,8 @@
                     <table class="table" id="buttons-datatables">
                         <thead>
                             <th>#</th>
-                            <th>Vendor</th>
+                            <th>Category</th>
+                            <th>Target</th>
                             <th>Achieved</th>
                             <th>Dates</th>
                             <th>Status</th>
@@ -21,13 +22,12 @@
                             @foreach ($targets as $key => $item)
                                 <tr>
                                     <td>{{ $key + 1 }}</td>
-                                    <td>{{ $item->vendor->title }}</td>
-                                    <td>{{ number_format($item->totalPer,2) }}%</td>
+                                    <td>{{ $item->category->name }}</td>
+                                    <td>{{ number_format($item->targetQty) }}</td>
+                                    <td>{{ number_format($item->status['totalQty']) }}</td>
                                     <td>{{ date('d M Y', strtotime($item->startDate)) }} <br>{{ date('d M Y', strtotime($item->endDate)) }}</td>
                                     <td>
-                                        <span class="badge bg-{{$item->campain_color}}">{{$item->campain}}</span>
-                                        <br>
-                                        <span class="badge bg-{{$item->goal_color}}">{{$item->goal}}</span>
+                                        <span class="badge bg-{{$item->status['color']}}">{{$item->status['status']}}</span>
                                     </td>
                                     <td>
                                         <div class="dropdown">

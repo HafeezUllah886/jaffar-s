@@ -10,6 +10,7 @@ use App\Models\products;
 use App\Models\SelfTagetDetails;
 use App\Models\SelfTargetDetails;
 use App\Models\units;
+use App\Models\purchase_details;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -18,63 +19,7 @@ class SelfTargetController extends Controller
     public function index()
     {
         $targets = SelfTarget::orderBy("endDate", 'desc')->get();
-        foreach($targets as $target)
-        {
-            $totalTarget = 0;
-            $totalSold = 0;
-            
-           foreach($target->details as $product)
-           {
-                $qtySold = DB::table('purchases')
-                ->join('purchase_details', 'purchases.id', '=', 'purchase_details.purchaseID')
-                ->where('purchases.vendorID', $target->vendorID)  // Filter by customer ID
-                ->where('purchase_details.productID', $product->productID)  // Filter by product ID
-                ->whereBetween('purchase_details.date', [$target->startDate, $target->endDate])  // Filter by date range
-                ->sum('purchase_details.qty');
-                $product->sold = $qtySold;
-                $targetQty = $product->qty;
-
-                if($qtySold > $targetQty)
-                {
-                    $qtySold = $targetQty;
-                }
-                $product->per = $qtySold / $targetQty * 100;
-               
-
-                $totalTarget += $targetQty;
-                $totalSold += $qtySold;
-           }
-           $totalPer = $totalSold / $totalTarget  * 100;
-           $target->totalPer = $totalPer;
-
-            if($target->endDate > now())
-            {
-
-                $target->campain = "Open";
-                $target->campain_color = "success";
-            }
-            else
-            {
-                $target->campain = "Closed";
-                $target->campain_color = "warning";
-            }
-
-            if($totalPer >= 100)
-            {
-                $target->goal = "Target Achieved";
-                $target->goal_color = "success";
-            }
-            elseif($target->endDate > now() && $totalPer < 100)
-            {
-                $target->goal = "In Progress";
-                $target->goal_color = "info";
-            }
-            else
-            {
-                $target->goal = "Not Achieved";
-                $target->goal_color = "danger";
-            }
-        }
+       
         return view('self_target.index', compact('targets'));
     }
 
@@ -100,28 +45,13 @@ class SelfTargetController extends Controller
             DB::beginTransaction();
             $target = SelfTarget::create(
                 [
-                    'vendorID'    => $request->vendorID,
+                    'categoryID'    => $request->categoryID,
+                    'targetQty'     => $request->targetQty,
                     'startDate'     => $request->startDate,
                     'endDate'       => $request->endDate,
                     'notes'         => $request->notes,
                 ]
             );
-
-            $ids = $request->id;
-
-            foreach($ids as $key => $id)
-            {
-                $unit = units::find($request->unit[$key]);
-                $qty = $request->qty[$key] * $unit->value;
-                SelfTargetDetails::create(
-                    [
-                        'targetID'      => $target->id,
-                        'productID'     => $id,
-                        'qty'           => $qty,
-                        'unitID'        => $unit->id,
-                    ]
-                );
-            }
             DB::commit();
             return back()->with("success", "Target Saved");
         }
@@ -138,62 +68,20 @@ class SelfTargetController extends Controller
     public function show($id)
     {
         $target = SelfTarget::find($id);
-       
-            $totalTarget = 0;
-            $totalSold = 0;
             
-           foreach($target->details as $product)
-           {
-                $qtySold = DB::table('purchases')
-                ->join('purchase_details', 'purchases.id', '=', 'purchase_details.purchaseID')
-                ->where('purchases.vendorID', $target->vendorID)  // Filter by customer ID
-                ->where('purchase_details.productID', $product->productID)  // Filter by product ID
-                ->whereBetween('purchase_details.date', [$target->startDate, $target->endDate])  // Filter by date range
-                ->sum('purchase_details.qty');
-                
-                $targetQty = $product->qty;
-
-                if($qtySold > $targetQty)
-                {
-                    $qtySold = $targetQty;
-                }
-                $product->sold = $qtySold;
-                $product->per = $qtySold / $targetQty * 100;
-
-                $totalTarget += $targetQty;
-                $totalSold += $qtySold;
-           }
-           $totalPer = $totalSold / $totalTarget * 100;
-           $target->totalPer = $totalPer;
-
-            if($target->endDate > now())
+            $products = products::where('catID', $target->categoryID)->get();
+            foreach($products as $product)
             {
-
-                $target->campain = "Open";
-                $target->campain_color = "success";
+              $purchase = purchase_details::where('productID', $product->id)->whereBetween('date', [$target->startDate, $target->endDate])->sum('qty');
+             
+              // Guard against null/zero unit values
+              $unitValue = optional($product->unit)->value ?? null;
+             
+              $product->qty = $purchase;
+              $product->packSize = $unitValue;
             }
-            else
-            {
-                $target->campain = "Closed";
-                $target->campain_color = "warning";
-            }
-
-            if($totalPer >= 100)
-            {
-                $target->goal = "Target Achieved";
-                $target->goal_color = "success";
-            }
-            elseif($target->endDate > now() && $totalPer < 100)
-            {
-                $target->goal = "In Progress";
-                $target->goal_color = "info";
-            }
-            else
-            {
-                $target->goal = "Not Achieved";
-                $target->goal_color = "danger";
-            }
-        return view('self_target.view', compact('target'));
+       
+        return view('self_target.view', compact('target', 'products'));
     }
 
     /**

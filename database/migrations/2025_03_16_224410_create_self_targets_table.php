@@ -13,7 +13,8 @@ return new class extends Migration
     {
         Schema::create('self_targets', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('vendorID')->constrained('accounts', 'id');
+            $table->foreignId('categoryID')->constrained('categories', 'id');
+            $table->float('targetQty');
             $table->date('startDate');
             $table->date('endDate');
             $table->text('notes')->nullable();

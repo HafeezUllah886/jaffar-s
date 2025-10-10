@@ -12,24 +12,10 @@
                                 <div class="d-flex">
                                     <div class="flex-grow-1">
                                         <img src="{{asset('assets/images/logo.png')}}" style="width:250px;">
-                                        <div class="mt-sm-5 mt-4">
-                                            <div class="row">
-                                                <div class="col-6">
-                                                    <h6 class="text-muted text-uppercase fw-semibold">Industrial Area, Sirki Road, Quetta</h6>
-                                                    <p class="text-muted mb-1" id="address-details">NTN: 2645388-6</p>
-                                                    <p class="text-muted mb-0" id="zip-code"><span>0331-8358638 | </span> jaffarqta92@gmail.com</p>
-                                                </div>
-                                                <div class="col-6">
-                                                    <p class="text-muted mb-2 text-uppercase fw-semibold">Vendor</p>
-                                                    <h5 class="fs-14 mb-0"> <span class="text-muted"></span> {{$target->vendor->title}}</h5>
-                                                   
-                                                </div>
-                                            </div>
-
-                                        </div>
+                                        
                                     </div>
                                     <div class="flex-shrink-0 mt-sm-0 mt-3">
-                                        <h3>Target Report</h3>
+                                        <h3>Self Target Report</h3>
                                         <p> <span class="text-muted text-uppercase fw-semibold mt-0 m-0 p-0">Target # </span><span class="fs-14 m-0 p-0">{{$target->id}}</span></p>
                                     </div>
                                 </div>
@@ -37,35 +23,57 @@
                             <!--end card-header-->
                         </div><!--end col-->
                         <div class="col-lg-12">
+                            
                             <div class="card-body p-4">
-                                <div class="table-responsive">
+                               
+                                    <div class="row">
+                                        <div class="col-3">
+                                            <p class="text-muted mb-2 text-uppercase fw-semibold">Category</p>
+                                            <h5 class="fs-14 mb-0"> <span class="text-muted"></span> {{$target->category->name}}</h5>
+                                           
+                                        </div>
+                                        <div class="col-3">
+                                            <p class="text-muted mb-2 text-uppercase fw-semibold">Target</p>
+                                            <h5 class="fs-14 mb-0"> <span class="text-muted"></span> {{$target->targetQty}}</h5>
+                                           
+                                        </div>
+                                        <div class="col-3">
+                                            <p class="text-muted mb-2 text-uppercase fw-semibold">Achieved</p>
+                                            <h5 class="fs-14 mb-0"> <span class="text-muted"></span> {{$target->status['totalQty']}}</h5>
+                                           
+                                        </div>
+                                        <div class="col-3">
+                                            <p class="text-muted mb-2 text-uppercase fw-semibold">Status</p>
+                                            <h5 class="fs-14 mb-0"> <span class="text-muted"></span> {{$target->status['status']}}</h5>
+                                           
+                                        </div>
+                                    </div>
+
+                              
+                                <div class="table-responsive mt-3">
                                     <table class="table table-borderless text-center table-nowrap align-middle mb-0">
                                         <thead>
                                             <tr class="table-active">
                                                 <th scope="col" style="width: 50px;">#</th>
                                                 <th scope="col" class="text-start">Product</th>
-                                                <th scope="col" class="text-end">Target Qty</th>
-                                                <th scope="col" class="text-end">Achieved Qty</th>
-                                                <th scope="col" class="text-end">Percent</th>
+                                                {{-- <th scope="col" class="text-end">Pack Size</th> --}}
+                                                <th scope="col" class="text-end">Qty</th>
                                             </tr>
                                         </thead>
                                         <tbody id="products-list">
-                                           @foreach ($target->details as $key => $product)
+                                           @foreach ($products as $key => $product)
                                                <tr class="border-1 border-dark">
                                                 <td class="m-1 p-1 border-1 border-dark">{{$key+1}}</td>
-                                                <td class="text-start m-1 p-1 border-1 border-dark">{{$product->product->name}}</td>
+                                                <td class="text-start m-1 p-1 border-1 border-dark">{{$product->name}}</td>
+                                               {{--  <td class="text-end m-1 p-1 border-1 border-dark">{{$product->packSize}} </td> --}}
                                                 <td class="text-end m-1 p-1 border-1 border-dark">{{number_format($product->qty)}} </td>
-                                                <td class="text-end m-1 p-1 border-1 border-dark">{{number_format($product->sold)}}</td>
-                                                <td class="text-end m-1 p-1 border-1 border-dark">{{$product->per}} %</td>
                                                </tr>
                                            @endforeach
                                         </tbody>
                                         <tfoot>
                                             <tr>
                                                 <th colspan="2" class="text-end">Total</th>
-                                                <th class="text-end">{{number_format($target->details->sum('qty'))}}</th>
-                                                <th class="text-end">{{number_format($target->details->sum('sold'))}}</th>
-                                                <th class="text-end">{{number_format($target->totalPer)}}%</th>
+                                                <th class="text-end">{{number_format($target->status['totalQty'])}}</th>
                                             </tr>
                                         </tfoot>
                                         

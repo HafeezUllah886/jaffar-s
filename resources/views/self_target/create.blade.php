@@ -17,10 +17,10 @@
                     <form action="{{ route('self_targets.store') }}" method="post">
                         @csrf
                         <div class="row">
-                            <div class="col-12">
+                            <div class="col-3">
                                 <div class="form-group">
-                                    <label for="category">Category</label>
-                                    <select name="category" class="selectize" id="category">
+                                    <label for="categoryID">Category</label>
+                                    <select name="categoryID" required class="selectize" id="categoryID">
                                         <option value=""></option>
                                         @foreach ($categories as $category)
                                             <option value="{{ $category->id }}">{{ $category->name }}</option>
@@ -28,43 +28,27 @@
                                     </select>
                                 </div>
                             </div>
-                            <div class="col-12">
-
-                                <table class="table table-striped table-hover">
-                                    <thead>
-                                        <th width="20%">Product</th>
-                                        <th class="text-center">Qty</th>
-                                        <th width="10%" class="text-center">Unit</th>
-                                        <th></th>
-                                    </thead>
-                                    <tbody id="products_list"></tbody>
-                                  
-                                </table>
+                            <div class="col-3">
+                                <div class="form-group">
+                                    <label for="targetQty">Target Qty</label>
+                                    <input type="number" name="targetQty" required id="targetQty" value="" class="form-control">
+                                </div>
                             </div>
-                            <div class="col-4">
+                            <div class="col-3">
                                 <div class="form-group">
                                     <label for="start">Start</label>
                                     <input type="date" name="startDate" required id="start" value="{{ date('Y-m-d') }}"
                                     class="form-control">
                                 </div>
                             </div>
-                            <div class="col-4">
+                            <div class="col-3">
                                 <div class="form-group">
                                     <label for="end">End</label>
                                     <input type="date" name="endDate" required id="end" value="{{ date('Y-m-d') }}"
                                     class="form-control">
                                 </div>
                             </div>
-                            <div class="col-4">
-                                <div class="form-group">
-                                    <label for="vendor">Vendor</label>
-                                    <select name="vendorID" id="vendor" class="selectize1">
-                                        @foreach ($vendors as $vendor)
-                                            <option value="{{ $vendor->id }}">{{ $vendor->title }}</option>
-                                        @endforeach
-                                    </select>
-                                </div>
-                            </div>
+                        
                             <div class="col-12 mt-2">
                                 <div class="form-group">
                                     <label for="notes">Notes</label>
@@ -100,58 +84,7 @@
     <script src="{{ asset('assets/libs/selectize/selectize.min.js') }}"></script>
     <script>
         $(".selectize1").selectize();
-        $(".selectize").selectize({
-            onChange: function(value) {
-                if (!value.length) return;
-                if (value != 0) {
-                    getSingleProduct(value);
-                    this.clear();
-                    this.focus();
-                }
-
-            },
-        });
-        var existingProducts = [];
-
-        function getSingleProduct(id) {
-            $.ajax({
-                url: "{{ url('sales/getproduct/') }}/" + id,
-                method: "GET",
-                success: function(product) {
-                    let found = $.grep(existingProducts, function(element) {
-                        return element === product.id;
-                    });
-                    if (found.length > 0) {
-
-                    } else {
-                        var id = product.id;
-                        var html = '<tr id="row_' + id + '">';
-                        html += '<td class="no-padding" width="70%">' + product.name + '</td>';
-                        html += '<td class="no-padding"><input type="number" name="qty[]" oninput="updateChanges(' + id +')" min="0.1" required step="any" value="1" class="form-control text-center" id="qty_' + id + '"></td>';
-                        html += '<td class="no-padding"><select name="unit[]" class="form-control text-center" onchange="updateChanges(' + id +')" id="unit_' + id + '">';
-                            units.forEach(function(unit) {
-                                var isSelected = (unit.id == product.unitID);
-                                html += '<option data-unit="'+unit.value+'" value="' + unit.id + '" ' + (isSelected ? 'selected' : '') + '>' + unit.name + '</option>';
-                            });
-                        html += '</select></td>';
-                        html += '<td> <span class="btn btn-sm btn-danger" onclick="deleteRow('+id+')">X</span> </td>';
-                        html += '<input type="hidden" name="id[]" value="' + id + '">';
-                        html += '<input type="hidden" id="stock_'+id+'" value="' + product.stock + '">';
-                        html += '</tr>';
-                        $("#products_list").prepend(html);
-                      
-                        existingProducts.push(id);
-                    }
-                }
-            });
-        }
-
-        function deleteRow(id) {
-            existingProducts = $.grep(existingProducts, function(value) {
-                return value !== id;
-            });
-            $('#row_'+id).remove();
-           
-        }
+        $(".selectize").selectize({});
+       
     </script>
 @endsection
