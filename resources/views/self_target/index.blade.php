@@ -98,7 +98,13 @@
                                 <th class="text-end" colspan="2">Total</th>
                                 <th>{{ number_format($total_target) }}</th>
                                 <th>{{ number_format($total_achived) }}</th>
-                                <th>{{ number_format($total_achived / $total_target * 100) }}%</th>
+                                <th>
+                                    @if($total_target == 0)
+                                        0%
+                                    @else
+                                        {{ number_format($total_achived / $total_target * 100) }}%
+                                    @endif
+                                </th>
                                 <th colspan="2"></th>
                             </tr>
                         </tfoot>
