@@ -50,13 +50,18 @@
 
                                 $total_target += $target;
                                 $total_achived += $achieved;
+                                if($target == 0){
+                                    $percentage = 0;
+                                }else{
+                                    $percentage = $achieved / $target * 100;
+                                }
                             @endphp
                                 <tr>
                                     <td>{{ $key + 1 }}</td>
                                     <td>{{ $item->category->name }}</td>
                                     <td>{{ number_format($target) }}</td>
                                     <td>{{ number_format($achieved) }}</td>
-                                    <td>{{ number_format($achieved / $target * 100) }}%</td>
+                                    <td>{{ number_format($percentage) }}%</td>
                                     <td>{{ date('d M Y', strtotime($item->startDate)) }} <br>{{ date('d M Y', strtotime($item->endDate)) }}</td>
                                     <td>
                                         <span class="badge bg-{{$item->status['color']}}">{{$item->status['status']}}</span>
