@@ -55,7 +55,9 @@
                                                 <th scope="col" class="text-start">Product</th>
                                                 <th scope="col" class="text-start">Category</th>
                                                 <th scope="col" class="text-end">Quantity</th>
+                                              
                                                 <th scope="col" class="text-end">CTN / Boxes</th>
+                                                  <th scope="col" class="text-end">Bonus</th>
                                                 <th scope="col" class="text-end">Amount</th>
                                               {{--   <th scope="col" class="text-end">Amount</th> --}}
                                             </tr>
@@ -64,12 +66,14 @@
                                             @php
                                             $total_qty = 0;
                                             $total_ctn = 0;
+                                            $total_bonus = 0;
                                             $total_amount = 0;
                                             @endphp
                                             @foreach ($salesData['sale_details'] as $key => $productDetails)
                                             @php
                                                 $total_qty += $productDetails['total_qty'];
                                                 $total_ctn += $productDetails['total_qty'] / $productDetails['pack_size'];
+                                                $total_bonus += $productDetails['total_bonus'];
                                                 $total_amount += $productDetails['total_amount'];
                                             @endphp
                                                 <tr>
@@ -78,6 +82,7 @@
                                                     <td class="text-start">{{ $productDetails['cat'] }}</td>
                                                     <td class="text-end">{{ $productDetails['total_qty'] }}</td>
                                                     <td class="text-end">{{ number_format($productDetails['total_qty'] / $productDetails['pack_size'], 2)}} {{$productDetails['pack_size'] > 1 ? "Box" : "Nos"}}</td>
+                                                    <td class="text-end">{{ $productDetails['total_bonus'] }}</td>
                                                     <td class="text-end">{{ number_format($productDetails['total_amount'], 2) }}</td>  </tr>
                                                 @endforeach
                                         </tbody>
@@ -86,6 +91,7 @@
                                                 <th colspan="2" class="text-end">Total</th>
                                                 <th class="text-end">{{number_format($total_qty, 2)}}</th>
                                                 <th class="text-end">{{number_format($total_ctn, 2)}}</th>
+                                                <th class="text-end">{{number_format($total_bonus, 2)}}</th>
                                                 <th class="text-end">{{number_format($total_amount, 2)}}</th>
                                             </tr>
                                         </tfoot>

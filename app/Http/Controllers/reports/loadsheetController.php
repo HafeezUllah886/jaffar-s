@@ -41,6 +41,7 @@ class loadsheetController extends Controller
             foreach ($productSales as $productID => $saleDetails) {
                 $totalQty = $saleDetails->sum('qty');
                 $totalAmount = $saleDetails->sum('ti');
+                $totalBonus = $saleDetails->sum('bonus');
 
                 // Check if product exists in $allProducts
                 if (!isset($allProducts[$productID])) {
@@ -50,12 +51,14 @@ class loadsheetController extends Controller
                     'name' => $product->name,
                     'cat' => $product->category->name,
                     'total_qty' => 0,
+                    'total_bonus' => 0,
                     'total_amount' => 0,
                     'pack_size' => $product->unit->value
                     ];
                 }
 
                 $allProducts[$productID]['total_qty'] += $totalQty;
+                $allProducts[$productID]['total_bonus'] += $totalBonus;
                 $allProducts[$productID]['total_amount'] += $totalAmount;
             }
 

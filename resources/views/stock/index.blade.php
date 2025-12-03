@@ -11,6 +11,7 @@
                         <thead>
                             <th>#</th>
                             <th>Product</th>
+                            <th>Product Category</th>
                             <th>Stock</th>
                             <th>Value</th>
                             <th>Action</th>
@@ -28,6 +29,7 @@
                                 <tr>
                                     <td>{{ $key + 1 }}</td>
                                     <td>{{ $product->name }}</td>
+                                    <td>{{ $product->category->name }}</td>
                                     <td>{{ number_format(getStock($product->id) / $product->unit->value, 2) }} {{$product->unit->name}}</td>
                                     <td>{{ number_format(productStockValue($product->id))}}</td>
                                     <td>
@@ -39,7 +41,7 @@
                             @endforeach
                         </tbody>
                         <tfoot>
-                            <th colspan="2">Total</th>
+                            <th colspan="3">Total</th>
                             <th>{{number_format($totalStock,2)}}</th>
                             <th>{{number_format($totalValue,2)}}</th>
                         </tfoot>

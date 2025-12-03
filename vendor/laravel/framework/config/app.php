@@ -93,6 +93,7 @@ return [
         'jaffar.diamondquetta.com',
         'jaffartest.diamondquetta.com',
         'jaffar.run',
+        '127.0.0.1:8000',
     ],
         
     'databases' => [
