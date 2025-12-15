@@ -270,6 +270,10 @@
                                         data-key="t-basic-elements">Vendor Wise Purchase Report</a>
                                 </li>
                                 <li class="nav-item">
+                                    <a href="{{ route('reportCustomerWiseSale') }}" class="nav-link"
+                                        data-key="t-basic-elements">Customer Wise Sale Report</a>
+                                </li>
+                                <li class="nav-item">
                                     <a href="{{ route('reportComparison') }}" class="nav-link"
                                         data-key="t-basic-elements">Comparison Report</a>
                                 </li>
@@ -300,6 +304,10 @@
                                 <li class="nav-item">
                                     <a href="{{ route('reportStockMovement') }}" class="nav-link"
                                         data-key="t-basic-elements">Stock Movement</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="{{ route('reportStockReport') }}" class="nav-link"
+                                        data-key="t-basic-elements">Stock Report</a>
                                 </li>
                             </ul>
                         </div>

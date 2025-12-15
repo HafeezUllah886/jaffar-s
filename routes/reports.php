@@ -8,6 +8,7 @@ use App\Http\Controllers\reports\comparisonReportController;
 use App\Http\Controllers\reports\customerBalanceReportController;
 use App\Http\Controllers\reports\CustomerProductReportController as ReportsCustomerProductReportController;
 use App\Http\Controllers\reports\CustomersReportController;
+use App\Http\Controllers\reports\CustomerWiseSaleReportController;
 use App\Http\Controllers\reports\dailycashbookController;
 use App\Http\Controllers\reports\loadsheetController;
 use App\Http\Controllers\reports\OrderbookerReportController;
@@ -21,6 +22,7 @@ use App\Http\Controllers\reports\salesManReportController;
 use App\Http\Controllers\reports\salesReportController;
 use App\Http\Controllers\reports\salesWHTReportController as ReportsSalesWHTReportController;
 use App\Http\Controllers\reports\stockMovementReportController;
+use App\Http\Controllers\reports\StockReportController;
 use App\Http\Controllers\reports\VendorWisePurchaseReportController;
 use App\Http\Controllers\salesWHTReportController;
 use App\Http\Middleware\adminCheck;
@@ -98,5 +100,13 @@ Route::middleware('auth', adminCheck::class)->group(function () {
      Route::get('/reports/vendorwisepurchase', [VendorWisePurchaseReportController::class, 'index'])->name('reportVendorWisePurchase');
     Route::get('/reports/vendorwisepurchasedata/{from}/{to}/{vendorID}', [VendorWisePurchaseReportController::class, 'data'])->name('reportVendorWisePurchaseData');
     Route::get('/reports/vendorwisepurchaseprint/{from}/{to}/{vendorID}', [VendorWisePurchaseReportController::class, 'print'])->name('reportVendorWisePurchasePrint');
+    
+     Route::get('/reports/customerwisesale', [CustomerWiseSaleReportController::class, 'index'])->name('reportCustomerWiseSale');
+    Route::get('/reports/customerwisesaledata/{from}/{to}/{customerID}', [CustomerWiseSaleReportController::class, 'data'])->name('reportCustomerWiseSaleData');
+    Route::get('/reports/customerwisesaleprint/{from}/{to}/{customerID}', [CustomerWiseSaleReportController::class, 'print'])->name('reportCustomerWiseSalePrint');
+
+     Route::get('/reports/stockreport', [StockReportController::class, 'index'])->name('reportStockReport');
+    Route::get('/reports/stockreportdata/{vendorID}', [StockReportController::class, 'details'])->name('reportStockReportData');
+    Route::get('/reports/stockreportprint/{vendorID}', [StockReportController::class, 'print'])->name('reportStockReportPrint');
 
 });
