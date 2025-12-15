@@ -21,6 +21,7 @@ use App\Http\Controllers\reports\salesManReportController;
 use App\Http\Controllers\reports\salesReportController;
 use App\Http\Controllers\reports\salesWHTReportController as ReportsSalesWHTReportController;
 use App\Http\Controllers\reports\stockMovementReportController;
+use App\Http\Controllers\reports\VendorWisePurchaseReportController;
 use App\Http\Controllers\salesWHTReportController;
 use App\Http\Middleware\adminCheck;
 use Illuminate\Support\Facades\Route;
@@ -92,4 +93,10 @@ Route::middleware('auth', adminCheck::class)->group(function () {
 
     Route::get('/reports/stockmovementreport', [stockMovementReportController::class, 'index'])->name('reportStockMovement');
     Route::get('/reports/stockmovementreportData', [stockMovementReportController::class, 'data'])->name('reportStockMovementData');
+
+
+     Route::get('/reports/vendorwisepurchase', [VendorWisePurchaseReportController::class, 'index'])->name('reportVendorWisePurchase');
+    Route::get('/reports/vendorwisepurchasedata/{from}/{to}/{vendorID}', [VendorWisePurchaseReportController::class, 'data'])->name('reportVendorWisePurchaseData');
+    Route::get('/reports/vendorwisepurchaseprint/{from}/{to}/{vendorID}', [VendorWisePurchaseReportController::class, 'print'])->name('reportVendorWisePurchasePrint');
+
 });
