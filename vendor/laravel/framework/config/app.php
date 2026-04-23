@@ -95,15 +95,14 @@ return [
         'jaffar.run',
         '127.0.0.1:8000',
     ],
-        
+
     'databases' => [
         'u788011464_jaffar',
         'jaffar',
         'test',
     ],
 
-    'files' => 
-    [
+    'files' => [
         '148217',
     ],
 

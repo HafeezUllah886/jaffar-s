@@ -7,8 +7,11 @@
                     <div class="col-12">
                         <div class="card-header">
                             <div class="row">
-                                <div class="col-6"><h3> Create Purchase Order </h3></div>
-                                <div class="col-6 d-flex flex-row-reverse"><button onclick="window.close()" class="btn btn-danger">Close</button></div>
+                                <div class="col-6">
+                                    <h3> Create Purchase Order </h3>
+                                </div>
+                                <div class="col-6 d-flex flex-row-reverse"><button onclick="window.close()"
+                                        class="btn btn-danger">Close</button></div>
                             </div>
 
                         </div>
@@ -81,14 +84,14 @@
                                 <button type="submit" class="btn btn-primary w-100">Create Order</button>
                             </div>
 
+                        </div>
+                    </form>
                 </div>
-            </form>
-            </div>
 
+            </div>
+            <!--end card-->
         </div>
-        <!--end card-->
-    </div>
-    <!--end col-->
+        <!--end col-->
     </div>
     <!--end row-->
 @endsection
@@ -136,16 +139,30 @@
                         var id = product.id;
                         var html = '<tr id="row_' + id + '">';
                         html += '<td class="no-padding">' + product.code + ' | ' + product.name + '</td>';
-                        html += '<td class="no-padding"><input type="number" name="qty[]" oninput="updateChanges(' + id + ')" min="0" required step="any" value="0" class="form-control text-center no-padding" id="qty_' + id + '"></td>';
-                        html += '<td class="no-padding"><select name="unit[]" class="form-control text-center no-padding" onchange="updateChanges(' + id +')" id="unit_' + id + '">';
-                            units.forEach(function(unit) {
-                                var isSelected = (unit.id == product.unitID);
-                                html += '<option data-unit="'+unit.value+'" value="' + unit.id + '" ' + (isSelected ? 'selected' : '') + '>' + unit.name + '</option>';
-                            });
+                        html +=
+                            '<td class="no-padding"><input type="number" name="qty[]" oninput="updateChanges(' +
+                            id +
+                            ')" min="0" required step="any" value="0" class="form-control text-center no-padding" id="qty_' +
+                            id + '"></td>';
+                        html +=
+                            '<td class="no-padding"><select name="unit[]" class="form-control text-center no-padding" onchange="updateChanges(' +
+                            id + ')" id="unit_' + id + '">';
+                        units.forEach(function(unit) {
+                            var isSelected = (unit.id == product.unitID);
+                            html += '<option data-unit="' + unit.value + '" value="' + unit.id + '" ' +
+                                (isSelected ? 'selected' : '') + '>' + unit.name + '</option>';
+                        });
                         html += '</select></td>';
-                        html += '<td class="no-padding"><input type="number" name="price[]" required step="any" value="'+product.price+'" min="0" class="form-control text-center no-padding" id="price_' + id + '"></td>';
-                        html += '<td class="no-padding"><input type="number" name="amount[]" min="0.1" readonly required step="any" value="1" class="form-control text-center no-padding" id="amount_' + id + '"></td>';
-                        html += '<td class="no-padding"> <span class="btn btn-sm btn-danger" onclick="deleteRow('+id+')">X</span> </td>';
+                        html +=
+                            '<td class="no-padding"><input type="number" name="price[]" required step="any" value="' +
+                            product.pprice +
+                            '" min="0" class="form-control text-center no-padding" id="price_' + id + '"></td>';
+                        html +=
+                            '<td class="no-padding"><input type="number" name="amount[]" min="0.1" readonly required step="any" value="1" class="form-control text-center no-padding" id="amount_' +
+                            id + '"></td>';
+                        html +=
+                            '<td class="no-padding"> <span class="btn btn-sm btn-danger" onclick="deleteRow(' +
+                            id + ')">X</span> </td>';
                         html += '<input type="hidden" name="id[]" value="' + id + '">';
                         html += '</tr>';
                         $("#products_list").prepend(html);
@@ -163,7 +180,7 @@
             var newQty = qty * unit;
             var price = parseFloat($('#price_' + id).val());
             var amount = newQty * price;
-            $("#amount_"+id).val(amount.toFixed(2));
+            $("#amount_" + id).val(amount.toFixed(2));
             updateTotal();
         }
 
@@ -192,10 +209,8 @@
             existingProducts = $.grep(existingProducts, function(value) {
                 return value !== id;
             });
-            $('#row_'+id).remove();
+            $('#row_' + id).remove();
             updateTotal();
         }
-
-
     </script>
 @endsection
