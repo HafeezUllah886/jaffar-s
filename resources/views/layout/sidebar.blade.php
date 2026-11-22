@@ -77,6 +77,11 @@
                                     <a href="{{ route('sale.index', ['start' => firstDayOfMonth(), 'end' => now()->toDateString()]) }}"
                                         class="nav-link" data-key="t-chat"> Sales History</a>
                                 </li>
+                                <li class="nav-item">
+                                    <a href="{{ route('settings.fbr') }}" class="nav-link" data-key="t-chat">
+                                        <i class="ri-shield-check-line me-1"></i> FBR IRIS Settings
+                                    </a>
+                                </li>
                             </ul>
                         </div>
                     </li>
@@ -325,6 +330,11 @@
                     <li class="nav-item">
                         <a class="nav-link menu-link" href="{{ route('self_targets.index') }}">
                             <i class="ri-apps-2-line"></i> <span data-key="t-apps">Self Targets</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link menu-link" href="{{ route('settings.fbr') }}">
+                            <i class="ri-shield-check-line"></i> <span data-key="t-apps">FBR IRIS Settings</span>
                         </a>
                     </li>
                 @endif

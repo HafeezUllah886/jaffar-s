@@ -93,6 +93,28 @@
                                         class="form-control">
                                 </div>
                             </div>
+                            <div class="col-6 mt-2 customer">
+                                <div class="form-group">
+                                    <label for="province">Province (FBR)</label>
+                                    <select name="province" id="province" class="form-control">
+                                        @php
+                                            $provinces = ['Sindh', 'Punjab', 'Khyber Pakhtunkhwa', 'Balochistan', 'Islamabad Capital Territory', 'Gilgit-Baltistan', 'Azad Jammu & Kashmir'];
+                                        @endphp
+                                        @foreach ($provinces as $prov)
+                                            <option value="{{ $prov }}" @selected(($account->province ?? 'Sindh') == $prov)>{{ $prov }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-6 mt-2 customer">
+                                <div class="form-group">
+                                    <label for="registration_type">FBR Registration Type</label>
+                                    <select name="registration_type" id="registration_type" class="form-control">
+                                        <option value="Unregistered" @selected(($account->registration_type ?? 'Unregistered') == 'Unregistered')>Unregistered</option>
+                                        <option value="Registered" @selected(($account->registration_type ?? '') == 'Registered')>Registered</option>
+                                    </select>
+                                </div>
+                            </div>
                             @endif
 
                             <div class="col-12 mt-3">

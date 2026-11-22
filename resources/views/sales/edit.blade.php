@@ -245,6 +245,67 @@
                                     </select>
                                 </div>
                             </div>
+                            <div class="col-12 mt-3">
+                                <div class="card border border-primary-subtle bg-light-subtle mb-0">
+                                    <div class="card-header bg-soft-primary py-2 d-flex justify-content-between align-items-center">
+                                        <h6 class="card-title mb-0 text-primary">
+                                            <i class="ri-shield-check-line me-1"></i> FBR Digital Invoicing - Customer Details
+                                        </h6>
+                                        <span class="badge bg-primary">IRIS Compliance (3rd Schedule Goods)</span>
+                                    </div>
+                                    <div class="card-body py-2">
+                                        <div class="row g-2">
+                                            <div class="col-md-3">
+                                                <div class="form-group">
+                                                    <label for="buyer_name" class="form-label mb-1 fs-12 fw-semibold">Buyer Name / Title <span class="text-danger">*</span></label>
+                                                    <input type="text" name="buyer_name" id="buyer_name" required class="form-control form-control-sm"
+                                                        value="{{ $sale->buyer_name ?? $sale->customer->title }}" placeholder="Buyer Name">
+                                                </div>
+                                            </div>
+                                            <div class="col-md-2">
+                                                <div class="form-group">
+                                                    <label for="buyer_ntn_cnic" class="form-label mb-1 fs-12 fw-semibold">Buyer NTN / CNIC <span class="text-danger">*</span></label>
+                                                    <input type="text" name="buyer_ntn_cnic" id="buyer_ntn_cnic" required class="form-control form-control-sm"
+                                                        value="{{ $sale->buyer_ntn_cnic ?? ($sale->customer->ntn ?? ($sale->customer->cnic ?? '9999999-9')) }}" placeholder="NTN, CNIC or 9999999-9">
+                                                </div>
+                                            </div>
+                                            <div class="col-md-2">
+                                                <div class="form-group">
+                                                    <label for="buyer_province" class="form-label mb-1 fs-12 fw-semibold">Buyer Province <span class="text-danger">*</span></label>
+                                                    <select name="buyer_province" id="buyer_province" required class="form-select form-select-sm">
+                                                        @php
+                                                            $currentProvince = $sale->buyer_province ?? ($sale->customer->province ?? 'Sindh');
+                                                            $provinces = ['Sindh', 'Punjab', 'Khyber Pakhtunkhwa', 'Balochistan', 'Islamabad Capital Territory', 'Gilgit-Baltistan', 'Azad Jammu & Kashmir'];
+                                                        @endphp
+                                                        @foreach ($provinces as $prov)
+                                                            <option value="{{ $prov }}" @selected($currentProvince == $prov)>{{ $prov }}</option>
+                                                        @endforeach
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-2">
+                                                <div class="form-group">
+                                                    <label for="buyer_registration_type" class="form-label mb-1 fs-12 fw-semibold">Buyer Type <span class="text-danger">*</span></label>
+                                                    @php
+                                                        $currentRegType = $sale->buyer_registration_type ?? ($sale->customer->registration_type ?? 'Unregistered');
+                                                    @endphp
+                                                    <select name="buyer_registration_type" id="buyer_registration_type" required class="form-select form-select-sm">
+                                                        <option value="Unregistered" @selected($currentRegType == 'Unregistered')>Unregistered</option>
+                                                        <option value="Registered" @selected($currentRegType == 'Registered')>Registered</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-3">
+                                                <div class="form-group">
+                                                    <label for="buyer_address" class="form-label mb-1 fs-12 fw-semibold">Buyer Address <span class="text-danger">*</span></label>
+                                                    <input type="text" name="buyer_address" id="buyer_address" required class="form-control form-control-sm"
+                                                        value="{{ $sale->buyer_address ?? ($sale->customer->address ?? '') }}" placeholder="Shop / Delivery Address">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                             <div class="col-12 mt-2">
                                 <div class="form-group">
                                     <label for="notes">Notes</label>
@@ -455,5 +516,26 @@
 
 
         }
+
+        function populateCustomerDetails(customerId) {
+            if (!customerId) return;
+            $.ajax({
+                url: "{{ url('sales/getcustomer/') }}/" + customerId,
+                method: "GET",
+                success: function(customer) {
+                    if (customer) {
+                        $('#buyer_name').val(customer.title || '');
+                        $('#buyer_ntn_cnic').val(customer.ntn || (customer.cnic || '9999999-9'));
+                        $('#buyer_province').val(customer.province || 'Sindh');
+                        $('#buyer_registration_type').val(customer.registration_type || (customer.ntn ? 'Registered' : 'Unregistered'));
+                        $('#buyer_address').val(customer.address || '');
+                    }
+                }
+            });
+        }
+
+        $("#customer").change(function() {
+            populateCustomerDetails($(this).val());
+        });
     </script>
 @endsection

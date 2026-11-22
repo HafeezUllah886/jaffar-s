@@ -97,6 +97,29 @@
                                         class="form-control">
                                 </div>
                             </div>
+                            <div class="col-6 mt-2 customer">
+                                <div class="form-group">
+                                    <label for="province">Province (FBR)</label>
+                                    <select name="province" id="province" class="form-control">
+                                        <option value="Sindh" @selected(old('province') == 'Sindh')>Sindh</option>
+                                        <option value="Punjab" @selected(old('province') == 'Punjab')>Punjab</option>
+                                        <option value="Khyber Pakhtunkhwa" @selected(old('province') == 'Khyber Pakhtunkhwa')>Khyber Pakhtunkhwa</option>
+                                        <option value="Balochistan" @selected(old('province') == 'Balochistan')>Balochistan</option>
+                                        <option value="Islamabad Capital Territory" @selected(old('province') == 'Islamabad Capital Territory')>Islamabad Capital Territory</option>
+                                        <option value="Gilgit-Baltistan" @selected(old('province') == 'Gilgit-Baltistan')>Gilgit-Baltistan</option>
+                                        <option value="Azad Jammu & Kashmir" @selected(old('province') == 'Azad Jammu & Kashmir')>Azad Jammu & Kashmir</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-6 mt-2 customer">
+                                <div class="form-group">
+                                    <label for="registration_type">FBR Registration Type</label>
+                                    <select name="registration_type" id="registration_type" class="form-control">
+                                        <option value="Unregistered" @selected(old('registration_type') == 'Unregistered')>Unregistered</option>
+                                        <option value="Registered" @selected(old('registration_type') == 'Registered')>Registered</option>
+                                    </select>
+                                </div>
+                            </div>
                             <div class="col-12 mt-2">
                                 <div class="form-group">
                                     <label for="initial">Initial Amount</label>

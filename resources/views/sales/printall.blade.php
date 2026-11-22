@@ -24,12 +24,12 @@
                                         <h5 class="fs-14 mb-0">{{$sale->id}}</h5>
                                     </div>
                                     <div class="col-5">
-                                        <p class="text-muted mb-2 text-uppercase fw-semibold">Customer</p>
-                                        <h5 class="fs-14 mb-0"> <span class="text-muted">M/S :</span> {{$sale->customer->title}}</h5>
+                                        <p class="text-muted mb-2 text-uppercase fw-semibold">Customer (Buyer)</p>
+                                        <h5 class="fs-14 mb-0"> <span class="text-muted">M/S :</span> {{ $sale->buyer_name ?: $sale->customer->title }}</h5>
                                         @if ($sale->customerID != 2)
-                                        <h5 class="fs-14 mb-0"> <span class="text-muted">CNIC :</span> {{$sale->customer->cnic ?? "NA"}} | <span class="text-muted">Contact :</span> {{$sale->customer->contact ?? "NA"}}</h5>
-                                        <h5 class="fs-14 mb-0"> <span class="text-muted">Type :</span> {{$sale->customer->c_type}} | NTN #</span> {{$sale->customer->ntn ?? "NA"}} | <span class="text-muted">STRN #</span> {{$sale->customer->strn ?? "NA"}}</h5>
-                                        <h5 class="fs-14 mb-0"> <span class="text-muted">Address :</span> {{$sale->customer->address ?? "NA"}}</h5>
+                                        <h5 class="fs-14 mb-0"> <span class="text-muted">CNIC/NTN :</span> {{ $sale->buyer_ntn_cnic ?: ($sale->customer->ntn ?: ($sale->customer->cnic ?? "NA")) }} | <span class="text-muted">Contact :</span> {{$sale->customer->contact ?? "NA"}}</h5>
+                                        <h5 class="fs-14 mb-0"> <span class="text-muted">Type :</span> {{ $sale->buyer_registration_type ?: $sale->customer->c_type }} | <span class="text-muted">Province :</span> {{ $sale->buyer_province ?: ($sale->customer->province ?? 'Sindh') }} | <span class="text-muted">STRN #</span> {{$sale->customer->strn ?? "NA"}}</h5>
+                                        <h5 class="fs-14 mb-0"> <span class="text-muted">Address :</span> {{ $sale->buyer_address ?: ($sale->customer->address ?? "NA") }}</h5>
                                         @endif
 
                                     </div>
@@ -117,51 +117,68 @@
                                                 <th class="text-end">{{number_format($totalGstVal,2)}}</th>
                                             </tr>
                                             <tr class="m-0 p-0">
-                                                <th colspan="10" class="text-end p-0 m-0">Tax Exclusive</th>
+                                                <td colspan="6" rowspan="12" class="align-top border-0 p-2 text-start">
+                                                    @if($sale->fbr_status === 'sent' && $sale->fbr_invoice_number)
+                                                        <div class="border border-2 border-dark p-2 bg-white d-inline-block" style="width: 290px;">
+                                                            <div class="d-flex justify-content-between align-items-center gap-2">
+                                                                <div class="border border-dark p-1 text-center d-flex align-items-center justify-content-center bg-white" style="width: 130px; height: 110px;">
+                                                                    <img src="{{ asset('assets/images/fbr-digital-logo.png') }}" alt="FBR Digital Invoicing" style="max-height: 100px; max-width: 120px; object-fit: contain;">
+                                                                </div>
+                                                                <div class="border border-dark p-1 text-center d-flex align-items-center justify-content-center bg-white" style="width: 130px; height: 110px;">
+                                                                    {!! \SimpleSoftwareIO\QrCode\Facades\QrCode::size(100)->margin(0)->generate($sale->fbr_invoice_number) !!}
+                                                                </div>
+                                                            </div>
+                                                            <div class="text-center fw-bold text-dark font-monospace mt-2" style="font-size: 10px; word-break: break-all;">
+                                                                Invoice Number: {{ $sale->fbr_invoice_number }}
+                                                            </div>
+                                                        </div>
+                                                    @endif
+                                                </td>
+                                                <th colspan="4" class="text-end p-0 m-0">Tax Exclusive</th>
                                                 <th class="text-end p-0 m-0">{{number_format($totalTi - $totalGstVal,2)}}</th>
                                             </tr>
                                             <tr class="m-0 p-0">
-                                                <th colspan="10" class="text-end p-0 m-0">Sales Tax</th>
+                                                <th colspan="4" class="text-end p-0 m-0">Sales Tax</th>
                                                 <th class="text-end p-0 m-0">{{number_format($totalGstVal,2)}}</th>
                                             </tr>
                                             <tr class="m-0 p-0">
-                                                <th colspan="10" class="text-end p-0 m-0">Gross</th>
+                                                <th colspan="4" class="text-end p-0 m-0">Gross</th>
                                                 <th class="text-end p-0 m-0 border-2 border-start-0 border-end-0 border-dark">{{number_format($totalTi,2)}}</th>
                                             </tr>
                                             <tr class="m-0 p-0">
-                                                <th colspan="10" class="text-end p-0 m-0">WH Tax {{$sale->wh}}% (+)</th>
+                                                <th colspan="4" class="text-end p-0 m-0">WH Tax {{$sale->wh}}% (+)</th>
                                                 <th class="text-end p-0 m-0">{{number_format($sale->whValue,2)}}</th>
                                             </tr>
                                             <tr class="m-0 p-0">
-                                                <th colspan="10" class="text-end p-0 m-0">Discount (-)</th>
+                                                <th colspan="4" class="text-end p-0 m-0">Discount (-)</th>
                                                 <th class="text-end p-0 m-0 ">{{number_format($sale->discount,2)}}</th>
                                             </tr>
                                             <tr class="m-0 p-0">
-                                                <th colspan="10" class="text-end p-0 m-0">Fright (-)</th>
+                                                <th colspan="4" class="text-end p-0 m-0">Fright (-)</th>
                                                 <th class="text-end p-0 m-0 ">{{number_format($sale->fright,2)}}</th>
                                             </tr>
                                             <tr class="m-0 p-0">
-                                                <th colspan="10" class="text-end p-0 m-0">Fright (+)</th>
+                                                <th colspan="4" class="text-end p-0 m-0">Fright (+)</th>
                                                 <th class="text-end p-0 m-0 ">{{number_format($sale->fright1,2)}}</th>
                                             </tr>
                                             <tr class="m-0 p-0">
-                                                <th colspan="10" class="text-end p-0 m-0">Net Bill</th>
+                                                <th colspan="4" class="text-end p-0 m-0">Net Bill</th>
                                                 <th class="text-end p-0 m-0 border-2 border-start-0 border-end-0 border-dark">{{number_format($sale->net,2)}}</th>
                                             </tr>
                                             <tr class="m-0 p-0">
-                                                <th colspan="10" class="text-end p-0 m-0">Paid</th>
+                                                <th colspan="4" class="text-end p-0 m-0">Paid</th>
                                                 <th class="text-end p-0 m-0">{{number_format($paid,2)}}</th>
                                             </tr>
                                             <tr class="m-0 p-0">
-                                                <th colspan="10" class="text-end p-0 m-0">Due</th>
+                                                <th colspan="4" class="text-end p-0 m-0">Due</th>
                                                 <th class="text-end p-0 m-0">{{number_format($due,2)}}</th>
                                             </tr>
                                             <tr class="m-0 p-0">
-                                                <th colspan="10" class="text-end p-0 m-0">Previous Balance</th>
+                                                <th colspan="4" class="text-end p-0 m-0">Previous Balance</th>
                                                 <th class="text-end p-0 m-0">{{number_format(spotBalanceBefore($sale->customerID, $sale->refID),2)}}</th>
                                             </tr>
                                             <tr class="m-0 p-0">
-                                                <th colspan="10" class="text-end p-0 m-0">Net Account Balance</th>
+                                                <th colspan="4" class="text-end p-0 m-0">Net Account Balance</th>
                                                 <th class="text-end p-0 m-0">{{number_format(spotBalance($sale->customerID, $sale->refID),2)}}</th>
                                             </tr>
                                         </tfoot>
@@ -200,7 +217,12 @@
     .urdu {
         font-family: 'Noto Nastaliq Urdu';font-size: 12px;
     }
-    </style>
+    @media print {
+        .d-print-none {
+            display: none !important;
+        }
+    }
+</style>
 @endsection
 @section('page-js')
     <script>
@@ -210,4 +232,3 @@
     </script>
 
 @endsection
-

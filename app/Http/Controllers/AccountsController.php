@@ -61,6 +61,8 @@ class AccountsController extends Controller
                             'ntn' => $request->ntn,
                             'strn' => $request->strn,
                             'c_type' => $request->c_type,
+                            'province' => $request->province ?? 'Sindh',
+                            'registration_type' => $request->registration_type ?? ($request->ntn ? 'Registered' : 'Unregistered'),
                         ]
                     );
                 }
@@ -148,6 +150,8 @@ class AccountsController extends Controller
                 'ntn' => $request->ntn ?? null,
                 'strn' => $request->strn ?? null,
                 'c_type' => $request->c_type ?? "Other",
+                'province' => $request->province ?? 'Sindh',
+                'registration_type' => $request->registration_type ?? ($request->ntn ? 'Registered' : 'Unregistered'),
             ]
         );
 

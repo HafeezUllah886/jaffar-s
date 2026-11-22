@@ -23,6 +23,7 @@
                         <thead>
                             <th>#</th>
                             <th>Code</th>
+                            <th>HS Code</th>
                             <th>Name</th>
                             <th>Category</th>
                             <th>Unit</th>
@@ -38,6 +39,7 @@
                                 <tr>
                                     <td>{{ $key + 1 }}</td>
                                     <td>{{ $item->code }}</td>
+                                    <td><span class="badge bg-light text-dark font-monospace">{{ $item->hs_code ?? '2105.0000' }}</span></td>
                                     <td>{{ $item->name }}</td>
                                     <td>{{ $item->category->name }}</td>
                                     <td>{{ $item->unit->name }}</td>
@@ -69,6 +71,12 @@
                                                         <input type="text" name="code" required
                                                             value="{{ $item->code }}" id="code"
                                                             class="form-control">
+                                                    </div>
+                                                    <div class="form-group mt-2">
+                                                        <label for="hs_code">HS Code (FBR Digital Invoicing)</label>
+                                                        <input type="text" name="hs_code"
+                                                            value="{{ $item->hs_code ?? '2105.0000' }}" id="hs_code"
+                                                            class="form-control font-monospace" placeholder="e.g. 2105.0000">
                                                     </div>
                                                     <div class="form-group mt-2">
                                                         <label for="name">Name</label>
@@ -169,6 +177,10 @@
                         <div class="form-group">
                             <label for="code">Code</label>
                             <input type="text" name="code" required id="code" class="form-control">
+                        </div>
+                        <div class="form-group mt-2">
+                            <label for="hs_code">HS Code (FBR Digital Invoicing)</label>
+                            <input type="text" name="hs_code" id="hs_code" value="2105.0000" class="form-control font-monospace" placeholder="e.g. 2105.0000">
                         </div>
                         <div class="form-group mt-2">
                             <label for="name">Name</label>
