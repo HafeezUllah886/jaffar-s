@@ -15,6 +15,7 @@ use App\Models\User;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Schema;
 
 class SalesController extends Controller
 {
@@ -78,26 +79,32 @@ class SalesController extends Controller
 
             DB::beginTransaction();
             $ref = getRef();
-            $sale = sales::create(
-                [
-                    'customerID' => $request->customerID,
-                    'date' => $request->date,
-                    'notes' => $request->notes,
-                    'discount' => $request->discount1,
-                    'fright' => $request->fright,
-                    'fright1' => $request->fright1,
-                    'wh' => $request->whTax ?? 0,
-                    'orderbookerID' => $request->orderbookerID,
-                    'deliverymanID' => $request->deliverymanID ?? 1,
-                    'refID' => $ref,
-                    'buyer_ntn_cnic' => $request->buyer_ntn_cnic,
-                    'buyer_name' => $request->buyer_name,
-                    'buyer_province' => $request->buyer_province,
-                    'buyer_address' => $request->buyer_address,
-                    'buyer_registration_type' => $request->buyer_registration_type ?? 'Unregistered',
-                    'fbr_status' => 'pending',
-                ]
-            );
+            $saleData = [
+                'customerID' => $request->customerID,
+                'date' => $request->date,
+                'notes' => $request->notes,
+                'discount' => $request->discount1,
+                'fright' => $request->fright,
+                'fright1' => $request->fright1,
+                'wh' => $request->whTax ?? 0,
+                'orderbookerID' => $request->orderbookerID,
+                'refID' => $ref,
+                'buyer_ntn_cnic' => $request->buyer_ntn_cnic,
+                'buyer_name' => $request->buyer_name,
+                'buyer_province' => $request->buyer_province,
+                'buyer_address' => $request->buyer_address,
+                'buyer_registration_type' => $request->buyer_registration_type ?? 'Unregistered',
+                'fbr_status' => 'pending',
+            ];
+
+            if (Schema::hasColumn('sales', 'deliverymanID')) {
+                $saleData['deliverymanID'] = $request->deliverymanID ?? 1;
+            }
+            if ($request->filled('orderID') && Schema::hasColumn('sales', 'orderID')) {
+                $saleData['orderID'] = $request->orderID;
+            }
+
+            $sale = sales::create($saleData);
 
             // Sync master customer data if fields were previously empty
             $customer = accounts::find($request->customerID);
@@ -133,26 +140,31 @@ class SalesController extends Controller
                 $qty = $request->qty[$key] * $unit->value;
                 $price = $request->price[$key];
                 $total += $request->ti[$key];
-                sale_details::create(
-                    [
-                        'salesID' => $sale->id,
-                        'customerID' => $sale->customerID,
-                        'orderbookerID' => $sale->orderbookerID,
-                        'productID' => $id,
-                        'price' => $price,
-                        'qty' => $qty,
-                        'discount' => $request->discount[$key],
-                        'ti' => $request->ti[$key],
-                        'tp' => $request->tp[$key],
-                        'gst' => $request->gst[$key],
-                        'gstValue' => $request->gstValue[$key],
-                        'date' => $request->date,
-                        'bonus' => $request->bonus[$key],
-                        'unitID' => $unit->id,
-                        'unitValue' => $unit->value,
-                        'refID' => $ref,
-                    ]
-                );
+                $detailData = [
+                    'salesID' => $sale->id,
+                    'productID' => $id,
+                    'price' => $price,
+                    'qty' => $qty,
+                    'discount' => $request->discount[$key],
+                    'ti' => $request->ti[$key],
+                    'tp' => $request->tp[$key],
+                    'gst' => $request->gst[$key],
+                    'gstValue' => $request->gstValue[$key],
+                    'date' => $request->date,
+                    'bonus' => $request->bonus[$key],
+                    'unitID' => $unit->id,
+                    'unitValue' => $unit->value,
+                    'refID' => $ref,
+                ];
+
+                if (Schema::hasColumn('sale_details', 'customerID')) {
+                    $detailData['customerID'] = $sale->customerID;
+                }
+                if (Schema::hasColumn('sale_details', 'orderbookerID')) {
+                    $detailData['orderbookerID'] = $sale->orderbookerID;
+                }
+
+                sale_details::create($detailData);
                 createStock($id, 0, $qty1, $request->date, "Sold in Inv # $sale->id", $ref);
             }
 
@@ -296,26 +308,31 @@ class SalesController extends Controller
                 $qty = $request->qty[$key] * $unit->value;
                 $price = $request->price[$key];
                 $total += $request->ti[$key];
-                sale_details::create(
-                    [
-                        'salesID' => $sale->id,
-                        'customerID' => $sale->customerID,
-                        'orderbookerID' => $sale->orderbookerID,
-                        'productID' => $id,
-                        'price' => $price,
-                        'qty' => $qty,
-                        'discount' => $request->discount[$key],
-                        'ti' => $request->ti[$key],
-                        'tp' => $request->tp[$key],
-                        'gst' => $request->gst[$key],
-                        'gstValue' => $request->gstValue[$key],
-                        'date' => $request->date,
-                        'bonus' => $request->bonus[$key],
-                        'unitID' => $unit->id,
-                        'unitValue' => $unit->value,
-                        'refID' => $ref,
-                    ]
-                );
+                $detailData = [
+                    'salesID' => $sale->id,
+                    'productID' => $id,
+                    'price' => $price,
+                    'qty' => $qty,
+                    'discount' => $request->discount[$key],
+                    'ti' => $request->ti[$key],
+                    'tp' => $request->tp[$key],
+                    'gst' => $request->gst[$key],
+                    'gstValue' => $request->gstValue[$key],
+                    'date' => $request->date,
+                    'bonus' => $request->bonus[$key],
+                    'unitID' => $unit->id,
+                    'unitValue' => $unit->value,
+                    'refID' => $ref,
+                ];
+
+                if (Schema::hasColumn('sale_details', 'customerID')) {
+                    $detailData['customerID'] = $sale->customerID;
+                }
+                if (Schema::hasColumn('sale_details', 'orderbookerID')) {
+                    $detailData['orderbookerID'] = $sale->orderbookerID;
+                }
+
+                sale_details::create($detailData);
                 createStock($id, 0, $qty1, $request->date, "Sold in Inv # $sale->id", $ref);
             }
             $whTax = $total * $request->whTax / 100;

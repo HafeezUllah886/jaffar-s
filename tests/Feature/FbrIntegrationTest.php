@@ -5,6 +5,8 @@ namespace Tests\Feature;
 use App\Models\accounts;
 use App\Models\categories;
 use App\Models\FbrSetting;
+use App\Models\order_details;
+use App\Models\orders;
 use App\Models\products;
 use App\Models\sale_details;
 use App\Models\sales;
@@ -20,8 +22,11 @@ class FbrIntegrationTest extends TestCase
     use DatabaseTransactions;
 
     protected User $user;
+
     protected accounts $customer;
+
     protected products $product;
+
     protected units $unit;
 
     protected function setUp(): void
@@ -51,8 +56,8 @@ class FbrIntegrationTest extends TestCase
         ]);
 
         $this->product = products::create([
-            'code' => 'PRD-TEST-' . uniqid(),
-            'name' => 'Special Ice Cream 500ml ' . uniqid(),
+            'code' => 'PRD-TEST-'.uniqid(),
+            'name' => 'Special Ice Cream 500ml '.uniqid(),
             'catID' => $category->id,
             'unitID' => $this->unit->id,
             'pprice' => 100,
@@ -159,7 +164,7 @@ class FbrIntegrationTest extends TestCase
             'refID' => $ref,
         ]);
 
-        $service = new FbrService();
+        $service = new FbrService;
         $payload = $service->buildInvoicePayload($sale);
 
         // Assert header requirements
@@ -339,7 +344,7 @@ class FbrIntegrationTest extends TestCase
      */
     public function test_get_customer_endpoint_returns_fbr_attributes(): void
     {
-        $response = $this->actingAs($this->user)->getJson('/sales/getcustomer/' . $this->customer->id);
+        $response = $this->actingAs($this->user)->getJson('/sales/getcustomer/'.$this->customer->id);
 
         $response->assertStatus(200);
         $response->assertJson([
@@ -466,9 +471,86 @@ class FbrIntegrationTest extends TestCase
                         'saleType',
                         'fixedNotifiedValueOrRetailPrice',
                         'salesTaxApplicable',
-                    ]
-                ]
-            ]
+                    ],
+                ],
+            ],
         ]);
+    }
+
+    /**
+     * Test Finalize Order form renders FBR fields and converts to sale properly.
+     */
+    public function test_finalize_order_form_renders_fbr_fields_and_submits_sale(): void
+    {
+        $order = orders::create([
+            'customerID' => $this->customer->id,
+            'orderbookerID' => $this->user->id,
+            'date' => '2026-11-23',
+            'net' => 1770,
+            'wh' => 0,
+            'whValue' => 0,
+            'status' => 'Pending',
+        ]);
+
+        order_details::create([
+            'orderID' => $order->id,
+            'productID' => $this->product->id,
+            'qty' => 10,
+            'price' => 150,
+            'discount' => 0,
+            'amount' => 1500,
+            'date' => '2026-11-23',
+            'unitID' => $this->unit->id,
+            'unitValue' => 1,
+            'bonus' => 0,
+        ]);
+
+        // 1. Check finalize order view renders FBR customer fields
+        $response = $this->actingAs($this->user)->get(route('order.sale', $order->id));
+        $response->assertStatus(200);
+        $response->assertSee('FBR Digital Invoicing - Customer Details (Required)');
+        $response->assertSee('name="buyer_name"', false);
+        $response->assertSee('name="buyer_ntn_cnic"', false);
+        $response->assertSee('name="buyer_province"', false);
+        $response->assertSee('name="buyer_address"', false);
+        $response->assertSee('name="buyer_registration_type"', false);
+
+        // 2. Submit conversion from order to sale
+        $postResponse = $this->actingAs($this->user)->post(route('sale.store'), [
+            'orderID' => $order->id,
+            'customerID' => $this->customer->id,
+            'orderbookerID' => $this->user->id,
+            'date' => '2026-11-23',
+            'id' => [$this->product->id],
+            'unit' => [$this->unit->id],
+            'qty' => [10],
+            'price' => [150],
+            'tp' => [150],
+            'discount' => [0],
+            'ti' => [1770],
+            'gst' => [18],
+            'gstValue' => [270],
+            'bonus' => [0],
+            'discount1' => 0,
+            'fright' => 0,
+            'fright1' => 0,
+            'whTax' => 0,
+            'notes' => 'Converted from order',
+            'buyer_name' => $this->customer->title,
+            'buyer_ntn_cnic' => '1234567-1',
+            'buyer_province' => 'Sindh',
+            'buyer_address' => 'Saddar, Karachi',
+            'buyer_registration_type' => 'Registered',
+            'status' => 'pending',
+        ]);
+
+        $createdSale = sales::latest('id')->first();
+        $this->assertNotNull($createdSale);
+        $this->assertEquals('pending', $createdSale->fbr_status);
+        $this->assertEquals($this->customer->title, $createdSale->buyer_name);
+
+        $order->refresh();
+        $this->assertEquals('Completed', $order->status);
+        $this->assertEquals($createdSale->id, $order->saleID);
     }
 }
